@@ -1,0 +1,24 @@
+{
+  "development": {
+    "username": "algolix",
+    "password": "12345",
+    "database": "E-commerce",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+
+  "test": {
+    "username": "algolix",
+    "password": "12345",
+    "database": "E-commerce",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "algolix",
+    "password": "12345",
+    "database": "E-commerce",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
