@@ -13,15 +13,16 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       Amount: {
-        type: Sequelize.STRING,
+        type: Sequelize.DECIMAL,
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        // references: {
-        //   model: user,
-        //   key: "id",
-        // },
+        unique: true,
+        references: {
+          model: "Users", //table name
+          key: "id",
+        },
       },
       createdAt: {
         allowNull: false,

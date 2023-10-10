@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Wallet.init(
     {
-      Amount: DataTypes.STRING,
+      Amount: DataTypes.DECIMAL,
       userId: DataTypes.INTEGER,
     },
     {

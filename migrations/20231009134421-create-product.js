@@ -20,24 +20,24 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        // references: {
-        //   model: user,
-        //   key: "id",
-        // },
+        references: {
+          model: "Users", //table name
+          key: "id",
+        },
       },
       categoryId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        // references: {
-        //   model: category,
-        //   key: "id",
-        // },
+        references: {
+          model: "Categories", //table name
+          key: "id",
+        },
       },
       Stock: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       price: {
-        type: Sequelize.STRING,
+        type: Sequelize.DECIMAL,
         allowNull: false,
       },
       meta: {

@@ -10,18 +10,22 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       payment: {
-        type: Sequelize.STRING,
+        type: Sequelize.DECIMAL,
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Users", //table name
+          key: "id",
+        },
       },
       paymentMethod: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       DeliveryFee: {
-        type: Sequelize.STRING,
+        type: Sequelize.DECIMAL,
         allowNull: false,
       },
       address: {
@@ -32,9 +36,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      // orderItemId: {
-      //   type: Sequelize.STRING,
-      // },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

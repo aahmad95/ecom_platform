@@ -24,6 +24,10 @@ module.exports = {
         //   model: user,
         //   key: "id",
         // },
+        references: {
+          model: "Users", //table name
+          key: "id",
+        },
       },
       //       Users.hasMany(Categories, {
       //   foreignKey: 'userId',
