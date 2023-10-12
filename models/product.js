@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "categoryId",
         sourceKey: "id",
       });
-      Product.belongsToMany(User, { through: "UserProduct" });
+      Product.belongsToMany(models.User, { through: "UserProduct" });
     }
   }
   Product.init(

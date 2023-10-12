@@ -1,22 +1,24 @@
-// const connectToMongo = require("./db");
-const path = require("path");
+// const path = require("path");
 
 const express = require("express");
-// var cors = require("cors");
+var cors = require("cors");
 
-// connectToMongo();
+const { sequelize } = require("./models");
 
 const app = express();
 const port = 5000;
 
 //using cors
-// app.use(cors());
+app.use(cors());
 
 //if you want to use the body of request use a middle-ware:
 app.use(express.json());
 //and set the  header content-type as json
 
-app.use("/", express.static(path.join(__dirname, "public")));
+// app.use(express.urlencoded({ extended: true }));
+
+// app.use("/", express.static(path.join(__dirname, "public")));
+// app.use("/api", require("./routes/api").route);
 
 // Available Routes:
 // app.get("/", (req, res) => {
@@ -26,8 +28,25 @@ app.use("/", express.static(path.join(__dirname, "public")));
 // app.use("/api/auth", require("./routes/auth"));
 // app.use("/api/notes", require("./routes/notes"));
 
-app.listen(port, () => {
+const user = require("./routes/user");
+app.use("/users", user);
+
+const category = require("./routes/category");
+app.use("/category", category);
+
+const wallet = require("./routes/wallet");
+app.use("/wallet", wallet);
+
+const order = require("./routes/order");
+app.use("/order", order);
+
+const orderItem = require("./routes/orderItem");
+app.use("/orderItem", orderItem);
+
+app.listen(port, async () => {
   console.log(
-    `E-commerce backend(server)listening at http://localhost:${port}`
+    `E-commerce Website backend(server) listening at http://localhost:${port}`
   );
+  await sequelize.authenticate();
+  console.log("Database connected!");
 });
