@@ -14,18 +14,17 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "orderId",
         as: "orderItems",
       });
-      Order.belongsToMany(user, { through: "UserOrder" });
+      Order.belongsToMany(models.User, { through: "UserOrder" });
     }
   }
   Order.init(
     {
-      payment: DataTypes.STRING,
+      payment: DataTypes.DECIMAL,
       userId: DataTypes.INTEGER,
       paymentMethod: DataTypes.STRING,
       DeliveryFee: DataTypes.STRING,
       address: DataTypes.STRING,
       status: DataTypes.STRING,
-      orderItemId: DataTypes.INTEGER,
     },
     {
       sequelize,

@@ -16,6 +16,7 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -24,6 +25,10 @@ module.exports = {
         //   model: user,
         //   key: "id",
         // },
+        references: {
+          model: "Users", //table name
+          key: "id",
+        },
       },
       //       Users.hasMany(Categories, {
       //   foreignKey: 'userId',

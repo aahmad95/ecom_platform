@@ -13,7 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "categoryId",
         sourceKey: "id",
       });
-      Product.belongsToMany(User, { through: "UserProduct" });
+      Product.belongsToMany(models.User, { through: "UserProduct" });
+      Product.hasMany(models.ProductDetail, {
+        foreignKey: "productId",
+        as: "ProductDetails",
+      });
     }
   }
   Product.init(
@@ -21,9 +25,10 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       userId: DataTypes.INTEGER,
       categoryId: DataTypes.INTEGER,
-      Stock: DataTypes.STRING,
-      price: DataTypes.STRING,
-      meta: DataTypes.STRING,
+      brand: DataTypes.STRING,
+      description: DataTypes.TEXT,
+      price: DataTypes.DECIMAL,
+      warranty: DataTypes.STRING,
       status: DataTypes.STRING,
     },
     {

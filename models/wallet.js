@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Wallet.belongsTo(models.Users, {
+      Wallet.belongsTo(models.User, {
         foreignKey: "userId",
         sourceKey: "id",
       });
@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Wallet.init(
     {
-      Amount: DataTypes.STRING,
+      Amount: DataTypes.DECIMAL,
       userId: DataTypes.INTEGER,
     },
     {

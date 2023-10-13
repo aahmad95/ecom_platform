@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
-const order = require("./order");
-const product = require("./product");
+// const order = require("./order");
+// const product = require("./product");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       User.hasMany(models.Category, { foreignKey: "userId", as: "categories" });
       User.hasOne(models.Wallet, { foreignKey: "userId", as: "Wallets" });
-      User.belongsToMany(product, { through: "UserProduct" });
-      User.belongsToMany(order, { through: "UserOrder" });
+      User.belongsToMany(models.Product, { through: "UserProduct" });
+      User.belongsToMany(models.Order, { through: "UserOrder" });
     }
   }
   User.init(
