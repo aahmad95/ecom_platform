@@ -1,119 +1,120 @@
-const { Order } = require("../models");
+const { OrderItem } = require("../models");
 
 //Get All Orders:
-const getAllOrders = async (req, res) => {
+const getAllOrderItems = async (req, res) => {
   try {
-    const order = await Order.findAll();
-    if (order.length) {
-      return res.json(order);
+    const orderItem = await OrderItem.findAll();
+    if (orderItem.length) {
+      return res.json(orderItem);
     }
-    return res.json({ message: "There isn't any Order yet." });
+    return res.json({ message: "There isn't any OrderItem yet." });
   } catch (err) {
     console.log(err);
-    // return res.status(500).json({ error: "something went wrong" });
+
     res.status(501).send({
-      error: "Server Error: Could not retrieve Orders.",
+      error: "Server Error: Could not retrieve OrderItems.",
     });
   }
 };
 
-// Create a New Order
-const createOrder = async (req, res) => {
+// Create a New OrderItem
+const createOrderItem = async (req, res) => {
   try {
-    const { Amount, userId } = req.body;
+    const { price, quantity, productId, orderId } = req.body;
     // const order = await Order.findOne({
     //   where: { userId },
     // });
     // if (user) {
     //   return res.json({ message: "The Wallet for this user already exist." });
     // }
-    const order = await Order.create({
-      Amount,
-      userId,
+    const orderItem = await OrderItem.create({
+      price,
+      quantity,
+      productId,
+      orderId,
     });
-    return res.json(order);
+    return res.json(orderItem);
   } catch (err) {
     console.log(err);
     res.status(501).send({
-      error: "Server Error: Could not create a new Order.",
+      error: "Server Error: Could not create a new OrderItem.",
     });
   }
 };
 
-// Get a Order By Id:
-const getOrderById = async (req, res) => {
+// Get a OrderItem By Id:
+const getOrderItemById = async (req, res) => {
   try {
     const { id } = req.params;
-    const order = await Order.findOne({
+    const orderItem = await OrderItem.findOne({
       where: { id },
     });
-    if (order) {
-      return res.json(order);
+    if (orderItem) {
+      return res.json(orderItem);
     }
-    return res.json({ message: "There isn't any Order of this id exist." });
+    return res.json({ message: "There isn't any OrderItem of this id exist." });
   } catch (err) {
     console.log(err);
     res.status(501).send({
-      error: "Server Error: Could not find the Order.",
+      error: "Server Error: Could not find the OrderItem.",
     });
   }
 };
 
-// Update a Order:
-const updateOrder = async (req, res) => {
+// Update a OrderItem:
+const updateOrderItem = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const [order] = await Order.update(req.body, {
+    const [orderItem] = await OrderItem.update(req.body, {
       where: { id },
     });
 
-    if (order) {
+    if (orderItem) {
       return res.json({
-        message: "Order updated successfully.",
-        Order: await Order.findOne({
+        message: "OrderItem updated successfully.",
+        OrderItem: await OrderItem.findOne({
           where: { id },
         }),
       });
     }
-    return res.json({ message: "There isn't any Order of this id exist." });
+    return res.json({ message: "There isn't any OrderItem of this id exist." });
   } catch (err) {
     console.log(err);
-    // return res.status(500).json({ error: "something went wrong" });
     res.status(501).send({
-      error: "Server Error: Could not update the Order.",
+      error: "Server Error: Could not update the OrderItem.",
     });
   }
 };
 
-// Delete a Order:
-const deleteOrder = async (req, res) => {
+// Delete a OrderItem:
+const deleteOrderItem = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const order = await Order.findOne({
+    const orderItem = await OrderItem.findOne({
       where: { id },
     });
-    if (order) {
-      await order.destroy();
+    if (orderItem) {
+      //   await orderItem.destroy();
       return res.json({
-        message: "Order deleted successfully.",
+        message: "OrderItem deleted successfully.",
       });
     }
 
-    return res.json({ message: "There isn't any Order of this id exist." });
+    return res.json({ message: "There isn't any OrderItem of this id exist." });
   } catch (err) {
     console.log(err);
     res.status(501).send({
-      error: "Server Error: Could not delete the Order",
+      error: "Server Error: Could not delete the OrderItem.",
     });
   }
 };
 
 module.exports = {
-  getAllOrders,
-  createOrder,
-  getOrderById,
-  updateOrder,
-  deleteOrder,
+  getAllOrderItems,
+  createOrderItem,
+  getOrderItemById,
+  updateOrderItem,
+  deleteOrderItem,
 };

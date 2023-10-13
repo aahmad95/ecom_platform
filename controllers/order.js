@@ -20,17 +20,18 @@ const getAllOrders = async (req, res) => {
 // Create a New Order
 const createOrder = async (req, res) => {
   try {
-    const { Amount, userId } = req.body;
-    // const order = await Order.findOne({
-    //   where: { userId },
-    // });
-    // if (user) {
-    //   return res.json({ message: "The Wallet for this user already exist." });
-    // }
+    const { payment, userId, paymentMethod, DeliveryFee, address, status } =
+      req.body;
+
     const order = await Order.create({
-      Amount,
+      payment,
       userId,
+      paymentMethod,
+      DeliveryFee,
+      address,
+      status,
     });
+
     return res.json(order);
   } catch (err) {
     console.log(err);
@@ -79,7 +80,6 @@ const updateOrder = async (req, res) => {
     return res.json({ message: "There isn't any Order of this id exist." });
   } catch (err) {
     console.log(err);
-    // return res.status(500).json({ error: "something went wrong" });
     res.status(501).send({
       error: "Server Error: Could not update the Order.",
     });
@@ -95,7 +95,7 @@ const deleteOrder = async (req, res) => {
       where: { id },
     });
     if (order) {
-      await order.destroy();
+      //   await order.destroy();
       return res.json({
         message: "Order deleted successfully.",
       });

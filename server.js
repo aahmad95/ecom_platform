@@ -37,6 +37,12 @@ app.use("/category", category);
 const wallet = require("./routes/wallet");
 app.use("/wallet", wallet);
 
+const product = require("./routes/product");
+app.use("/product", product);
+
+const productDetail = require("./routes/productDetail");
+app.use("/productDetail", productDetail);
+
 const order = require("./routes/order");
 app.use("/order", order);
 

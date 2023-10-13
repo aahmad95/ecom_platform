@@ -33,14 +33,19 @@ module.exports = {
           key: "id",
         },
       },
-      Stock: {
-        type: Sequelize.INTEGER,
+      brand: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: Sequelize.TEXT,
+        allowNull: false,
       },
       price: {
         type: Sequelize.DECIMAL,
         allowNull: false,
       },
-      meta: {
+      warranty: {
         type: Sequelize.STRING,
         allowNull: false,
       },
