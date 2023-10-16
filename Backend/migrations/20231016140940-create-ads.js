@@ -1,12 +1,8 @@
 "use strict";
-
-const user = require("../models/user");
-
 /** @type {import('sequelize-cli').Migration} */
-
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Categories", {
+    await queryInterface.createTable("Ads", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,7 +12,6 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
       },
       image: {
         type: Sequelize.STRING,
@@ -25,20 +20,11 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        // references: {
-        //   model: user,
-        //   key: "id",
-        // },
         references: {
           model: "Users", //table name
           key: "id",
         },
       },
-      //       Users.hasMany(Categories, {
-      //   foreignKey: 'userId',
-      //   sourceKey: "id"
-      // }),
-
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -50,6 +36,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Categories");
+    await queryInterface.dropTable("Ads");
   },
 };

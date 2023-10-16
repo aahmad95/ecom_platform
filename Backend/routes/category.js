@@ -7,8 +7,9 @@ const {
   deleteCategory,
   updateCategory,
 } = require("../controllers/category");
+const { upload } = require("../controllers/image");
 
-router.post("/createCategory", createCategory);
+router.post("/createCategory", upload, createCategory);
 router.get("/getAllCategory", getAllCategory);
 router.get("/getCategory/:id", getCategoryById);
 router.delete("/deleteCategory/:id", deleteCategory);

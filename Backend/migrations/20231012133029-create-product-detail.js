@@ -17,6 +17,9 @@ module.exports = {
           key: "id",
         },
       },
+      image: {
+        type: Sequelize.STRING,
+      },
       stock: {
         type: Sequelize.INTEGER,
         allowNull: false,

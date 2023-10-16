@@ -1,3 +1,5 @@
+const multer = require("multer");
+const path = require("path");
 const { ProductDetail } = require("../models");
 
 //Get All ProductDetails:

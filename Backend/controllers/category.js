@@ -1,3 +1,5 @@
+const multer = require("multer");
+const path = require("path");
 const { Category } = require("../models");
 
 //Get All Categories:
@@ -21,6 +23,7 @@ const getAllCategory = async (req, res) => {
 const createCategory = async (req, res) => {
   try {
     const { name, userId } = req.body;
+    const image = req.file.path;
     const Name = await Category.findOne({
       where: { name },
     });
@@ -29,6 +32,7 @@ const createCategory = async (req, res) => {
     }
     const category = await Category.create({
       name,
+      image,
       userId,
     });
     return res.json(category);

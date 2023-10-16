@@ -15,6 +15,8 @@ app.use(cors());
 app.use(express.json());
 //and set the  header content-type as json
 
+//static Images Folder
+app.use("/Images", express.static("./Images"));
 // app.use(express.urlencoded({ extended: true }));
 
 // app.use("/", express.static(path.join(__dirname, "public")));
@@ -30,6 +32,9 @@ app.use(express.json());
 
 const user = require("./routes/user");
 app.use("/users", user);
+
+const ads = require("./routes/ad");
+app.use("/ads", ads);
 
 const category = require("./routes/category");
 app.use("/category", category);

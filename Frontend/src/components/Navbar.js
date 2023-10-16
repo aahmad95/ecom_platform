@@ -41,60 +41,60 @@ function Navbar() {
       <NavBar.Collapse id="responsive-navbar-nav">
         <Nav className="me-auto mx-2">
           <Nav.Link href="#home">
-            <h2>
+            <h3>
               <i
                 class="mx-2 fa-sharp fa-solid fa-right-to-bracket fa-beat-fade"
                 style={{ color: "#ff9633" }}
               ></i>
               Login
-            </h2>
+            </h3>
           </Nav.Link>
           <Nav.Link href="#link">
-            <h2>
+            <h3>
               <i
                 class="mx-2 fa-solid fa-user-plus fa-fade"
                 style={{ color: "#ff9633" }}
               ></i>
               SignUp
-            </h2>
+            </h3>
           </Nav.Link>
           <Nav.Link href="#link">
-            <h2>
+            <h3>
               <i
                 class="mx-2 fa-solid fa-cart-plus fa-bounce"
                 style={{ color: "#ff9633" }}
               ></i>
               Cart
-            </h2>
+            </h3>
           </Nav.Link>
 
           {/* After Login  */}
           {/* <Nav.Link href="#link">
-            <h2>
+            <h3>
               My Account
               <i
                 class="mx-2 fa-solid fa-id-card fa-flip"
                 style={{ color: "#ff9633" }}
               ></i>
-            </h2>
+            </h3>
           </Nav.Link>
           <Nav.Link href="#link">
-            <h2>
+            <h3>
               Cart
               <i
                 class="mx-2 fa-solid fa-cart-plus fa-bounce"
                 style={{ color: "#ff9633" }}
               ></i>
-            </h2>
+            </h3>
           </Nav.Link>
           <Nav.Link href="#link">
-            <h2>
+            <h3>
               Logout
               <i
                 class="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
                 style={{ color: "#ff9633" }}
               ></i>
-            </h2>
+            </h3>
           </Nav.Link> */}
 
           {/* <NavDropdown title="Categories" id="collasible-nav-dropdown">
@@ -111,7 +111,7 @@ function Navbar() {
         </Nav>
         <Form className="d-flex">
           <Form.Control
-            style={{ width: "500px", textAlign: "center" }}
+            style={{ width: "350px", textAlign: "center" }}
             type="search"
             placeholder="Search"
             className="mx-2"

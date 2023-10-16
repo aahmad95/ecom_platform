@@ -4,6 +4,18 @@ import ShowCarousel from "./ShowCarousel";
 // import ShowCarousel from "./ShowCarousel";
 
 const Home = () => {
+  var result;
+  const getCategory = () => {
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:5000/category/getAllCategory", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
   return (
     <>
       <div>
