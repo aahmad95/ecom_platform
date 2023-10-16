@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "postgres",
+    "username": "algolix",
     "password": "12345",
-    "database": "E-commerce Website",
+    "database": "E-commerce",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
