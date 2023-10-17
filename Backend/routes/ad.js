@@ -13,6 +13,6 @@ router.post("/createAds", upload, createAds);
 router.get("/getAllAds", getAllAds);
 router.get("/getAds/:id", getAdsById);
 router.delete("/deleteAds/:id", deleteAds);
-router.put("/updateAds/:id", updateAds);
+router.put("/updateAds/:id", upload, updateAds);
 
 module.exports = router;

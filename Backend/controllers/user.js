@@ -1,5 +1,8 @@
 const { User } = require("../models");
+const bcrypt = require("bcryptjs");
+var jwt = require("jsonwebtoken");
 
+const JWT_SECRET = "HelloWorld";
 // Get All Users:
 const getAllUsers = async (req, res) => {
   try {
@@ -28,13 +31,23 @@ const createUser = async (req, res) => {
     if (Email) {
       return res.json({ message: "This email is already have an account." });
     }
+    const salt = await bcrypt.genSalt(10);
+    const secPass = await bcrypt.hash(password, salt);
     const user = await User.create({
       username,
       role,
       email,
-      password,
+      password: secPass,
     });
-    return res.json(user);
+    const data = {
+      user: {
+        id: user.id,
+        role: user.role,
+      },
+    };
+    const authToken = jwt.sign(data, JWT_SECRET);
+
+    return res.json({ authToken });
   } catch (err) {
     console.log(err);
     // res.status(500).json(err);
@@ -112,10 +125,47 @@ const updateUser = async (req, res) => {
   }
 };
 
+// Login a User:
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({
+      where: { email },
+    });
+    if (!user) {
+      return res.json({
+        message: "Please try to login with correct credentials.",
+      });
+    }
+    // returns true/false
+    const passwordCompare = bcrypt.compare(password, user.password);
+    if (!passwordCompare) {
+      return res.json({
+        message: "Please try to login with correct credentials.",
+      });
+    }
+    const data = {
+      user: {
+        id: user.id,
+        role: user.role,
+      },
+    };
+    const authToken = jwt.sign(data, JWT_SECRET);
+    return res.json({ authToken });
+  } catch (err) {
+    console.log(err);
+    // res.status(500).json(err);
+    res.status(501).send({
+      error: "Server Error: Could not login user.",
+    });
+  }
+};
+
 module.exports = {
   createUser,
   getAllUsers,
   getUserById,
   deleteUser,
   updateUser,
+  loginUser,
 };

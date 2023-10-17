@@ -13,6 +13,6 @@ router.post("/createCategory", upload, createCategory);
 router.get("/getAllCategory", getAllCategory);
 router.get("/getCategory/:id", getCategoryById);
 router.delete("/deleteCategory/:id", deleteCategory);
-router.put("/updateCategory/:id", updateCategory);
+router.put("/updateCategory/:id", upload, updateCategory);
 
 module.exports = router;

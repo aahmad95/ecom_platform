@@ -25,47 +25,44 @@ function Navbar() {
           src={icon}
           width="60"
           height="50"
-          className="d-inline-block align-top mx-4"
+          className="d-inline-block align-top mx-2"
           alt="E-commerce website logo"
         />
       </NavBar.Brand>
-      <NavBar.Brand
-        // style={{ color: "#430404" }}
-        href="#home"
-      >
-        <h1>
-          <b> E-commerce Website </b>
-        </h1>
+      <NavBar.Brand style={{ color: "#ff9633", fontSize: "47px" }} href="#home">
+        {/* <h1> */}
+        <b> E-commerce Website </b>
+        {/* </h1> */}
       </NavBar.Brand>
       <NavBar.Toggle className="mx-2" aria-controls="responsive-navbar-nav" />
       <NavBar.Collapse id="responsive-navbar-nav">
-        <Nav className="me-auto mx-2">
+        <Nav className=" mx-2">
           <Nav.Link href="#home">
-            <h3>
+            <h5>
               <i
                 class="mx-2 fa-sharp fa-solid fa-right-to-bracket fa-beat-fade"
                 style={{ color: "#ff9633" }}
               ></i>
               Login
-            </h3>
+            </h5>
           </Nav.Link>
           <Nav.Link href="#link">
-            <h3>
+            <h5>
               <i
-                class="mx-2 fa-solid fa-user-plus fa-fade"
+                class="mx-3 fa-solid fa-user-plus fa-fade"
                 style={{ color: "#ff9633" }}
               ></i>
               SignUp
-            </h3>
+            </h5>
           </Nav.Link>
           <Nav.Link href="#link">
-            <h3>
+            <h5>
               <i
                 class="mx-2 fa-solid fa-cart-plus fa-bounce"
                 style={{ color: "#ff9633" }}
               ></i>
               Cart
-            </h3>
+            </h5>
           </Nav.Link>
 
           {/* After Login  */}

@@ -67,12 +67,13 @@ const getAdsById = async (req, res) => {
 // Update a Category:
 const updateAds = async (req, res) => {
   try {
-    const { id } = req.params.id;
+    const { id } = req.params;
+    console.log("id", id);
 
     const [ads] = await Ads.update(req.body, {
       where: { id },
     });
-
+    console.log("ads", ads);
     if (ads) {
       return res.json({
         message: "Ad updated successfully.",
