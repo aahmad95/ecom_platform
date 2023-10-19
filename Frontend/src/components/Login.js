@@ -4,6 +4,9 @@ import Stack from "react-bootstrap/Stack";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import icon from "../logo.svg";
+import * as formik from "formik";
+import * as yup from "yup";
 // import jwt_decode from "jsonwebtoken";
 // import { jwt_decode } from "jsonwebtoken";
 const Login = () => {
@@ -12,11 +15,27 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState("");
+  const [validated, setValidated] = useState(false);
   let navigate = useNavigate();
   const handleSignUp = () => {
     navigate("/signup");
   };
-  const handleLogin = async () => {
+
+  //   const { Formik } = formik;
+
+  //   const schema = yup.object().shape({
+  //     eamil: yup.string().required(),
+  //     password: yup.string().required(),
+  //   });
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+    }
+
+    setValidated(true);
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -57,66 +76,110 @@ const Login = () => {
     }
   };
   return (
-    <div className="d-flex justify-content-center align-items-center bg-primary">
-      <div className="pg-3 bg-white w-50 mt-5 mb-5">
-        <Stack gap={4} className="mt-5 col-md-5 mx-4">
-          <h2
-            className="text-center"
-            style={{ fontSize: "50px", color: "#9b32e0" }}
-          >
-            <b>Login</b>
-          </h2>
+    // <Formik
+    //   validationSchema={schema}
+    //   onSubmit={console.log}
+    //   initialValues={{
+    //     email: "",
+    //     password: "",
+    //   }}
+    // >
+    //   {({ handleSubmit, handleChange, values, touched, errors }) => (
+    <Form validated={validated} onSubmit={handleSubmit}>
+      <div className="d-flex justify-content-center align-items-center bg-white">
+        <div className="shadow-lg pg-3 bg-white w-45 m-5 ">
+          {/* <Stack
+          gap={4}
+          className="pg-3 bg-white w-50 mt-5 mb-5 mt-5 col-md-5 mx-4"
+        > */}
 
-          <Form onSubmit={handleLogin}>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <div className="justify-content-center align-items-center  m-5 w-40 ">
+            <div className="text-center">
+              <img
+                src={icon}
+                width="70"
+                height="50"
+                className="img-fluid"
+                alt="E-commerce website logo"
+              />
+            </div>
+
+            <h2
+              className="text-center mb-5 "
+              style={{ fontSize: "50px", color: "#9b32e0" }}
+            >
+              <b>Login</b>
+            </h2>
+
+            <Form.Group className="mb-3" controlId="validationCustom03">
               <Form.Label>
                 <b>Email address:</b>
               </Form.Label>
               <Form.Control
+                // name="email"
                 variant="outlined"
                 type="email"
                 placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 required
+                // value={values.email}
+                // isInvalid={!!errors.city}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <Form.Text className="text-muted">
                 We'll never share your email with anyone else.
               </Form.Text>
+              <Form.Control.Feedback type="invalid">
+                Please provide a valid email.
+              </Form.Control.Feedback>
+              {/* <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback> */}
             </Form.Group>
 
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
+            <Form.Group className="mb-3" controlId="validationCustom04">
               <Form.Label>
                 <b>Password:</b>
               </Form.Label>
               <Form.Control
-                variant="outlined"
+                variant="outlined "
                 type="password"
+                // name="password"
                 placeholder="Enter your password here."
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 required
+                // value={values.password}
+                onChange={(e) => setPassword(e.target.value)}
+                // isInvalid={!!errors.state}
               />
+
+              <Form.Control.Feedback type="invalid">
+                Please provide a valid password.
+              </Form.Control.Feedback>
+              {/* <Form.Control.Feedback type="invalid">
+                    {errors.state}
+                  </Form.Control.Feedback> */}
             </Form.Group>
-          </Form>
-        </Stack>
-        <div className="mt-4 mb-3 grid text-center">
-          <Button
-            variant="outline-success mx-2"
-            type="submit"
-            //   onClick={handleLogin}
-          >
-            Login
-          </Button>
-          <Button variant="outline-info mx-2" onClick={handleSignUp}>
-            SignUp
-          </Button>
+          </div>
+          {/* </Stack> */}
+          <div className="mt-4 mb-5 grid text-center">
+            <Button
+              variant="outline-success mx-3 p-3 shadow-lg"
+              type="submit"
+              //   onClick={handleLogin}
+            >
+              Login
+            </Button>
+            <Button
+              variant="outline-info mx-2 p-3 shadow-lg"
+              onClick={handleSignUp}
+            >
+              SignUp
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </Form>
+    //   )}
+    // </Formik>
   );
 };
 

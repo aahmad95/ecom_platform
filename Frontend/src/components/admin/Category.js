@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import ModalHeader from "react-bootstrap/ModalHeader";
 import categoryContext from "../../context/category/categoryContext";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
@@ -42,16 +43,20 @@ const Category = () => {
     // // formData.append("name", name);
     // // formData.append("image", image);
     // // formData.append("userId", decoded.user.id);
-    const reqBody = {
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
       name: name,
       image: image,
       userId: decoded.user.id,
-    };
+    });
 
     var requestOptions = {
       method: "POST",
-      body: JSON.stringify(reqBody),
-      maxBodyLength: Infinity,
+      headers: myHeaders,
+      body: raw,
       redirect: "follow",
     };
 
@@ -70,7 +75,14 @@ const Category = () => {
         <h1 style={{ fontSize: "50px", color: "#9b32e0" }}>
           <b>Categories:</b>
         </h1>
-        <div className="container mx-3">
+
+        <div className="container mx-3 text-center">
+          <Button
+            variant="outline-dark py-2 px-3  m-5  fw-bold fs-2 shadow-lg"
+            onClick={handleShow}
+          >
+            Add New Category
+          </Button>
           {categories.length === 0 && "No Categories to display."}
         </div>
         {/* {notes.map((note) => {
@@ -83,44 +95,66 @@ const Category = () => {
             />
           );
         })} */}
-        {categories &&
-          categories.map((category) => {
-            // const base64String = btoa(
-            //   String.fromCharCode(...new Uint8Array(category.image.data))
-            // );
-            // console.log(base64String);
-            // console.log(category.image.data);
-            return (
-              <div>
-                {/* console.log(categories); */}
-                <Card style={{ width: "18rem" }}>
-                  <Card.Img variant="top" src={category.image} alt="image" />
-                  <Card.Body>
-                    <Card.Title>{category.name}</Card.Title>
-                    {/* <Card.Text>
+        <div class="container text-center mt-2">
+          <div class="row row-cols-3">
+            {categories &&
+              categories.map((category) => {
+                // const base64String = btoa(
+                //   String.fromCharCode(...new Uint8Array(category.image.data))
+                // );
+                // console.log(base64String);
+                // console.log(category.image.data);
+                return (
+                  <div>
+                    {/* console.log(categories); */}
+                    <Card className="shadow-lg">
+                      <Card.Img
+                        variant="top"
+                        src={category.image}
+                        alt="image"
+                      />
+                      <Card.Body>
+                        <Card.Title className="fw-bold fs-1">
+                          {category.name}
+                        </Card.Title>
+                        {/* <Card.Text>
                   Some quick example text to build on the card title and make up
                   the bulk of the card's content.
                 </Card.Text>  */}
-                    <Button variant="primary">Show Products</Button>
-                  </Card.Body>
-                </Card>
-                <img src={category.image.data} alt="" />
-              </div>
-            );
-          })}
+                        <Button variant="info fw-bold shadow-lg">
+                          Products
+                        </Button>
+                      </Card.Body>
+                    </Card>
+                    <img src={category.image.data} alt="" />
+                  </div>
+                );
+              })}
+          </div>
+        </div>
 
-        <Button variant="primary" onClick={handleShow}>
-          Add Category
-        </Button>
-
-        <Modal show={show} onHide={handleClose}>
+        <Modal
+          show={show}
+          onHide={handleClose}
+          dialogClassName="modal-90w"
+          aria-labelledby="example-custom-modal-styling-title"
+        >
           <Modal.Header closeButton>
-            <Modal.Title>Add Category</Modal.Title>
+            <Modal.Title className="fw-bold text-center fs-1">
+              Add Category
+            </Modal.Title>
+            <button
+              type="button"
+              className="btn-close"
+              // data-bs-dismiss="modal"
+              aria-label="Close"
+              onClick={handleClose}
+            ></button>
           </Modal.Header>
           <Modal.Body>
             <Form>
               <Form.Group className="mb-3" controlId="title">
-                <Form.Label>Category Name:</Form.Label>
+                <Form.Label className="fw-bold fs-3">Category Name:</Form.Label>
                 <Form.Control
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -128,7 +162,9 @@ const Category = () => {
                 />
               </Form.Group>
               <Form.Group controlId="fileName" className="mb-3">
-                <Form.Label>Category Image: </Form.Label>
+                <Form.Label className="fw-bold fs-3">
+                  Category Image:{" "}
+                </Form.Label>
                 <Form.Control
                   type="file"
                   name="image"
@@ -157,10 +193,13 @@ const Category = () => {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              variant="secondary shadow-lg fw-bold p-2"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
-            <Button variant="success" onClick={handleAdd}>
+            <Button variant="success shadow-lg fw-bold p-2" onClick={handleAdd}>
               Add Category
             </Button>
           </Modal.Footer>

@@ -29,22 +29,37 @@ const AdminPage = () => {
         </h1>
       </div>
       {/* <div className="mt-2 mx-3 "></div> */}
-      <Stack gap={4} className="mt-5 col-md-5 mx-auto">
-        <Button onClick={handleDashboard} variant="outline-info">
+      <Stack gap={4} className="mt-5 col-md-4 mx-auto">
+        <Button
+          onClick={handleDashboard}
+          variant="outline-info p-2 fw-bold fs-2 shadow-lg"
+        >
           Dashboard
         </Button>
 
-        <Button onClick={handleCategory} variant="outline-info">
+        <Button
+          onClick={handleCategory}
+          variant="outline-info p-2 fw-bold fs-2 shadow-lg"
+        >
           Categories
         </Button>
 
-        <Button onClick={handleUsers} variant="outline-info">
+        <Button
+          onClick={handleUsers}
+          variant="outline-info p-2 fw-bold fs-2 shadow-lg"
+        >
           Users
         </Button>
-        <Button onClick={handleSellers} variant="outline-info">
+        <Button
+          onClick={handleSellers}
+          variant="outline-info p-2 fw-bold fs-2 shadow-lg"
+        >
           Sellers
         </Button>
-        <Button onClick={handleAds} variant="outline-info">
+        <Button
+          onClick={handleAds}
+          variant="outline-info p-2 fw-bold fs-2 shadow-lg"
+        >
           Ads
         </Button>
       </Stack>
