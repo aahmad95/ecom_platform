@@ -19,7 +19,7 @@ module.exports = {
         unique: true,
       },
       image: {
-        type: Sequelize.BLOB,
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       userId: {

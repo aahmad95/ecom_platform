@@ -30,24 +30,24 @@ const Home = () => {
           <b>Categories:</b>
         </h1>
         <div className="container mx-3">
-          {categories.length === 0 && "No Categories to display."}
-        </div>
-
-        {categories.map((category) => {
-          return (
-            <Card style={{ width: "18rem" }}>
-              <Card.Img variant="top" src={category.image} />
-              <Card.Body>
-                <Card.Title>{category.name}</Card.Title>
-                {/* <Card.Text>
+          {categories.length
+            ? categories.map((category) => {
+                return (
+                  <Card style={{ width: "18rem" }}>
+                    <Card.Img variant="top" src={category.image} />
+                    <Card.Body>
+                      <Card.Title>{category.name}</Card.Title>
+                      {/* <Card.Text>
                   Some quick example text to build on the card title and make up
                   the bulk of the card's content.
                 </Card.Text> */}
-                <Button variant="primary">Show Products</Button>
-              </Card.Body>
-            </Card>
-          );
-        })}
+                      <Button variant="primary">Show Products</Button>
+                    </Card.Body>
+                  </Card>
+                );
+              })
+            : "No Categories to display."}
+        </div>
       </div>
     </>
   );

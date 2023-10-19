@@ -39,6 +39,37 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
+### For using jwt in react install these and
+
+### `npm install crypto-browserify stream-browserify`
+
+### `npm install stream `
+
+Add this into node_modules/react-scripts/config/webpack.config.js
+resolve: {
+
+      fallback: {
+        crypto: require.resolve("crypto-browserify"),
+        stream: require.resolve("stream-browserify"),
+      },
+
+}
+
+And Add this into dependencies in package.json
+"browser": {
+"buffer": false,
+"crypto": false,
+"stream": false
+},
+
+### `npm start`
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).

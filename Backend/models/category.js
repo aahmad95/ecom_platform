@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
   Category.init(
     {
       name: DataTypes.STRING,
-      image: DataTypes.BLOB("long"),
+      image: DataTypes.TEXT,
       userId: DataTypes.INTEGER,
     },
     {

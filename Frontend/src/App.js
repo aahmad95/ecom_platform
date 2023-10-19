@@ -7,33 +7,35 @@ import Category from "./components/admin/Category";
 import AdminPage from "./components/AdminPage";
 import User from "./components/admin/User";
 import Seller from "./components/admin/Seller";
+import Login from "./components/Login";
 
 import Dashboard from "./components/admin/Dashboard";
 import Ads from "./components/admin/Ads";
+import SignUp from "./components/SignUp";
 
 function App() {
   return (
     <>
       <CategoryState>
-        <Navbar />
         <Router>
-          <div className="conatiner">
-            <Routes>
-              <Route exact path="/" element={<Home />} />
+          <Navbar />
 
-              <Route exact path="/navbar" element={<Navbar />} />
+          <Routes>
+            <Route exact path="/" element={<Home />} />
 
-              {/* <Route exact path="/login" element={<Login />} />
+            <Route exact path="/navbar" element={<Navbar />} />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/signup" element={<SignUp />} />
+            {/* 
 
             <Route exact path="/signup" element={<Signup />} /> */}
-              <Route exact path="/admin" element={<AdminPage />} />
-              <Route exact path="/admin/category" element={<Category />} />
-              <Route exact path="/admin/users" element={<User />} />
-              <Route exact path="/admin/sellers" element={<Seller />} />
-              <Route exact path="/admin/ads" element={<Ads />} />
-              <Route exact path="/admin/dashboard" element={<Dashboard />} />
-            </Routes>
-          </div>
+            <Route exact path="/admin" element={<AdminPage />} />
+            <Route exact path="/admin/category" element={<Category />} />
+            <Route exact path="/admin/users" element={<User />} />
+            <Route exact path="/admin/sellers" element={<Seller />} />
+            <Route exact path="/admin/ads" element={<Ads />} />
+            <Route exact path="/admin/dashboard" element={<Dashboard />} />
+          </Routes>
         </Router>
       </CategoryState>
     </>

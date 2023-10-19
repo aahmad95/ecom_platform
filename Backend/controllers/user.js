@@ -1,7 +1,8 @@
 const { User } = require("../models");
 const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
-
+// require("dotenv").config();
+// const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_SECRET = "HelloWorld";
 // Get All Users:
 const getAllUsers = async (req, res) => {
@@ -137,8 +138,13 @@ const loginUser = async (req, res) => {
         message: "Please try to login with correct credentials.",
       });
     }
+    // console.log("user----->", user);
+    // console.log("user.password----->", user.password);
+    // console.log("password----->", password);
+
     // returns true/false
-    const passwordCompare = bcrypt.compare(password, user.password);
+    const passwordCompare = await bcrypt.compare(password, user.password);
+    // console.log("passwordCompare----->", passwordCompare);
     if (!passwordCompare) {
       return res.json({
         message: "Please try to login with correct credentials.",

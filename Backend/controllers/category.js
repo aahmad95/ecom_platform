@@ -9,7 +9,7 @@ const getAllCategory = async (req, res) => {
     if (category.length) {
       return res.json(category);
     }
-    return res.json({ message: "There isn't any category yet." });
+    return res.json([]);
   } catch (err) {
     console.log(err);
     // return res.status(500).json({ error: "something went wrong" });
@@ -22,11 +22,13 @@ const getAllCategory = async (req, res) => {
 // Create a New Category
 const createCategory = async (req, res) => {
   try {
-    const { name, userId } = req.body;
-    const image = req.file.path;
+    const { name, image, userId } = req.body;
+    console.log(req);
+
     const Name = await Category.findOne({
       where: { name },
     });
+    console.log("Name", name);
     if (Name) {
       return res.json({ message: "This Category already exist." });
     }

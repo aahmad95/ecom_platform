@@ -9,7 +9,16 @@ import Button from "react-bootstrap/Button";
 // import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import icon from "../logo.svg";
 import "font-awesome/css/font-awesome.min.css";
+import Stack from "react-bootstrap/Stack";
+import { useNavigate } from "react-router-dom";
+
 function Navbar() {
+  let navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+    // props.showAlert("Logged Out Successfully.", "success");
+  };
   return (
     <NavBar
       collapseOnSelect
@@ -29,7 +38,7 @@ function Navbar() {
           alt="E-commerce website logo"
         />
       </NavBar.Brand>
-      <NavBar.Brand style={{ color: "#ff9633", fontSize: "47px" }} href="#home">
+      <NavBar.Brand style={{ color: "#ff9633", fontSize: "45px" }} href="#home">
         {/* <h1> */}
         <b> E-commerce Website </b>
         {/* </h1> */}
@@ -37,74 +46,67 @@ function Navbar() {
       <NavBar.Toggle className="mx-2" aria-controls="responsive-navbar-nav" />
       <NavBar.Collapse id="responsive-navbar-nav">
         <Nav className=" mx-2">
-          <Nav.Link href="#home">
-            <h5>
-              <i
-                class="mx-2 fa-sharp fa-solid fa-right-to-bracket fa-beat-fade"
-                style={{ color: "#ff9633" }}
-              ></i>
-              Login
-            </h5>
-          </Nav.Link>
-          <Nav.Link href="#link">
-            <h5>
-              <i
-                class="mx-3 fa-solid fa-user-plus fa-fade"
-                style={{ color: "#ff9633" }}
-              ></i>
-              SignUp
-            </h5>
-          </Nav.Link>
-          <Nav.Link href="#link">
-            <h5>
-              <i
-                class="mx-2 fa-solid fa-cart-plus fa-bounce"
-                style={{ color: "#ff9633" }}
-              ></i>
-              Cart
-            </h5>
-          </Nav.Link>
-
-          {/* After Login  */}
-          {/* <Nav.Link href="#link">
-            <h3>
-              My Account
-              <i
-                class="mx-2 fa-solid fa-id-card fa-flip"
-                style={{ color: "#ff9633" }}
-              ></i>
-            </h3>
-          </Nav.Link>
-          <Nav.Link href="#link">
-            <h3>
-              Cart
-              <i
-                class="mx-2 fa-solid fa-cart-plus fa-bounce"
-                style={{ color: "#ff9633" }}
-              ></i>
-            </h3>
-          </Nav.Link>
-          <Nav.Link href="#link">
-            <h3>
-              Logout
-              <i
-                class="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
-                style={{ color: "#ff9633" }}
-              ></i>
-            </h3>
-          </Nav.Link> */}
-
-          {/* <NavDropdown title="Categories" id="collasible-nav-dropdown">
-            <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.2">
-              Another action
-            </NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="#action/3.4">
-              Separated link
-            </NavDropdown.Item>
-          </NavDropdown> */}
+          {localStorage.getItem("token") ? (
+            <Stack direction="horizontal">
+              <Nav.Link href="#link">
+                <h5>
+                  Profile
+                  <i
+                    class="mx-2 fa-solid fa-id-card fa-flip"
+                    style={{ color: "#ff9633" }}
+                  ></i>
+                </h5>
+              </Nav.Link>
+              <Nav.Link href="#link">
+                <h5>
+                  Cart
+                  <i
+                    class="mx-2 fa-solid fa-cart-plus fa-bounce"
+                    style={{ color: "#ff9633" }}
+                  ></i>
+                </h5>
+              </Nav.Link>
+              <Nav.Link onClick={handleLogout}>
+                <h5>
+                  Logout
+                  <i
+                    class="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
+                    style={{ color: "#ff9633" }}
+                  ></i>
+                </h5>
+              </Nav.Link>
+            </Stack>
+          ) : (
+            <Stack direction="horizontal">
+              <Nav.Link href="/login">
+                <h5>
+                  <i
+                    class="mx-2 fa-sharp fa-solid fa-right-to-bracket fa-beat-fade"
+                    style={{ color: "#ff9633" }}
+                  ></i>
+                  Login
+                </h5>
+              </Nav.Link>
+              <Nav.Link href="#link">
+                <h5>
+                  <i
+                    class="mx-3 fa-solid fa-user-plus fa-fade"
+                    style={{ color: "#ff9633" }}
+                  ></i>
+                  SignUp
+                </h5>
+              </Nav.Link>
+              <Nav.Link href="#link">
+                <h5>
+                  <i
+                    class="mx-2 fa-solid fa-cart-plus fa-bounce"
+                    style={{ color: "#ff9633" }}
+                  ></i>
+                  Cart
+                </h5>
+              </Nav.Link>
+            </Stack>
+          )}
         </Nav>
         <Form className="d-flex">
           <Form.Control

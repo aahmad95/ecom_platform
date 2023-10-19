@@ -9,10 +9,10 @@ const {
 } = require("../controllers/category");
 const { upload } = require("../controllers/image");
 
-router.post("/createCategory", upload, createCategory);
+router.post("/createCategory", createCategory);
 router.get("/getAllCategory", getAllCategory);
 router.get("/getCategory/:id", getCategoryById);
 router.delete("/deleteCategory/:id", deleteCategory);
-router.put("/updateCategory/:id", upload, updateCategory);
+router.put("/updateCategory/:id", updateCategory);
 
 module.exports = router;
