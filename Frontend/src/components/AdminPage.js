@@ -67,7 +67,7 @@ const AdminPage = () => {
         </Button>
       </Stack> */}
 
-        <div class="sidebar">
+        <div class="sidebar1">
           <ul>
             <li>
               <a href="#">
@@ -114,18 +114,18 @@ const AdminPage = () => {
           </ul>
         </div>
 
-        <div class="main">
-          <div class="topbar">
-            <div class="search">
+        <div class="main1">
+          <div class="topbar1">
+            <div class="search1">
               <input type="search" name="search" placeholder="search here" />
               <label for="search">
                 <i class="fas fa-search "></i>
               </label>
             </div>
-            <div class="notification">
+            <div class="notification1">
               <i class="fas fa-bell "></i>
 
-              <div class="profilepic">
+              <div class="profilepic1">
                 <img src="/download.jpeg" alt="profile" />
               </div>
             </div>
@@ -134,29 +134,29 @@ const AdminPage = () => {
           <div class="cards">
             <div class="card">
               <div class="card-content">
-                <div class="number">67</div>
+                <div class="number1">67</div>
                 <div class="card-name">Appointements</div>
               </div>
-              <div class="icon-box">
+              <div class="icon-box1">
                 <i class="fas fa-briefcase-medical "></i>
               </div>
             </div>
 
             <div class="card">
               <div class="card-content">
-                <div class="number">105</div>
+                <div class="number1">105</div>
                 <div class="card-name">New Patients</div>
               </div>
-              <div class="icon-box">
+              <div class="icon-box1">
                 <i class="fas fa-frown"></i>
               </div>
             </div>
             <div class="card">
               <div class="card-content">
-                <div class="number">8</div>
+                <div class="number1">8</div>
                 <div class="card-name">Consultants</div>
               </div>
-              <div class="icon-box">
+              <div class="icon-box1">
                 <i class="fas fa-user"></i> <i class="fas fa-user"></i>
               </div>
             </div>

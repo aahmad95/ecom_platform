@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ModalHeader from "react-bootstrap/ModalHeader";
-import categoryContext from "../../context/category/categoryContext";
+import categoryContext from "../../context/cart/cartContext";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";

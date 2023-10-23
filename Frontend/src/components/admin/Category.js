@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import ModalHeader from "react-bootstrap/ModalHeader";
-import categoryContext from "../../context/category/categoryContext";
+import categoryContext from "../../context/cart/cartContext";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
@@ -200,7 +200,7 @@ const Category = () => {
           </Modal.Body>
           <Modal.Footer>
             <Button
-              variant="secondary shadow-lg fw-bold p-2 mb-3"
+              variant="secondary shadow-lg fw-bold p-2 "
               onClick={handleClose}
             >
               Cancel

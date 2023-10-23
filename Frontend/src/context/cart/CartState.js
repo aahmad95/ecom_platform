@@ -1,10 +1,11 @@
 import React from "react";
-import CategoryContext from "./categoryContext";
+import CartContext from "./cartContext";
 import { useState } from "react";
 import axios from "axios";
 
-const CategoryState = (props) => {
-  const [categories, setCategories] = useState([]);
+const CartState = (props) => {
+  const [order, setOrder] = useState([]);
+  const [orderItem, setOrderItem] = useState([]);
   const host = "http://localhost:5000";
 
   //Get all Categories:
@@ -112,10 +113,10 @@ const CategoryState = (props) => {
   //   };
 
   return (
-    <CategoryContext.Provider value={{ categories, getCategories }}>
+    <CartContext.Provider value={{ orderItem, setOrderItem }}>
       {props.children}
-    </CategoryContext.Provider>
+    </CartContext.Provider>
   );
 };
 
-export default CategoryState;
+export default CartState;

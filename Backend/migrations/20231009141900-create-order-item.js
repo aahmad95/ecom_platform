@@ -17,11 +17,11 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      productId: {
+      productDetailId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "Products", //table name
+          model: "ProductDetails", //table name
           key: "id",
         },
       },

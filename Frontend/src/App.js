@@ -2,7 +2,7 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
-import CategoryState from "./context/category/CategoryState";
+import CartState from "./context/cart/CartState";
 import Category from "./components/admin/Category";
 import AdminPage from "./components/AdminPage";
 import User from "./components/admin/User";
@@ -14,11 +14,13 @@ import Ads from "./components/admin/Ads";
 import SignUp from "./components/SignUp";
 import Products from "./components/Products";
 import ProductDetails from "./components/ProductDetails";
+import Footer from "./components/Footer";
+import Cart from "./components/Cart";
 
 function App() {
   return (
     <div>
-      <CategoryState>
+      <CartState>
         <Router>
           <Navbar />
 
@@ -35,6 +37,7 @@ function App() {
             <Route exact path="/navbar" element={<Navbar />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/signup" element={<SignUp />} />
+            <Route exact path="/cart" element={<Cart />} />
             {/* 
 
             <Route exact path="/signup" element={<Signup />} /> */}
@@ -47,7 +50,8 @@ function App() {
             <Route exact path="/admin/dashboard" element={<Dashboard />} />
           </Routes>
         </Router>
-      </CategoryState>
+      </CartState>
+      <Footer />
     </div>
   );
 }

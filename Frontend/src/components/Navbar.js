@@ -24,6 +24,7 @@ function Navbar() {
 
   return (
     <NavBar
+      sticky="top"
       collapseOnSelect
       expand="lg"
       style={{
@@ -53,11 +54,18 @@ function Navbar() {
         as={Link}
         to="/"
       >
-        {/* <h1> */}
         <b> E-commerce Website </b>
-        {/* </h1> */}
       </NavBar.Brand>
       <NavBar.Toggle className="mx-2" aria-controls="responsive-navbar-nav" />
+      {/* <Nav className=" mx-4">
+        <Nav.Link as={Link} to="/">
+          <i
+            className="mx-2 fa-solid fa-house fa-flip"
+            style={{ color: "#ab41f1" }}
+          ></i>
+          Home
+        </Nav.Link>
+      </Nav> */}
       <NavBar.Collapse
         id="responsive-navbar-nav"
         className="justify-content-end"
@@ -65,30 +73,26 @@ function Navbar() {
         {localStorage.getItem("token") ? (
           <Nav className=" mx-4">
             <Nav.Link as={Link} to="/">
-              {/* <h6> */}
               <i
-                class="mx-2 fa-solid fa-house fa-flip"
-                style={{ color: "#D7BDE2" }}
+                className="mx-2 fa-solid fa-house fa-flip"
+                style={{ color: "#ab41f1" }}
               ></i>
               Home
-              {/* </h6> */}
             </Nav.Link>
             {/* <Stack direction="horizontal" gap={2}> */}
-            <Nav.Link href="#link">
-              {/* <h6> */}
+            {/* <Nav.Link href="#link">
               Profile
               <i
-                class="mx-2 fa-solid fa-id-card fa-flip"
-                style={{ color: "#ff9633" }}
+                className="mx-2 fa-solid fa-id-card fa-flip"
+                style={{ color: "#ab41f1" }}
               ></i>
-              {/* </h6> */}
-            </Nav.Link>
-            <Nav.Link href="#link">
+            </Nav.Link> */}
+            <Nav.Link as={Link} to="/cart">
               {/* <h6> */}
               Cart
               <i
-                class="mx-2 fa-solid fa-cart-plus fa-bounce"
-                style={{ color: "#ff9633" }}
+                className="mx-2 fa-solid fa-cart-plus fa-bounce"
+                style={{ color: "#ab41f1" }}
               ></i>
               {/* </h6> */}
             </Nav.Link>
@@ -96,8 +100,8 @@ function Navbar() {
               {/* <h6> */}
               Logout
               <i
-                class="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
-                style={{ color: "#ff9633" }}
+                className="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
+                style={{ color: "#ab41f1" }}
               ></i>
               {/* </h6> */}
             </Nav.Link>
@@ -105,44 +109,34 @@ function Navbar() {
           </Nav>
         ) : (
           <Nav className=" mx-4">
-            <Nav.Link as={Link} to="/">
-              {/* <h6> */}
+            <Nav.Link href="/">
               <i
-                class="mx-2 fa-solid fa-house fa-flip"
+                className="mx-2 fa-solid fa-house fa-bounce"
                 style={{ color: "#ab41f1" }}
               ></i>
               Home
-              {/* </h6> */}
             </Nav.Link>
-            {/* <Stack gap={2}> */}
             <Nav.Link as={Link} to="/login">
-              {/* <h6> */}
               <i
-                class="mx-2 fa-sharp fa-solid fa-right-to-bracket fa-beat-fade"
-                style={{ color: "#ff9633" }}
+                className="mx-2 fa-sharp fa-solid fa-right-to-bracket fa-beat-fade"
+                style={{ color: "#ab41f1" }}
               ></i>
               Login
-              {/* </h6> */}
             </Nav.Link>
-            <Nav.Link as={Link} to="/signup">
-              {/* <h6> */}
+            <Nav.Link href="/signup">
               <i
-                class="mx-2 fa-solid fa-user-plus fa-fade"
-                style={{ color: "#ff9633" }}
+                className="mx-2 fa-solid fa-user-plus fa-fade"
+                style={{ color: "#ab41f1" }}
               ></i>
               SignUp
-              {/* </h6> */}
             </Nav.Link>
-            <Nav.Link href="#link">
-              {/* <h6> */}
+            {/* <Nav.Link href="/login">
               <i
-                class="mx-2 fa-solid fa-cart-plus fa-bounce"
-                style={{ color: "#ff9633" }}
+                className="mx-2 fa-solid fa-cart-plus fa-bounce"
+                style={{ color: "#ab41f1" }}
               ></i>
               Cart
-              {/* </h6> */}
-            </Nav.Link>
-            {/* </Stack> */}
+            </Nav.Link> */}
           </Nav>
         )}
 

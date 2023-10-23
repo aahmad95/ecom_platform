@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import categoryContext from "../context/category/categoryContext";
+import categoryContext from "../context/cart/cartContext";
 import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
 import { Link } from "react-router-dom";
@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const Products = () => {
   const param = useParams();
   const [category, setCategory] = useState("");
-  const navigate = useNavigate();
+  //   const navigate = useNavigate();
   // const context = useContext(categoryContext);
   // const { categories, getCategories } = context;
   const [products, setProducts] = useState([]);
