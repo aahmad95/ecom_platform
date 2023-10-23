@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 import Button from "react-bootstrap/Button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import icon from "../logo.svg";
 import * as formik from "formik";
@@ -17,9 +17,9 @@ const Login = () => {
   const [user, setUser] = useState("");
   const [validated, setValidated] = useState(false);
   let navigate = useNavigate();
-  const handleSignUp = () => {
-    navigate("/signup");
-  };
+  // const handleSignUp = () => {
+  //   navigate("/signup");
+  // };
 
   //   const { Formik } = formik;
 
@@ -52,7 +52,7 @@ const Login = () => {
     };
 
     const response = await fetch(
-      "http://localhost:5000/users/loginUser",
+      "http://localhost:5000/api/v1/users/loginUser",
       requestOptions
     );
     const json = await response.json();
@@ -61,17 +61,19 @@ const Login = () => {
     if (json.authToken) {
       //saving the auth-token in local-Storage and redirect
       localStorage.setItem("token", json.authToken);
-      setUser(json.user);
-      var decoded = jwt_decode(json.authToken);
+
+      var decoded = await jwt_decode(json.authToken);
       console.log(decoded);
+      await setUser(decoded.user);
+      console.log(user);
 
       //   props.showAlert("Logged in Successfully.", "success");
-      if (decoded.user.role === "admin") {
+      if (user.role === "admin") {
         navigate("/admin");
       } else if (user.role === "seller") {
         navigate("/seller");
       } else if (user.role === "customer") {
-        navigate("/customer");
+        navigate("/home");
       }
     }
   };
@@ -97,22 +99,23 @@ const Login = () => {
             <div className="text-center">
               <img
                 src={icon}
-                width="70"
-                height="50"
+                width="65"
+                height="45"
                 className="img-fluid"
                 alt="E-commerce website logo"
               />
             </div>
 
-            <h2
+            <h1
               className="text-center mb-5 "
-              style={{ fontSize: "50px", color: "#9b32e0" }}
+              // style={{ fontSize: "50px", color: "#9b32e0" }}
             >
               <b>Login</b>
-            </h2>
+            </h1>
 
             <Form.Group className="mb-3" controlId="validationCustom03">
               <Form.Label>
+                <i class="fa-solid fa-at fa-beat-fade mx-1"></i>
                 <b>Email address:</b>
               </Form.Label>
               <Form.Control
@@ -138,6 +141,7 @@ const Login = () => {
 
             <Form.Group className="mb-3" controlId="validationCustom04">
               <Form.Label>
+                <i class="fa-sharp fa-solid fa-key fa-beat-fade mx-1"></i>
                 <b>Password:</b>
               </Form.Label>
               <Form.Control
@@ -160,20 +164,26 @@ const Login = () => {
             </Form.Group>
           </div>
           {/* </Stack> */}
-          <div className="mt-4 mb-5 grid text-center">
+          <div className="mt-4 mb-2 grid text-center">
             <Button
-              variant="outline-success mx-3 p-3 shadow-lg"
+              variant="outline-success mx-2 py-2 px-4 shadow-lg"
               type="submit"
               //   onClick={handleLogin}
             >
               Login
             </Button>
-            <Button
-              variant="outline-info mx-2 p-3 shadow-lg"
+            {/* <Button
+              variant="outline-info mx-2 py-2 px-3 shadow-lg"
               onClick={handleSignUp}
             >
               SignUp
-            </Button>
+            </Button> */}
+            {/* <br /> */}
+          </div>
+          <div className=" mb-5 grid text-center">
+            <Form.Text>
+              Create a new account. <Link to="/signup">SignUp</Link>
+            </Form.Text>
           </div>
         </div>
       </div>

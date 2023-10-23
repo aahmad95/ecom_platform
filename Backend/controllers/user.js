@@ -24,7 +24,7 @@ const getAllUsers = async (req, res) => {
 
 // Create a new User:
 const createUser = async (req, res) => {
-  const { username, role, email, password } = req.body;
+  const { username, role, address, email, password } = req.body;
   try {
     const Email = await User.findOne({
       where: { email },
@@ -37,6 +37,7 @@ const createUser = async (req, res) => {
     const user = await User.create({
       username,
       role,
+      address,
       email,
       password: secPass,
     });
@@ -44,6 +45,9 @@ const createUser = async (req, res) => {
       user: {
         id: user.id,
         role: user.role,
+        username: user.username,
+        email: user.email,
+        address: user.address,
       },
     };
     const authToken = jwt.sign(data, JWT_SECRET);
@@ -138,6 +142,7 @@ const loginUser = async (req, res) => {
         message: "Please try to login with correct credentials.",
       });
     }
+    // if(password===user,password)
     // console.log("user----->", user);
     // console.log("user.password----->", user.password);
     // console.log("password----->", password);
@@ -154,6 +159,9 @@ const loginUser = async (req, res) => {
       user: {
         id: user.id,
         role: user.role,
+        username: user.username,
+        email: user.email,
+        address: user.address,
       },
     };
     const authToken = jwt.sign(data, JWT_SECRET);

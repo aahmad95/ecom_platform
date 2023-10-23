@@ -14,8 +14,12 @@ module.exports = {
         allowNull: false,
       },
       image: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
+      },
+      priority: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       userId: {
         type: Sequelize.INTEGER,

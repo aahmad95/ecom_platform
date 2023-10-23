@@ -25,6 +25,7 @@ const createProduct = async (req, res) => {
       categoryId,
       brand,
       description,
+      image,
       price,
       warranty,
       status,
@@ -36,6 +37,7 @@ const createProduct = async (req, res) => {
       categoryId,
       brand,
       description,
+      image,
       price,
       warranty,
       status,
@@ -118,6 +120,27 @@ const deleteProduct = async (req, res) => {
     });
   }
 };
+// Get all Products of a Category:
+const getProductsByCategory = async (req, res) => {
+  try {
+    const { categoryId } = await req.params;
+    console.log("categoryId----->", categoryId);
+    const products = await Product.findAll({
+      where: { categoryId },
+    });
+    if (products.length) {
+      return res.json(products);
+    }
+    return res.json({
+      message: "There isn't any Product of this category exist.",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(501).send({
+      error: "Server Error: Could not find the Product of Category.",
+    });
+  }
+};
 
 module.exports = {
   getAllProducts,
@@ -125,4 +148,5 @@ module.exports = {
   getProductById,
   updateProduct,
   deleteProduct,
+  getProductsByCategory,
 };

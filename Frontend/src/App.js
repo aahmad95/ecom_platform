@@ -12,16 +12,25 @@ import Login from "./components/Login";
 import Dashboard from "./components/admin/Dashboard";
 import Ads from "./components/admin/Ads";
 import SignUp from "./components/SignUp";
+import Products from "./components/Products";
+import ProductDetails from "./components/ProductDetails";
 
 function App() {
   return (
-    <>
+    <div>
       <CategoryState>
         <Router>
           <Navbar />
 
           <Routes>
             <Route exact path="/" element={<Home />} />
+            <Route exact path="/home" element={<Home />} />
+            <Route exact path="/category/:categoryId" element={<Products />} />
+            <Route
+              exact
+              path="/product/:productId"
+              element={<ProductDetails />}
+            />
 
             <Route exact path="/navbar" element={<Navbar />} />
             <Route exact path="/login" element={<Login />} />
@@ -31,6 +40,7 @@ function App() {
             <Route exact path="/signup" element={<Signup />} /> */}
             <Route exact path="/admin" element={<AdminPage />} />
             <Route exact path="/admin/category" element={<Category />} />
+
             <Route exact path="/admin/users" element={<User />} />
             <Route exact path="/admin/sellers" element={<Seller />} />
             <Route exact path="/admin/ads" element={<Ads />} />
@@ -38,7 +48,7 @@ function App() {
           </Routes>
         </Router>
       </CategoryState>
-    </>
+    </div>
   );
 }
 

@@ -17,11 +17,12 @@ module.exports = {
           key: "id",
         },
       },
-      image: {
-        type: Sequelize.STRING,
-      },
       stock: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      image: {
+        type: Sequelize.ARRAY(Sequelize.TEXT),
         allowNull: false,
       },
 

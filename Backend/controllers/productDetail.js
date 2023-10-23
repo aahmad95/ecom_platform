@@ -24,6 +24,7 @@ const createProductDetail = async (req, res) => {
     const {
       productId,
       stock,
+      image,
       size,
       color,
       material,
@@ -56,6 +57,7 @@ const createProductDetail = async (req, res) => {
     const productDetail = await ProductDetail.create({
       productId,
       stock,
+      image,
       size,
       color,
       material,
@@ -159,11 +161,32 @@ const deleteProductDetail = async (req, res) => {
     });
   }
 };
-
+// Get all ProductDetails of a Product:
+const getProductDetailsByProduct = async (req, res) => {
+  try {
+    const { productId } = await req.params;
+    // console.log("categoryId----->", categoryId);
+    const productDetails = await ProductDetail.findAll({
+      where: { productId },
+    });
+    if (productDetails.length) {
+      return res.json(productDetails);
+    }
+    return res.json({
+      message: "There isn't any Product Details of this Product exist.",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(501).send({
+      error: "Server Error: Could not find the Product Details of Product.",
+    });
+  }
+};
 module.exports = {
   getAllProductDetails,
   createProductDetail,
   getProductDetailById,
   updateProductDetail,
   deleteProductDetail,
+  getProductDetailsByProduct,
 };

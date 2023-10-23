@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   Ads.init(
     {
       name: DataTypes.STRING,
-      image: DataTypes.STRING,
+      image: DataTypes.TEXT,
       userId: DataTypes.INTEGER,
     },
     {

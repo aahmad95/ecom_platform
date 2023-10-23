@@ -1,5 +1,5 @@
-const multer = require("multer");
-const path = require("path");
+// const multer = require("multer");
+// const path = require("path");
 const { Ads } = require("../models");
 
 //Get All Ads:
@@ -22,8 +22,8 @@ const getAllAds = async (req, res) => {
 // Create a New Ads
 const createAds = async (req, res) => {
   try {
-    const { name, userId } = req.body;
-    const image = req.file.path;
+    const { name, image, userId } = req.body;
+
     // const Name = await Ads.findOne({
     //   where: { name },
     // });

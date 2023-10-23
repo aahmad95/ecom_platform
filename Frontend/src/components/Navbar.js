@@ -15,17 +15,25 @@ import { useNavigate } from "react-router-dom";
 
 function Navbar() {
   let navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
     // props.showAlert("Logged Out Successfully.", "success");
   };
+
   return (
     <NavBar
       collapseOnSelect
       expand="lg"
       style={{
-        backgroundColor: "#9b32e0",
+        // backgroundColor: "#9b32e0",
+        backgroundImage:
+          // "radial-gradient( circle farthest-corner at 10% 20%,  rgba(171,102,255,1) 0%, rgba(116,182,247,1) 90% )",
+          // "linear-gradient( 173.1deg,  rgba(226,66,249,0.94) 10.2%, rgba(79,147,249,1) 77.3% )",
+          "linear-gradient( 160.1deg,  rgba(151, 17, 172, 0.94) 10.2%, rgb(26, 93, 194) 77.3% )",
+        // "linear-gradient(90deg, #efd5ff 0%, #515ada 100%)",
+
         // , color: "#430404"
       }}
     >
@@ -33,14 +41,15 @@ function Navbar() {
       <NavBar.Brand as={Link} to="/">
         <img
           src={icon}
-          width="65"
-          height="60"
+          width="60"
+          height="55"
           className="d-inline-block align-top mx-2"
           alt="E-commerce website logo"
         />
       </NavBar.Brand>
       <NavBar.Brand
-        style={{ color: "#ff9633", fontSize: "50px" }}
+        className="text-wrap"
+        style={{ color: "#1ab5e9", fontSize: "36px" }}
         as={Link}
         to="/"
       >
@@ -53,78 +62,90 @@ function Navbar() {
         id="responsive-navbar-nav"
         className="justify-content-end"
       >
-        <Nav className=" mx-4">
-          <Nav.Link as={Link} to="/">
-            <h5>
+        {localStorage.getItem("token") ? (
+          <Nav className=" mx-4">
+            <Nav.Link as={Link} to="/">
+              {/* <h6> */}
               <i
                 class="mx-2 fa-solid fa-house fa-flip"
-                style={{ color: "#ff9633" }}
+                style={{ color: "#D7BDE2" }}
               ></i>
               Home
-            </h5>
-          </Nav.Link>
-          {localStorage.getItem("token") ? (
-            <Stack direction="horizontal" gap={2}>
-              <Nav.Link href="#link">
-                <h5>
-                  Profile
-                  <i
-                    class="mx-2 fa-solid fa-id-card fa-flip"
-                    style={{ color: "#ff9633" }}
-                  ></i>
-                </h5>
-              </Nav.Link>
-              <Nav.Link href="#link">
-                <h5>
-                  Cart
-                  <i
-                    class="mx-2 fa-solid fa-cart-plus fa-bounce"
-                    style={{ color: "#ff9633" }}
-                  ></i>
-                </h5>
-              </Nav.Link>
-              <Nav.Link onClick={handleLogout}>
-                <h5>
-                  Logout
-                  <i
-                    class="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
-                    style={{ color: "#ff9633" }}
-                  ></i>
-                </h5>
-              </Nav.Link>
-            </Stack>
-          ) : (
-            <Stack direction="horizontal">
-              <Nav.Link as={Link} to="/login">
-                <h5>
-                  <i
-                    class="mx-2 fa-sharp fa-solid fa-right-to-bracket fa-beat-fade"
-                    style={{ color: "#ff9633" }}
-                  ></i>
-                  Login
-                </h5>
-              </Nav.Link>
-              <Nav.Link as={Link} to="/signup">
-                <h5>
-                  <i
-                    class="mx-2 fa-solid fa-user-plus fa-fade"
-                    style={{ color: "#ff9633" }}
-                  ></i>
-                  SignUp
-                </h5>
-              </Nav.Link>
-              <Nav.Link href="#link">
-                <h5>
-                  <i
-                    class="mx-2 fa-solid fa-cart-plus fa-bounce"
-                    style={{ color: "#ff9633" }}
-                  ></i>
-                  Cart
-                </h5>
-              </Nav.Link>
-            </Stack>
-          )}
-        </Nav>
+              {/* </h6> */}
+            </Nav.Link>
+            {/* <Stack direction="horizontal" gap={2}> */}
+            <Nav.Link href="#link">
+              {/* <h6> */}
+              Profile
+              <i
+                class="mx-2 fa-solid fa-id-card fa-flip"
+                style={{ color: "#ff9633" }}
+              ></i>
+              {/* </h6> */}
+            </Nav.Link>
+            <Nav.Link href="#link">
+              {/* <h6> */}
+              Cart
+              <i
+                class="mx-2 fa-solid fa-cart-plus fa-bounce"
+                style={{ color: "#ff9633" }}
+              ></i>
+              {/* </h6> */}
+            </Nav.Link>
+            <Nav.Link onClick={handleLogout}>
+              {/* <h6> */}
+              Logout
+              <i
+                class="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
+                style={{ color: "#ff9633" }}
+              ></i>
+              {/* </h6> */}
+            </Nav.Link>
+            {/* </Stack> */}
+          </Nav>
+        ) : (
+          <Nav className=" mx-4">
+            <Nav.Link as={Link} to="/">
+              {/* <h6> */}
+              <i
+                class="mx-2 fa-solid fa-house fa-flip"
+                style={{ color: "#ab41f1" }}
+              ></i>
+              Home
+              {/* </h6> */}
+            </Nav.Link>
+            {/* <Stack gap={2}> */}
+            <Nav.Link as={Link} to="/login">
+              {/* <h6> */}
+              <i
+                class="mx-2 fa-sharp fa-solid fa-right-to-bracket fa-beat-fade"
+                style={{ color: "#ff9633" }}
+              ></i>
+              Login
+              {/* </h6> */}
+            </Nav.Link>
+            <Nav.Link as={Link} to="/signup">
+              {/* <h6> */}
+              <i
+                class="mx-2 fa-solid fa-user-plus fa-fade"
+                style={{ color: "#ff9633" }}
+              ></i>
+              SignUp
+              {/* </h6> */}
+            </Nav.Link>
+            <Nav.Link href="#link">
+              {/* <h6> */}
+              <i
+                class="mx-2 fa-solid fa-cart-plus fa-bounce"
+                style={{ color: "#ff9633" }}
+              ></i>
+              Cart
+              {/* </h6> */}
+            </Nav.Link>
+            {/* </Stack> */}
+          </Nav>
+        )}
+
         {/* <Form className="d-flex">
           <Form.Control
             style={{ width: "350px", textAlign: "center" }}

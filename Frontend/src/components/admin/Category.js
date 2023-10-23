@@ -9,6 +9,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import { Buffer } from "buffer";
+// import closeButton from "react-bootstrap/ModalHeader";
 const Category = () => {
   // const context = useContext(categoryContext);
   // const { categories, getCategories } = context;
@@ -136,20 +137,25 @@ const Category = () => {
         <Modal
           show={show}
           onHide={handleClose}
-          dialogClassName="modal-90w"
-          aria-labelledby="example-custom-modal-styling-title"
+          // size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
         >
           <Modal.Header closeButton>
-            <Modal.Title className="fw-bold text-center fs-1">
+            <Modal.Title
+              id="contained-modal-title-vcenter"
+              className="fw-bold text-center fs-1"
+            >
               Add Category
             </Modal.Title>
-            <button
+
+            {/* <button
               type="button"
-              className="btn-close"
-              // data-bs-dismiss="modal"
+              className="btn-close justify-content-end"
+              data-bs-dismiss="modal"
               aria-label="Close"
               onClick={handleClose}
-            ></button>
+            ></button> */}
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -194,7 +200,7 @@ const Category = () => {
           </Modal.Body>
           <Modal.Footer>
             <Button
-              variant="secondary shadow-lg fw-bold p-2"
+              variant="secondary shadow-lg fw-bold p-2 mb-3"
               onClick={handleClose}
             >
               Cancel
