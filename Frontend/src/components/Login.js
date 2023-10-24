@@ -35,7 +35,6 @@ const Login = () => {
       event.stopPropagation();
     }
 
-    setValidated(true);
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -59,23 +58,27 @@ const Login = () => {
     console.log(json);
 
     if (json.authToken) {
-      //saving the auth-token in local-Storage and redirect
-      localStorage.setItem("token", json.authToken);
-
       var decoded = await jwt_decode(json.authToken);
       console.log(decoded);
       await setUser(decoded.user);
       console.log(user);
 
+      //saving the auth-token in local-Storage and redirect
+      localStorage.setItem("token", json.authToken);
+
       //   props.showAlert("Logged in Successfully.", "success");
-      if (user.role === "admin") {
+      if (decoded.user.role === "admin") {
+        setValidated(true);
         navigate("/admin");
-      } else if (user.role === "seller") {
+      } else if (decoded.user.role === "seller") {
+        setValidated(true);
         navigate("/seller");
-      } else if (user.role === "customer") {
+      } else if (decoded.user.role === "customer") {
+        setValidated(true);
         navigate("/home");
       }
     }
+    // }
   };
   return (
     // <Formik
@@ -88,6 +91,7 @@ const Login = () => {
     // >
     //   {({ handleSubmit, handleChange, values, touched, errors }) => (
     <Form validated={validated} onSubmit={handleSubmit}>
+      {/* validated={validated} onSubmit={handleSubmit} */}
       <div className="d-flex justify-content-center align-items-center bg-white">
         <div className="shadow-lg pg-3 bg-white w-45 m-5 ">
           {/* <Stack
@@ -168,7 +172,7 @@ const Login = () => {
             <Button
               variant="outline-success mx-2 py-2 px-4 shadow-lg"
               type="submit"
-              //   onClick={handleLogin}
+              // onClick={handleSubmit}
             >
               Login
             </Button>

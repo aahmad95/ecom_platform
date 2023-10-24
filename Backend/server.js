@@ -36,7 +36,7 @@ const user = require("./routes/user");
 app.use("/api/v1/users", user);
 
 const ads = require("./routes/ad");
-app.use("/api/v1/ads", ads);
+app.use("/api/v1/get", ads);
 
 const category = require("./routes/category");
 app.use("/api/v1/category", category);

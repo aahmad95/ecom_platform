@@ -10,7 +10,7 @@ const {
 const { upload } = require("../controllers/image");
 
 router.post("/createAds", upload, createAds);
-router.get("/getAllAds", getAllAds);
+router.get("/getAll", getAllAds);
 router.get("/getAds/:id", getAdsById);
 router.delete("/deleteAds/:id", deleteAds);
 router.put("/updateAds/:id", upload, updateAds);

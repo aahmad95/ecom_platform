@@ -20,7 +20,7 @@ const getAllOrderItems = async (req, res) => {
 // Create a New OrderItem
 const createOrderItem = async (req, res) => {
   try {
-    const { price, quantity, productId, orderId } = req.body;
+    const { price, quantity, productDetailId, orderId } = req.body;
     // const order = await Order.findOne({
     //   where: { userId },
     // });
@@ -30,7 +30,7 @@ const createOrderItem = async (req, res) => {
     const orderItem = await OrderItem.create({
       price,
       quantity,
-      productId,
+      productDetailId,
       orderId,
     });
     return res.json(orderItem);

@@ -1,119 +1,132 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CartContext from "./cartContext";
 import { useState } from "react";
-import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 const CartState = (props) => {
-  const [order, setOrder] = useState([]);
+  const [orders, setOrders] = useState([]);
+  let orderId;
+  // [{ productDetailId: "", quantity: 0 }]
   const [orderItem, setOrderItem] = useState([]);
+  // const [orders, setOrders] = useState([]);
   const host = "http://localhost:5000";
+  const [user, setUser] = useState("");
+  const authToken = localStorage.getItem("token");
+  useEffect(() => {
+    var decoded = jwt_decode(authToken);
+    setUser(decoded.user);
+    // console.log(decoded);
+    console.log(user);
+  }, []);
 
-  //Get all Categories:
-  const getCategories = async () => {
-    //     //API Call
-    //     var requestOptions = {
-    //       method: "GET",
-    //       redirect: "follow",
-    //     };
-    //     const response = await fetch(
-    //       `${host}/category/getAllCategory`,
-    //       requestOptions
-    //     );
-    //     const json = await response.json(); // parses JSON response into native JavaScript objects
-    const { data } = await axios.get(`${host}/category/getAllCategory`);
-    //Logic for adding note:
-    console.log(data);
+  const checkout = async (data) => {
+    let price = 100;
+    // console.log(decoded);
+    // console.log(user);
+    // const orderId =
+    await createOrder();
+    console.log("data:  ", data);
+    console.log("orders:  ", orders);
+    console.log("orderId", orderId);
 
-    setCategories(data);
+    const orderPromises = data.map(async (order) => {
+      console.log(">>>>>>>>>", order);
+      console.log(order.product.price, order.quantity, order.productDetails.id);
+      price = price + order.product.price * order.quantity;
+      await createOrderItem(
+        order.product.price,
+        order.quantity,
+        order.productDetails.id,
+        orderId
+      );
+    });
+    await Promise.all(orderPromises);
+    console.log(price);
+    await updateOrder(price);
+  };
+  const createOrder = async () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      payment: 0,
+      userId: user.id,
+      paymentMethod: "Cash",
+      DeliveryFee: 100,
+      address: user.address,
+      status: "Pending",
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    const response = await fetch(
+      "http://localhost:5000/api/v1/order/createOrder",
+      requestOptions
+    );
+    const data = await response.json();
+    orderId = await data.id;
+
+    console.log("Order:  ", data);
+    console.log("orderId: ", orderId);
+    // return await data.id;
   };
 
-  //   //Add a Note:
-  //   const addNote = async (title, description, tag) => {
-  //     //API Call
+  const createOrderItem = async (price, quantity, productDetailId, orderId) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-  //     //check if the tag is empty set it to deafult.
-  //     tag = `${tag ? tag : "General"}`;
-  //     // console.log(typeof tag);
+    var raw = JSON.stringify({
+      price: price,
+      quantity: quantity,
+      productDetailId: productDetailId,
+      orderId: orderId,
+    });
 
-  //     const response = await fetch(`${host}/api/notes/addnote`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "auth-token": localStorage.getItem("token"),
-  //       },
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
 
-  //       body: JSON.stringify({ title, description, tag }),
-  //     });
+    const response = await fetch(
+      "http://localhost:5000/api/v1/orderItem/createOrderItem",
+      requestOptions
+    );
+    const data = await response.json();
+    console.log("orderItem:  ", data);
+  };
 
-  //     //Logic for adding note:
-  //     console.log("Adding a new note");
-  //     await getNotes();
+  const updateOrder = async (price) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-  //     // const note = await response.json();
-  //     console.log(response);
-  //     // setNotes(notes.concat(note));
-  //   };
+    var raw = JSON.stringify({
+      payment: price,
+    });
 
-  //   //Delete a Note:
-  //   const deleteNote = async (id) => {
-  //     //API Call
-  //     const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
-  //       method: "DELETE",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "auth-token": localStorage.getItem("token"),
-  //       },
-  //     });
-  //     // const json = response.json(); // parses JSON response into native JavaScript objects
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
 
-  //     console.log(response);
-
-  //     //Delete Note Logic
-  //     console.log(`Note Deleted note with id: ${id}`);
-  //     await getNotes();
-  //     // const newNotes = notes.filter((note) => {
-  //     //   return note._id !== id;
-  //     // });
-  //     // setNotes(newNotes);
-  //   };
-
-  //   //Edit a Note:
-  //   const editNote = async (id, title, description, tag) => {
-  //     //API Call
-  //     console.log("title =>>", title);
-  //     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-  //       method: "PUT",
-
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "auth-token": localStorage.getItem("token"),
-  //       },
-
-  //       body: JSON.stringify({ title, description, tag }),
-  //     });
-
-  //     // Logic to edit in client side:
-  //     console.log("Note has been updated succesfully", response);
-
-  //     await getNotes();
-  //     // const newNotes = notes;
-  //     // for (let i = 0; i < newNotes.length; i++) {
-  //     //   const note = newNotes[i];
-  //     //   console.log(note);
-  //     //   if (note._id === id) {
-  //     //     note.title = title;
-  //     //     note.description = description;
-  //     //     note.tag = tag;
-  //     //     console.log(note);
-  //     //     break;
-  //     //   }
-  //     // }
-  //     // console.log(newNotes);
-  //     // setNotes(newNotes);
-  //   };
+    const response = await fetch(
+      `http://localhost:5000/api/v1/order/updateOrder/${orderId}`,
+      requestOptions
+    );
+    const data = await response.json();
+    console.log("Updated Order: ", data);
+  };
 
   return (
-    <CartContext.Provider value={{ orderItem, setOrderItem }}>
+    <CartContext.Provider value={{ orders, setOrders, checkout }}>
       {props.children}
     </CartContext.Provider>
   );

@@ -6,60 +6,49 @@ import Image5 from "./CarouselImages/Image5.jpeg";
 
 import Carousel from "react-bootstrap/Carousel";
 // import ExampleCarouselImage from "components/ExampleCarouselImage";
-
+import { useEffect, useState } from "react";
 function ShowCarousel() {
+  const [ads, setAds] = useState([]);
+  useEffect(() => {
+    const fetchAds = async () => {
+      var requestOptions = {
+        method: "GET",
+        redirect: "follow",
+      };
+
+      const response = await fetch(
+        "http://localhost:5000/api/v1/get/getAll",
+        requestOptions
+      );
+      const data = await response.json();
+      console.log("Ads:  ", data);
+      setAds(data);
+    };
+    fetchAds();
+    // console.log("OrderItems------->", orderItems);
+  }, []);
   return (
     <Carousel>
-      <Carousel.Item interval={2000}>
-        {/* <Image1 text="Second slide" /> */}
-        <img
-          src={Image1}
-          width="100%"
-          height="430px"
-          // className="d-inline-block align-top mx-4"
-          alt="Ad"
-        />
-      </Carousel.Item>
-      <Carousel.Item interval={2000}>
-        {/* <Image1 text="Second slide" /> */}
-        <img
-          src={Image2}
-          width="100%"
-          height="400px"
-          // className="d-inline-block align-top mx-4"
-          alt="Ad"
-        />
-      </Carousel.Item>
-      <Carousel.Item interval={2000}>
-        {/* <Image1 text="Second slide" /> */}
-        <img
-          src={Image3}
-          width="100%"
-          height="400px"
-          // className="d-inline-block align-top mx-4"
-          alt="Ad"
-        />
-      </Carousel.Item>
-      <Carousel.Item interval={2000}>
-        {/* <Image1 text="Second slide" /> */}
-        <img
-          src={Image4}
-          width="100%"
-          height="400px"
-          // className="d-inline-block align-top mx-4"
-          alt="Ad"
-        />
-      </Carousel.Item>
-      <Carousel.Item interval={2000}>
-        {/* <Image1 text="Second slide" /> */}
-        <img
-          src={Image5}
-          width="100%"
-          height="400px"
-          // className="d-inline-block align-top mx-4"
-          alt="Ad"
-        />
-      </Carousel.Item>
+      {ads.length ? (
+        ads.map((ad) => {
+          return (
+            <Carousel.Item interval={2000}>
+              {/* <Image1 text="Second slide" /> */}
+              <img
+                src={ad.image}
+                width="100%"
+                height="430px"
+                // className="d-inline-block align-top mx-4"
+                alt={ad.name}
+              />
+            </Carousel.Item>
+          );
+        })
+      ) : (
+        <div className="text-center my-5 fw-bold fs-3">
+          No Ads to display now.
+        </div>
+      )}
     </Carousel>
   );
 }

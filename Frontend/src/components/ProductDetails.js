@@ -10,16 +10,19 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useNavigate, useParams } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
+import cartContext from "../context/cart/cartContext";
 // import { renderItem } from CarouselProps;
 const ProductDetails = (props) => {
   const param = useParams();
+  const context = useContext(cartContext);
+  const { orders, setOrders } = context;
   const [product, setProduct] = useState("");
   const [productDetails, setProductDetails] = useState(null);
   const [images, setImages] = useState([]);
   const [quantity, setQuantity] = useState(0);
   const [show, setShow] = useState(false);
 
-  const [productDetailId, setProductDetailId] = useState();
+  const [productDetailId, setProductDetailId] = useState(0);
   //   console.log(param);
   const navigate = useNavigate();
   const handleClose = () => setShow(false);
@@ -54,36 +57,36 @@ const ProductDetails = (props) => {
       `http://localhost:5000/api/v1/productDetail/getProductDetailsByProduct/${param.productId}`,
       requestOptions
     );
-    console.group();
-    console.log("Products Details Response => ", response);
+    // console.group();
+    // console.log("Products Details Response => ", response);
     const json = await response.json();
-    console.log(json);
+    // console.log(json);
     await setProductDetails(json);
 
-    console.log("product details====>", productDetails);
-    console.groupEnd();
+    // console.log("product details====>", productDetails);
+    // console.groupEnd();
     const imageArr = [];
     json.forEach(async (productDetail) => {
-      console.log(productDetail);
+      // console.log(productDetail);
       productDetail.image.forEach(async (i) => {
         if (!imageArr.includes(i)) {
           imageArr.push(i);
         }
       });
     });
-    console.log(imageArr);
+    // console.log(imageArr);
     setImages(imageArr);
     // console.log(images);
-    console.log(productDetails);
+    // console.log(productDetails);
   };
   const handleButton = (event) => {
     // setProductDetailId(event.target.id);
 
-    console.log(event);
-    console.log(event.target.id);
-    console.log(event.target.checked);
-    console.log(productDetails);
-    console.log(productDetails[0].id);
+    // console.log(event);
+    // console.log(event.target.id);
+    // console.log(event.target.checked);
+    // console.log(productDetails);
+    // console.log(productDetails[0].id);
     if (event.target.checked) {
       setProductDetailId(event.target.id);
       for (let i = 0; i < productDetails.length; i++) {
@@ -95,12 +98,17 @@ const ProductDetails = (props) => {
     } else if (productDetailId === event.target.id) {
       setProductDetailId(0);
     }
-    console.log(productDetailId);
+    // console.log(productDetailId);
     // event.target.checked = "true";
   };
   const handleAddToCart = () => {
     if (!localStorage.getItem("token")) {
       setShow(true);
+    } else if (localStorage.getItem("token")) {
+      const product = orders;
+
+      product.push({ productDetailId, quantity });
+      setOrders(product);
     }
 
     // var decoded = await jwt_decode(json.authToken);
@@ -211,7 +219,7 @@ const ProductDetails = (props) => {
                         ) {
                           // console.log(`/////////${key}: ${product[key]}`);
                           if (product[key]) {
-                            console.log(`${key}: ${product[key]}`);
+                            // console.log(`${key}: ${product[key]}`);
                             if (key === "image") {
                               return (
                                 <img
@@ -272,6 +280,7 @@ const ProductDetails = (props) => {
             {/* </Stack> */}
             <div className="text-center">
               <Button
+                disabled={!(quantity && productDetailId)}
                 variant="success shadow-lg fs-4 fw-bold p-2 px-3"
                 onClick={handleAddToCart}
               >

@@ -18,6 +18,8 @@ function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    // const context = useContext(cartContext);
+    // const { orders, setOrders } = context;
     navigate("/login");
     // props.showAlert("Logged Out Successfully.", "success");
   };
@@ -73,11 +75,11 @@ function Navbar() {
         {localStorage.getItem("token") ? (
           <Nav className=" mx-4">
             <Nav.Link as={Link} to="/">
+              Home
               <i
                 className="mx-2 fa-solid fa-house fa-flip"
                 style={{ color: "#ab41f1" }}
               ></i>
-              Home
             </Nav.Link>
             {/* <Stack direction="horizontal" gap={2}> */}
             {/* <Nav.Link href="#link">
