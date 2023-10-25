@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
 import cartContext from "../context/cart/cartContext";
+import Login from "./Login";
 // import { renderItem } from CarouselProps;
 const ProductDetails = (props) => {
   const param = useParams();
@@ -21,11 +22,16 @@ const ProductDetails = (props) => {
   const [images, setImages] = useState([]);
   const [quantity, setQuantity] = useState(0);
   const [show, setShow] = useState(false);
+  const [modal, setModal] = useState(false);
 
   const [productDetailId, setProductDetailId] = useState(0);
   //   console.log(param);
   const navigate = useNavigate();
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setModal(false);
+  };
+
   useEffect(() => {
     var requestOptions = {
       method: "GET",
@@ -105,10 +111,25 @@ const ProductDetails = (props) => {
     if (!localStorage.getItem("token")) {
       setShow(true);
     } else if (localStorage.getItem("token")) {
+      let addProduct = false;
       const product = orders;
-
-      product.push({ productDetailId, quantity });
+      product.forEach((element) => {
+        if (element.productDetailId === productDetailId) {
+          element.quantity = element.quantity + quantity;
+          addProduct = true;
+        }
+      });
+      if (!addProduct) {
+        product.push({ productDetailId, quantity });
+      }
       setOrders(product);
+      setModal(true);
+      setQuantity(0);
+      for (let i = 0; i < productDetails.length; i++) {
+        let element = document.getElementById(productDetails[i].id);
+        console.log(element);
+        element.checked = false;
+      }
     }
 
     // var decoded = await jwt_decode(json.authToken);
@@ -294,7 +315,7 @@ const ProductDetails = (props) => {
       <Modal
         show={show}
         onHide={handleClose}
-        // size="lg"
+        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         className="text-center"
@@ -307,27 +328,71 @@ const ProductDetails = (props) => {
             Add to Cart
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="fs-3">
-          Please login first for adding this product to cart.
-        </Modal.Body>
-        <Modal.Footer>
+        <Modal.Body>
+          <div className="text-danger fs-4">
+            Please login first for adding this product to cart.
+          </div>
+
+          <Login />
           <Button
-            variant="danger shadow-lg fw-bold"
+            variant="danger shadow-lg fs-4 fw-bold px-4"
             onClick={() => {
               setShow(false);
             }}
           >
             Close
           </Button>
-          <Button
+        </Modal.Body>
+
+        <Modal.Footer>
+          {/* <Button
             variant="info shadow-lg fw-bold"
             onClick={() => {
               navigate("/login");
             }}
           >
             Login
-          </Button>
+          </Button> */}
         </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={modal}
+        onHide={handleClose}
+        // size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        className="text-center"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title
+            id="contained-modal-title-vcenter "
+            className="fw-bold text-center fs-3"
+          >
+            Successfully Added to Cart
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center">
+          <div className="text-success fs-4">
+            1 new item(s) have been added to your cart
+          </div>
+          <Button
+            variant="outline-secondary shadow-lg fs-5 fw-bold px-2 my-4"
+            onClick={() => {
+              setModal(false);
+            }}
+          >
+            Close
+          </Button>
+          <Button
+            variant="outline-success shadow-lg fs-5 fw-bold px-2 my-4 mx-2"
+            onClick={() => {
+              navigate("/cart");
+            }}
+          >
+            Go to Cart
+          </Button>
+        </Modal.Body>
       </Modal>
     </div>
   );

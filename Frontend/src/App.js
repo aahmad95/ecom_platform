@@ -16,6 +16,8 @@ import Products from "./components/Products";
 import ProductDetails from "./components/ProductDetails";
 import Footer from "./components/Footer";
 import Cart from "./components/Cart";
+import MyProfile from "./components/MyProfile";
+import Checkout from "./components/Checkout";
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/signup" element={<SignUp />} />
             <Route exact path="/cart" element={<Cart />} />
+            <Route exact path="/profile" element={<MyProfile />} />
+            <Route exact path="/checkout" element={<Checkout />} />
             {/* 
 
             <Route exact path="/signup" element={<Signup />} /> */}

@@ -1,6 +1,8 @@
 const { User } = require("../models");
 const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+const Mailgen = require("mailgen");
 // require("dotenv").config();
 // const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_SECRET = "HelloWorld";
@@ -174,6 +176,92 @@ const loginUser = async (req, res) => {
     });
   }
 };
+const emailConfirmation = async (req, res) => {
+  // let testAccount = await nodemailer.createTestAccount();
+
+  // const transporter = nodemailer.createTransport({
+  //   host: "smtp.ethereal.email",
+  //   port: 465,
+  //   secure: true, // only true for 465 and false for other ports.
+  //   auth: {
+  //     // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+  //     user: testAccount.user,
+  //     pass: testAccount.pass,
+  //   },
+  // });
+
+  // let message = {
+  //   from: '"Fred Foo 👻" <foo@example.com>', // sender address
+  //   to: "bar@example.com, baz@example.com", // list of receivers
+  //   subject: "Hello ✔", // Subject line
+  //   text: "Hello world?", // plain text body
+  //   html: "<b>Hello world?</b>", // html body
+  // };
+  // transporter
+  //   .sendMail(message)
+  //   .then(() => {
+  //     return res.json({ msg: "Email sent successfully." });
+  //   })
+  //   .catch((error) => {
+  //     return res.json({ Error: error });
+  //   });
+
+  // console.log("Message sent: %s", info.messageId);
+
+  let config = {
+    service: "gmail",
+    auth: {
+      user: "sehar.algolix@gmail.com",
+      pass: "cgoc jtuu oyma wwpr",
+    },
+  };
+  let transporter = nodemailer.createTransport(config);
+
+  let MailGenerator = new Mailgen({
+    theme: "default",
+    product: {
+      name: "Mailgen",
+      link: "https://mailgen.js/",
+    },
+  });
+
+  let response = {
+    body: {
+      name: "Sehar",
+      intro: "Order Placed Succesfully.",
+      table: {
+        data: [
+          {
+            item: "T-Shirt",
+            description: "T-Shirt",
+            price: 1000,
+          },
+          {
+            item: "T-Shirt",
+            description: "T-Shirt",
+            price: 1000,
+          },
+        ],
+      },
+      outro: "Looking forward to do more business",
+    },
+  };
+  let mail = MailGenerator.generate(response);
+  let message = {
+    from: "sehar.algolix@gmail.com",
+    to: "seharsaleem08@gmail.com",
+    subject: "Order Placed",
+    html: mail,
+  };
+  transporter
+    .sendMail(message)
+    .then(() => {
+      return res.status(201).json({ msg: "Mail has been sent successfully" });
+    })
+    .catch((error) => {
+      return res.status(400).json({ error });
+    });
+};
 
 module.exports = {
   createUser,
@@ -182,4 +270,5 @@ module.exports = {
   deleteUser,
   updateUser,
   loginUser,
+  emailConfirmation,
 };

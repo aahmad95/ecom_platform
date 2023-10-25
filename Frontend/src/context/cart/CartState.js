@@ -11,10 +11,13 @@ const CartState = (props) => {
   // const [orders, setOrders] = useState([]);
   const host = "http://localhost:5000";
   const [user, setUser] = useState("");
-  const authToken = localStorage.getItem("token");
+
   useEffect(() => {
-    var decoded = jwt_decode(authToken);
-    setUser(decoded.user);
+    if (localStorage.getItem("token")) {
+      const authToken = localStorage.getItem("token");
+      var decoded = jwt_decode(authToken);
+      setUser(decoded.user);
+    }
     // console.log(decoded);
     console.log(user);
   }, []);

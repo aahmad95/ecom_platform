@@ -34,7 +34,7 @@ function Footer() {
             <MDBIcon fab icon="twitter" />
           </MDBBtn>
 
-          <MDBBtn
+          {/* <MDBBtn
             floating
             className="m-1 border-info"
             style={{ backgroundColor: "#dd4b39" }}
@@ -42,7 +42,7 @@ function Footer() {
             role="button"
           >
             <MDBIcon fab icon="google" />
-          </MDBBtn>
+          </MDBBtn> */}
           <MDBBtn
             floating
             className="m-1 border-info"
@@ -63,7 +63,7 @@ function Footer() {
             <MDBIcon fab icon="linkedin-in" />
           </MDBBtn>
 
-          <MDBBtn
+          {/* <MDBBtn
             floating
             className="m-1 border-info"
             style={{ backgroundColor: "#333333" }}
@@ -71,7 +71,7 @@ function Footer() {
             role="button"
           >
             <MDBIcon fab icon="github" />
-          </MDBBtn>
+          </MDBBtn> */}
         </section>
       </MDBContainer>
 

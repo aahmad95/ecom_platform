@@ -70,13 +70,17 @@ const Cart = () => {
     console.log("items......", items);
     setOrderItems(items);
   };
-  const handleCancel = (productId) => {
+  const handleCancel = async (productId) => {
+    // showConfirm(true);
     let newOrder = orders.filter((order) => {
       return order.productDetailId != productId;
     });
-    console.log("newOrder-------------", newOrder);
-    setOrders(newOrder);
-    fetchOrderItems();
+    // console.log("newOrder-------------", newOrder);
+    await Promise.all(newOrder);
+    await setOrders(newOrder);
+
+    // console.log("orders-------------", orders);
+    // fetchOrderItems();
   };
   const handleCheckout = () => {
     if (!localStorage.getItem("token")) {
@@ -123,7 +127,7 @@ const Cart = () => {
   //   return json;
   // };
 
-  const getOrderItems = async () => {};
+  // const getOrderItems = async () => {};
 
   return (
     <div className="d-flex justify-content-center align-items-center bg-white">
@@ -218,13 +222,13 @@ const Cart = () => {
               })
             ) : (
               <div className="text-center">
-                You haven't added any product into the cart yet.{" "}
+                You haven't added any product into the cart yet.
               </div>
             )}
           </Stack>
           <div className="text-center">
             <Button
-              // disabled={!(quantity && productDetailId)}
+              disabled={!orders.length}
               variant="outline-success shadow-lg fs-4 fw-bold p-1 px-4 mb-3"
               onClick={handleCheckout}
             >

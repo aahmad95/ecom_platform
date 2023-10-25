@@ -31,18 +31,20 @@ function ShowCarousel() {
     <Carousel>
       {ads.length ? (
         ads.map((ad) => {
-          return (
-            <Carousel.Item interval={2000}>
-              {/* <Image1 text="Second slide" /> */}
-              <img
-                src={ad.image}
-                width="100%"
-                height="430px"
-                // className="d-inline-block align-top mx-4"
-                alt={ad.name}
-              />
-            </Carousel.Item>
-          );
+          if (ad.priority) {
+            return (
+              <Carousel.Item interval={2000}>
+                {/* <Image1 text="Second slide" /> */}
+                <img
+                  src={ad.image}
+                  width="100%"
+                  height="430px"
+                  // className="d-inline-block align-top mx-4"
+                  alt={ad.name}
+                />
+              </Carousel.Item>
+            );
+          }
         })
       ) : (
         <div className="text-center my-5 fw-bold fs-3">

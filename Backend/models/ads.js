@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.STRING,
       image: DataTypes.TEXT,
+      priority: DataTypes.BOOLEAN,
       userId: DataTypes.INTEGER,
     },
     {

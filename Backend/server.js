@@ -1,3 +1,50 @@
+// const hbs = require("nodemailer-express-handlebars");
+// const nodemailer = require("nodemailer");
+// const path = require("path");
+// const users = ["seharsaleem08@gmail"];
+// const emailConfirmation = async () => {
+//   // initialize nodemailer
+//   var transporter = nodemailer.createTransport({
+//     service: "gmail",
+//     auth: {
+//       user: "sehar.algolix@gmail.com",
+//       pass: "hahm mwya eqez ctrq",
+//     },
+//   });
+
+//   // point to the template folder
+//   const handlebarOptions = {
+//     viewEngine: {
+//       partialsDir: path.resolve("./views/"),
+//       defaultLayout: false,
+//     },
+//     viewPath: path.resolve("./views/"),
+//   };
+
+//   // use a template file with nodemailer
+//   transporter.use("compile", hbs(handlebarOptions));
+
+//   for (const user of users) {
+//     if (user.email) {
+//       const mailOptions = {
+//         from: '"E-Commerce Website" <sehar.algolix@gmail.com>', // sender address
+//         template: email.handlebars, // the name of the template file, i.e., email.handlebars
+//         to: user.email,
+//         subject: `Welcome to My Company, ${user.name}`,
+//         context: {
+//           name: user.name,
+//           company: "E-Commerce Website",
+//         },
+//       };
+//       try {
+//         await transporter.sendMail(mailOptions);
+//       } catch (error) {
+//         console.log(`Nodemailer error sending email to ${user.email}`, error);
+//       }
+//     }
+//   }
+// };
+
 // const path = require("path");
 
 const express = require("express");
@@ -62,4 +109,5 @@ app.listen(port, async () => {
   );
   await sequelize.authenticate();
   console.log("Database connected!");
+  // emailConfirmation();
 });
