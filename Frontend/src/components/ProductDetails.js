@@ -23,6 +23,7 @@ const ProductDetails = (props) => {
   const [quantity, setQuantity] = useState(0);
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState(false);
+  let q = 0;
 
   const [productDetailId, setProductDetailId] = useState(0);
   //   console.log(param);
@@ -108,6 +109,7 @@ const ProductDetails = (props) => {
     // event.target.checked = "true";
   };
   const handleAddToCart = () => {
+    q = quantity;
     if (!localStorage.getItem("token")) {
       setShow(true);
     } else if (localStorage.getItem("token")) {
@@ -122,14 +124,22 @@ const ProductDetails = (props) => {
       if (!addProduct) {
         product.push({ productDetailId, quantity });
       }
+
+      // console.log(q);
+
       setOrders(product);
-      setModal(true);
-      setQuantity(0);
+
       for (let i = 0; i < productDetails.length; i++) {
         let element = document.getElementById(productDetails[i].id);
         console.log(element);
         element.checked = false;
       }
+      setQuantity(0);
+      setModal(true);
+
+      // setTimeout(() => {
+
+      // }, 1000);
     }
 
     // var decoded = await jwt_decode(json.authToken);
@@ -171,7 +181,7 @@ const ProductDetails = (props) => {
                   );
                 })
               ) : (
-                <div>No Images to show </div>
+                <div>No Images to show.</div>
               )}
 
               {/* <div>
@@ -374,7 +384,7 @@ const ProductDetails = (props) => {
         </Modal.Header>
         <Modal.Body className="text-center">
           <div className="text-success fs-4">
-            1 new item(s) have been added to your cart
+            1 new item(s) have been added to your cart.
           </div>
           <Button
             variant="outline-secondary shadow-lg fs-5 fw-bold px-2 my-4"

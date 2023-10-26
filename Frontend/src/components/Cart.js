@@ -177,11 +177,32 @@ const Cart = () => {
                       height="300px"
                     />
                     <ListGroup className="list-group-flush fs-4">
-                      <ListGroup.Item>
+                      <ListGroup.Item className="fw-bold">
                         {`Price: ${orderItem.product.price} Rs`}
                       </ListGroup.Item>
                       <ListGroup.Item>
-                        {`Quantity: ${orderItem.quantity}`}
+                        {/* <div className="m-5 text-center fs-3"> */}
+                        Quantity:
+                        <Button
+                          disabled={orderItem.quantity < 2}
+                          variant="secondary shadow-lg fw-bold p-1  px-2 mx-3"
+                          onClick={() => {
+                            orderItem.quantity = orderItem.quantity - 1;
+                          }}
+                        >
+                          &#8722;
+                        </Button>
+                        <b>{orderItem.quantity}</b>
+                        <Button
+                          variant="secondary shadow-lg fw-bold p-1  px-2 mx-3"
+                          onClick={() => {
+                            orderItem.quantity = orderItem.quantity + 1;
+                          }}
+                        >
+                          &#43;
+                        </Button>
+                        {/* </div> */}
+                        {/* {`Quantity: ${orderItem.quantity}`} */}
                       </ListGroup.Item>
                       {Object.keys(orderItem.productDetails).map((key) => {
                         if (
