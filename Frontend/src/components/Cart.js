@@ -7,14 +7,17 @@ import Button from "react-bootstrap/Button";
 import icon from "../logo.svg";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
+import Checkout from "./Checkout";
 
 const Cart = () => {
   const context = useContext(cartContext);
-  const { orders, setOrders, checkout } = context;
+  // orderDetails
+  const { orders, setOrders, orderDetails, setOrderDetails } = context;
   // const orderItems = [];
   const [orderItems, setOrderItems] = useState([]);
   // { product: {}, productDetails: {}, quantity:0 }
   const [show, setShow] = useState(false);
+  const [cancel, setCancel] = useState(false);
   const navigate = useNavigate();
   const handleClose = () => setShow(false);
   useEffect(() => {
@@ -82,11 +85,16 @@ const Cart = () => {
     // console.log("orders-------------", orders);
     // fetchOrderItems();
   };
-  const handleCheckout = () => {
+  const handleCheckout = async() => {
+console.log("orderItems: ",orderItems);
+    await setOrderDetails(orderItems);
+    console.log("orderDetails: ",orderDetails);
     if (!localStorage.getItem("token")) {
       setShow(true);
     } else if (localStorage.getItem("token")) {
-      checkout(orderItems);
+      // checkout(orderItems);
+      // <Checkout orderItems={orderItems}/>
+      navigate("/checkout")
     }
     //  let newOrder = orders.filter((order) => {
     //    return order.productDetailId != productId;
@@ -231,7 +239,8 @@ const Cart = () => {
                         // disabled={!(quantity && productDetailId)}
                         variant="dark shadow-lg fs-5 "
                         onClick={() => {
-                          handleCancel(orderItem.productDetails.id);
+                          // handleCancel(orderItem.productDetails.id);
+                          setCancel(true);
                         }}
                       >
                         Cancel Order
@@ -294,6 +303,43 @@ const Cart = () => {
             }}
           >
             Login
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={cancel}
+        onHide={()=>{setCancel(false)}}
+        // size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        className="text-center"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title
+            id="contained-modal-title-vcenter "
+            className="fw-bold text-center fs-2"
+          >
+            Cancel Order
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="fs-2">
+          Are you sure?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="danger shadow-lg fw-bold px-4"
+            onClick={() => {
+              setCancel(false);
+            }}
+          >
+            Close
+          </Button>
+          <Button
+            variant="info shadow-lg fw-bold"
+            // onClick={handlePlaceOrder}
+          >
+            Cancel Order
           </Button>
         </Modal.Footer>
       </Modal>

@@ -309,10 +309,10 @@ const ProductDetails = (props) => {
             {/* </Stack> */}
             {/* </div> */}
             {/* </Stack> */}
-            <div className="text-center">
+            <div className="text-center mb-4">
               <Button
                 disabled={!(quantity && productDetailId)}
-                variant="success shadow-lg fs-4 fw-bold p-2 px-3"
+                variant="outline-success shadow-lg fs-4 fw-bold p-2 px-3"
                 onClick={handleAddToCart}
               >
                 Add to Cart

@@ -5,7 +5,8 @@ import jwt_decode from "jwt-decode";
 
 const CartState = (props) => {
   const [orders, setOrders] = useState([]);
-  let orderId;
+  const[orderDetails, setOrderDetails]=useState([]);
+  // let orderId;
   // [{ productDetailId: "", quantity: 0 }]
   const [orderItem, setOrderItem] = useState([]);
   // const [orders, setOrders] = useState([]);
@@ -22,20 +23,25 @@ const CartState = (props) => {
     console.log(user);
   }, []);
 
-  const checkout = async (data) => {
-    let price = 100;
+  const checkout = async (payment, deliveryFee, address ) => {
+    console.log("payment", payment)
+    console.log("deliveryFee", deliveryFee)
+    console.log("address", address)
+   
+    
+    // let price = 100;
     // console.log(decoded);
     // console.log(user);
     // const orderId =
-    await createOrder();
-    console.log("data:  ", data);
-    console.log("orders:  ", orders);
+    const orderId=await createOrder(payment, deliveryFee, address);
+    // console.log("data:  ", data);
+    console.log("orderDetails:  ", orderDetails);
     console.log("orderId", orderId);
 
-    const orderPromises = data.map(async (order) => {
+    const orderPromises = orderDetails.map(async (order) => {
       console.log(">>>>>>>>>", order);
-      console.log(order.product.price, order.quantity, order.productDetails.id);
-      price = price + order.product.price * order.quantity;
+      // console.log(order.product.price, order.quantity, order.productDetails.id);
+      // price = price + order.product.price * order.quantity;
       await createOrderItem(
         order.product.price,
         order.quantity,
@@ -44,19 +50,20 @@ const CartState = (props) => {
       );
     });
     await Promise.all(orderPromises);
-    console.log(price);
-    await updateOrder(price);
+    console.log("done");
+    setOrders([]);
+    // await updateOrder(price);
   };
-  const createOrder = async () => {
+  const createOrder = async (payment, deliveryFee, address) => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
-      payment: 0,
+      payment: payment,
       userId: user.id,
       paymentMethod: "Cash",
-      DeliveryFee: 100,
-      address: user.address,
+      DeliveryFee: deliveryFee,
+      address: address,
       status: "Pending",
     });
 
@@ -72,11 +79,11 @@ const CartState = (props) => {
       requestOptions
     );
     const data = await response.json();
-    orderId = await data.id;
+    // orderId = await data.id;
 
     console.log("Order:  ", data);
-    console.log("orderId: ", orderId);
-    // return await data.id;
+    // console.log("orderId: ", orderId);
+    return data.id;
   };
 
   const createOrderItem = async (price, quantity, productDetailId, orderId) => {
@@ -105,31 +112,31 @@ const CartState = (props) => {
     console.log("orderItem:  ", data);
   };
 
-  const updateOrder = async (price) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+  // const updateOrder = async (price) => {
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify({
-      payment: price,
-    });
+  //   var raw = JSON.stringify({
+  //     payment: price,
+  //   });
 
-    var requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
+  //   var requestOptions = {
+  //     method: "PUT",
+  //     headers: myHeaders,
+  //     body: raw,
+  //     redirect: "follow",
+  //   };
 
-    const response = await fetch(
-      `http://localhost:5000/api/v1/order/updateOrder/${orderId}`,
-      requestOptions
-    );
-    const data = await response.json();
-    console.log("Updated Order: ", data);
-  };
+    // const response = await fetch(
+    //   `http://localhost:5000/api/v1/order/updateOrder/${orderId}`,
+    //   requestOptions
+    // );
+    // const data = await response.json();
+    // console.log("Updated Order: ", data);
+  // };
 
   return (
-    <CartContext.Provider value={{ orders, setOrders, checkout }}>
+    <CartContext.Provider value={{ orders, setOrders, checkout, orderDetails,setOrderDetails }}>
       {props.children}
     </CartContext.Provider>
   );
