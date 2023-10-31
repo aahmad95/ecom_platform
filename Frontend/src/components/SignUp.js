@@ -18,6 +18,7 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [image, setImage] = useState("");
   // const [user, setUser] = useState("");
   const [validated, setValidated] = useState(false);
   let navigate = useNavigate();
@@ -71,6 +72,7 @@ const SignUp = () => {
       address: address,
       email: email,
       password: password,
+      image:image
     });
 
     var requestOptions = {
@@ -129,6 +131,35 @@ const SignUp = () => {
             >
               <b>SignUp</b>
             </h1>
+
+            <Form.Group controlId="fileName" className="my-3">
+                <Form.Label>
+                <i class="fa-solid fa-circle-user fa-beat-fade mx-1"></i>
+                <b>
+                  Profile Image:</b>
+                </Form.Label>
+                <Form.Control
+                  type="file"
+                  name="image"
+                  size="sm"
+                  onChange={(event) => {
+                    //   setImage(e.target.files[0]);
+                    const file = event.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+
+                      reader.onload = (e) => {
+                        const imageDataURL = e.target.result;
+                        // console.log("Base 64 -> ", base64);
+                        // You can use imageDataURL as a base64-encoded image string.
+                        // console.log(imageDataURL);
+                        setImage(imageDataURL);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+              </Form.Group>
             <Form.Group className="mb-3" controlId="validationCustom01">
               <Form.Label>
                 <i class="fa-solid fa-user fa-beat-fade mx-1"></i>

@@ -15,6 +15,7 @@ const Cart = () => {
   const { orders, setOrders, orderDetails, setOrderDetails } = context;
   // const orderItems = [];
   const [orderItems, setOrderItems] = useState([]);
+  const [orderId, setOrderId] = useState('')
   // { product: {}, productDetails: {}, quantity:0 }
   const [show, setShow] = useState(false);
   const [cancel, setCancel] = useState(false);
@@ -240,6 +241,7 @@ console.log("orderItems: ",orderItems);
                         variant="dark shadow-lg fs-5 "
                         onClick={() => {
                           // handleCancel(orderItem.productDetails.id);
+                          setOrderId(orderItem.productDetails.id)
                           setCancel(true);
                         }}
                       >
@@ -333,13 +335,17 @@ console.log("orderItems: ",orderItems);
               setCancel(false);
             }}
           >
-            Close
+            No
           </Button>
           <Button
-            variant="info shadow-lg fw-bold"
-            // onClick={handlePlaceOrder}
+            variant="info shadow-lg fw-bold px-4"
+            onClick={()=>{
+              // if(orderId)
+              handleCancel(orderId);
+              setCancel(false);
+            }}
           >
-            Cancel Order
+            Yes
           </Button>
         </Modal.Footer>
       </Modal>

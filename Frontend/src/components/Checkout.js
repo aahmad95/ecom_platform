@@ -43,8 +43,8 @@ const Checkout = () => {
     // console.log("OrderItems------->", orderItems);
   }, [orderDetails]);
 
-const handlePlaceOrder=(event)=>{
-  event.preventDefault();
+const handlePlaceOrder=()=>{
+  // event.preventDefault();
   setModal(true);
 checkout(subtotal,deliveryFee, address);
 
@@ -319,13 +319,17 @@ return(
               setShow(false);
             }}
           >
-            Close
+            No
           </Button>
           <Button
-            variant="outline-warning shadow-lg fs-5 fw-bold px-2 my-4 mx-2"
-            onClick={handlePlaceOrder}
+            variant="outline-warning shadow-lg fs-5 fw-bold px-4 my-4 mx-2"
+            onClick={()=>{
+              setShow(false)
+              handlePlaceOrder()
+            }}
+            
           >
-            Place Order
+            Yes
           </Button>
           </Modal.Body>
       </Modal>

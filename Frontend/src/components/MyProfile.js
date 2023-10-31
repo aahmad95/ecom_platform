@@ -1,29 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Image from 'react-bootstrap/Image';
+import Row from 'react-bootstrap/Row';
 import icon from "../logo.svg";
+import Modal from "react-bootstrap/Modal";
 import * as formik from "formik";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
-// import { decode } from "jsonwebtoken";
-// import jwt_decode from "jsonwebtoken";
-// import { jwt_decode } from "jsonwebtoken";
+
+
 const MyProfile = () => {
-  //   const jwt = require("jsonwebtoken");
-  //   var jwt = require("jsonwebtoken");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [password, setPassword] = useState("");
-  // const [user, setUser] = useState("");
+  const token=localStorage.getItem("token")
+  const decoded=jwt_decode(token);
+ 
+  const [user, setUser] = useState(decoded.user);
+  // console.log(decoded.user);
+
+  const [name, setName] = useState(user.username);
+  const [image, setImage] = useState(user.image);
+  const [email, setEmail] = useState(user.email);
+  const [address, setAddress] = useState(user.address);
+  
+
+  const [show, setShow] = useState(false);
+  
   const [validated, setValidated] = useState(false);
   let navigate = useNavigate();
-  // const handleLogin = () => {
-  //   navigate("/login");
-  // };
+  
+
 
   //   const { Formik } = formik;
 
@@ -31,29 +41,15 @@ const MyProfile = () => {
   //     eamil: yup.string().required(),
   //     password: yup.string().required(),
   //   });
-  const createWallet = async (userId) => {
-    console.log(userId);
-    var myHeaders1 = new Headers();
-    myHeaders1.append("Content-Type", "application/json");
 
-    var raw1 = JSON.stringify({
-      Amount: 0,
-      userId: userId,
-    });
 
-    var requestOptions1 = {
-      method: "POST",
-      headers: myHeaders1,
-      body: raw1,
-      redirect: "follow",
-    };
-    const response1 = await fetch(
-      "http://localhost:5000/api/v1/wallet/createWallet",
-      requestOptions1
-    );
-    const json1 = await response1.json();
-    console.log(json1);
-  };
+  // useEffect(() => {
+    
+  //   // console.log("OrderItems------->", orderItems);
+  // }, []);
+
+
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -63,36 +59,32 @@ const MyProfile = () => {
 
     setValidated(true);
     var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify({
-      username: name,
-      role: "customer",
-      address: address,
-      email: email,
-      password: password,
-    });
+var raw = JSON.stringify({
+  "username": name,
+  "email": email,
+  "address": address,
+  "image": image
+});
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
+var requestOptions = {
+  method: 'PUT',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
 
-    const response = await fetch(
-      "http://localhost:5000/api/v1/users/createUser",
-      requestOptions
-    );
+const response = await fetch(`http://localhost:5000/api/v1/users/updateUser/${user.id}`, requestOptions)
     const json = await response.json();
     console.log(json);
 
-    if (json.authToken) {
-      var decoded = await jwt_decode(json.authToken);
-      console.log(decoded);
-      await createWallet(decoded.user.id);
-      navigate("/login");
-    }
+    // if (json.authToken) {
+    //   var decoded = await jwt_decode(json.authToken);
+    //   console.log(decoded);
+    //   // await createWallet(decoded.user.id);
+    //   navigate("/login");
+    // }
   };
   return (
     // <Formik
@@ -124,21 +116,60 @@ const MyProfile = () => {
             </div>
 
             <h1
-              className="text-center mb-5 "
+              className="text-center mb-4 "
               // style={{ fontSize: "50px", color: "#9b32e0" }}
             >
-              <b>SignUp</b>
+              <b>My Profile</b>
             </h1>
+           
+
+
+       <div className="text-center">
+       <Image 
+       height="100px"
+       width="100px"
+       alt="Profile Image"
+       src={image} roundedCircle />
+       </div>
+       
+            <Form.Group controlId="fileName" className="my-3">
+                <Form.Label>
+                <i class="fa-solid fa-circle-user fa-beat-fade mx-1"></i>
+                <b>
+                  Profile Image:</b>
+                </Form.Label>
+                <Form.Control
+                  type="file"
+                  name="image"
+                  size="sm"
+                  onChange={(event) => {
+                    //   setImage(e.target.files[0]);
+                    const file = event.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+
+                      reader.onload = (e) => {
+                        const imageDataURL = e.target.result;
+                        // console.log("Base 64 -> ", base64);
+                        // You can use imageDataURL as a base64-encoded image string.
+                        // console.log(imageDataURL);
+                        setImage(imageDataURL);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+              </Form.Group>
             <Form.Group className="mb-3" controlId="validationCustom01">
               <Form.Label>
                 <i class="fa-solid fa-user fa-beat-fade mx-1"></i>
                 <b>Username:</b>
               </Form.Label>
               <Form.Control
-                // name="email"
+                value={name}
                 variant="outlined"
                 type="text"
-                placeholder="Enter your name here."
+                // placeholder="Enter your name here."
                 required
                 // value={values.email}
                 // isInvalid={!!errors.city}
@@ -155,10 +186,10 @@ const MyProfile = () => {
                 <b>Email address:</b>
               </Form.Label>
               <Form.Control
-                // name="email"
+                value={email}
                 variant="outlined"
                 type="email"
-                placeholder="name@example.com"
+                // placeholder="name@example.com"
                 required
                 // value={values.email}
                 // isInvalid={!!errors.city}
@@ -168,7 +199,7 @@ const MyProfile = () => {
                 We'll never share your email with anyone else.
               </Form.Text>
               <Form.Control.Feedback type="invalid">
-                Please provide a valid email.
+                Please provide a different email as this email has already been registered.
               </Form.Control.Feedback>
               {/* <Form.Control.Feedback type="invalid">
                     {errors.email}
@@ -181,10 +212,10 @@ const MyProfile = () => {
                 <b>Address:</b>
               </Form.Label>
               <Form.Control
-                // name="email"
+                value={address}
                 variant="outlined"
                 type="text"
-                placeholder="Enter your address here."
+                // placeholder="Enter your address here."
                 required
                 // value={values.email}
                 // isInvalid={!!errors.city}
@@ -194,55 +225,75 @@ const MyProfile = () => {
                 Please provide a valid address.
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="validationCustom04">
-              <Form.Label>
-                <i class="fa-sharp fa-solid fa-key fa-beat-fade mx-1"></i>
-                <b>Password:</b>
-              </Form.Label>
-              <Form.Control
-                variant="outlined "
-                type="password"
-                // name="password"
-                placeholder="Enter your password here."
-                required
-                // value={values.password}
-                onChange={(e) => setPassword(e.target.value)}
-                // isInvalid={!!errors.state}
-              />
+            {/* <Form.Label>
+                <i class="fa-solid fa-location-dot fa-beat-fade mx-1"></i>
 
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid password.
-              </Form.Control.Feedback>
-              {/* <Form.Control.Feedback type="invalid">
-                    {errors.state}
-                  </Form.Control.Feedback> */}
-            </Form.Group>
+                <b>Gender:</b>
+              </Form.Label>
+            {['checkbox', 'radio'].map((type) => (
+        <div key={`inline-${type}`} className="mb-3">
+          <Form.Check
+            label="1"
+            name="group1"
+            type={type}
+            id={`inline-${type}-1`}
+          />
+          <Form.Check
+            label="2"
+            name="group1"
+            type={type}
+            id={`inline-${type}-2`}
+          />
+          
+        </div>
+      ))} */}
+            
           </div>
-          {/* </Stack> */}
+          
           <div className="mt-4 mb-2 grid text-center">
-            {/* <Button
-              variant="outline-success mx-3 p-3 shadow-lg"
-              type="submit"
-              onClick={handleLogin}
-            >
-              Login
-            </Button> */}
 
             <Button
-              variant="outline-success mx-2 py-2 px-4 shadow-lg"
+              variant="outline-success mx-2 py-2 px-4 shadow-lg mb-5"
               type="submit"
               //   onClick={handleSignUp}
             >
-              Create Account
+              Update Account
             </Button>
           </div>
-          <div className=" mb-5 grid text-center">
-            <Form.Text>
-              Already have an account. <Link to="/login">Login </Link>
-            </Form.Text>
-          </div>
+
         </div>
+        
       </div>
+      <Modal
+        show={show}
+        onHide={()=>{setShow(false)}}
+        // size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        className="text-center"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title
+            id="contained-modal-title-vcenter "
+            className="fw-bold text-center fs-3"
+          >
+            Update Profile
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center">
+          <div className="text-success fs-4">
+            Your Profile has been updated Successfully.
+          </div>
+          <Button
+            variant="outline-secondary shadow-lg fs-5 fw-bold px-3 my-3"
+            onClick={() => {
+              setShow(false);
+            }}
+          >
+            Close
+          </Button>
+        </Modal.Body>
+      </Modal>
     </Form>
     //   )}
     // </Formik>

@@ -82,13 +82,13 @@ function Navbar() {
               ></i>
             </Nav.Link>
             {/* <Stack direction="horizontal" gap={2}> */}
-            {/* <Nav.Link href="#link">
+            <Nav.Link as={Link} to="/profile">
               Profile
               <i
                 className="mx-2 fa-solid fa-id-card fa-flip"
                 style={{ color: "#ab41f1" }}
               ></i>
-            </Nav.Link> */}
+            </Nav.Link>
             <Nav.Link as={Link} to="/cart">
               {/* <h6> */}
               Cart
