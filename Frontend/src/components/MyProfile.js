@@ -79,6 +79,8 @@ const response = await fetch(`http://localhost:5000/api/v1/users/updateUser/${us
     const json = await response.json();
     console.log(json);
 
+    setShow(true);
+
     // if (json.authToken) {
     //   var decoded = await jwt_decode(json.authToken);
     //   console.log(decoded);
@@ -98,13 +100,13 @@ const response = await fetch(`http://localhost:5000/api/v1/users/updateUser/${us
     //   {({ handleSubmit, handleChange, values, touched, errors }) => (
     <Form validated={validated} onSubmit={handleSubmit}>
       <div className="d-flex justify-content-center align-items-center bg-white">
-        <div className="shadow-lg pg-3 bg-white w-45 m-5 ">
+        <div className="shadow-lg pg-3 bg-white w-50 m-5">
           {/* <Stack
           gap={4}
           className="pg-3 bg-white w-50 mt-5 mb-5 mt-5 col-md-5 mx-4"
         > */}
 
-          <div className="justify-content-center align-items-center  m-5 w-40 ">
+          <div className="justify-content-center align-items-center p-5 mx-auto">
             <div className="text-center">
               <img
                 src={icon}
@@ -116,7 +118,7 @@ const response = await fetch(`http://localhost:5000/api/v1/users/updateUser/${us
             </div>
 
             <h1
-              className="text-center mb-4 "
+              className="text-center mb-3 "
               // style={{ fontSize: "50px", color: "#9b32e0" }}
             >
               <b>My Profile</b>
@@ -126,13 +128,14 @@ const response = await fetch(`http://localhost:5000/api/v1/users/updateUser/${us
 
        <div className="text-center">
        <Image 
-       height="100px"
-       width="100px"
+      //  className="shadow-lg"
+       height="130px"
+       width="130px"
        alt="Profile Image"
-       src={image} roundedCircle />
+       src={image?image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVz_XdPamId2_uvEeLG23zjW02eAXgZhCfoQ&usqp=CAU"} roundedCircle />
        </div>
        
-            <Form.Group controlId="fileName" className="my-3">
+            <Form.Group controlId="fileName" className="mb-3">
                 <Form.Label>
                 <i class="fa-solid fa-circle-user fa-beat-fade mx-1"></i>
                 <b>
@@ -247,19 +250,19 @@ const response = await fetch(`http://localhost:5000/api/v1/users/updateUser/${us
           
         </div>
       ))} */}
-            
+            <div className="mt-5 grid text-center">
+
+<Button
+  variant="outline-success fw-bold mx-2 py-2 px-4 shadow-lg m-3"
+  type="submit"
+  //   onClick={handleSignUp}
+>
+  Update Profile
+</Button>
+</div>
           </div>
           
-          <div className="mt-4 mb-2 grid text-center">
-
-            <Button
-              variant="outline-success mx-2 py-2 px-4 shadow-lg mb-5"
-              type="submit"
-              //   onClick={handleSignUp}
-            >
-              Update Account
-            </Button>
-          </div>
+          
 
         </div>
         

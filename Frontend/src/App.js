@@ -18,6 +18,7 @@ import Footer from "./components/Footer";
 import Cart from "./components/Cart";
 import MyProfile from "./components/MyProfile";
 import Checkout from "./components/Checkout";
+import Customer from "./components/admin/Customer";
 
 function App() {
   return (
@@ -48,7 +49,7 @@ function App() {
             <Route exact path="/admin" element={<AdminPage />} />
             <Route exact path="/admin/category" element={<Category />} />
 
-            <Route exact path="/admin/users" element={<User />} />
+            <Route exact path="/admin/customers" element={<Customer />} />
             <Route exact path="/admin/sellers" element={<Seller />} />
             <Route exact path="/admin/ads" element={<Ads />} />
             <Route exact path="/admin/dashboard" element={<Dashboard />} />

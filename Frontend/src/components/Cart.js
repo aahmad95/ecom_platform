@@ -12,6 +12,7 @@ import Checkout from "./Checkout";
 const Cart = () => {
   const context = useContext(cartContext);
   // orderDetails
+  let array = [];
   const { orders, setOrders, orderDetails, setOrderDetails } = context;
   // const orderItems = [];
   const [orderItems, setOrderItems] = useState([]);
@@ -24,10 +25,11 @@ const Cart = () => {
   useEffect(() => {
     fetchOrderItems();
     // console.log("OrderItems------->", orderItems);
-  }, [orders]);
+  }, []);
   const fetchOrderItems = async () => {
     const items = [];
     const orderPromises = orders.map(async (order) => {
+      
       // orders.forEach(async (order) => {
       // console.log(order);
       // const orderItem = {
@@ -73,6 +75,7 @@ const Cart = () => {
     await Promise.all(orderPromises);
     console.log("items......", items);
     setOrderItems(items);
+    array=items;
   };
   const handleCancel = async (productId) => {
     // showConfirm(true);
@@ -161,8 +164,9 @@ console.log("orderItems: ",orderItems);
             className="mx-auto mt-1"
           />
           <Stack className="mx-auto my-5" gap={3}>
+            {console.log("Array: ",array)}
             {orderItems.length > 0 ? (
-              orderItems.map((orderItem, index) => {
+              array=orderItems.map((orderItem, index) => {
                 console.log("------> Hi", orderItem);
                 console.log(index);
                 return (

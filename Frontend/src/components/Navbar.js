@@ -125,7 +125,7 @@ function Navbar() {
               ></i>
               Login
             </Nav.Link>
-            <Nav.Link href="/signup">
+            <Nav.Link as={Link} to="/signup">
               <i
                 className="mx-2 fa-solid fa-user-plus fa-fade"
                 style={{ color: "#ab41f1" }}

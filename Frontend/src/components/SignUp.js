@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 import Button from "react-bootstrap/Button";
@@ -18,7 +18,9 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState("");
+  const [match, setMatch] = useState(true);
   // const [user, setUser] = useState("");
   const [validated, setValidated] = useState(false);
   let navigate = useNavigate();
@@ -32,6 +34,11 @@ const SignUp = () => {
   //     eamil: yup.string().required(),
   //     password: yup.string().required(),
   //   });
+
+  useEffect(() => {
+   
+    // eslint-disable-next-line
+  }, [match]);
   const createWallet = async (userId) => {
     console.log(userId);
     var myHeaders1 = new Headers();
@@ -57,11 +64,15 @@ const SignUp = () => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     const form = event.currentTarget;
+    
+    
     if (form.checkValidity() === false) {
       event.stopPropagation();
     }
 
+    
     setValidated(true);
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -108,13 +119,13 @@ const SignUp = () => {
     //   {({ handleSubmit, handleChange, values, touched, errors }) => (
     <Form validated={validated} onSubmit={handleSubmit}>
       <div className="d-flex justify-content-center align-items-center bg-white">
-        <div className="shadow-lg pg-3 bg-white w-45 m-5 ">
+        <div className="shadow-lg pg-3 bg-white w-60 m-5">
           {/* <Stack
           gap={4}
           className="pg-3 bg-white w-50 mt-5 mb-5 mt-5 col-md-5 mx-4"
         > */}
 
-          <div className="justify-content-center align-items-center  m-5 w-40 ">
+          <div className="justify-content-center align-items-center p-5 mx-5">
             <div className="text-center">
               <img
                 src={icon}
@@ -132,7 +143,7 @@ const SignUp = () => {
               <b>SignUp</b>
             </h1>
 
-            <Form.Group controlId="fileName" className="my-3">
+            <Form.Group className="mb-3" controlId="fileName">
                 <Form.Label>
                 <i class="fa-solid fa-circle-user fa-beat-fade mx-1"></i>
                 <b>
@@ -141,7 +152,7 @@ const SignUp = () => {
                 <Form.Control
                   type="file"
                   name="image"
-                  size="sm"
+                  size="md"
                   onChange={(event) => {
                     //   setImage(e.target.files[0]);
                     const file = event.target.files[0];
@@ -237,10 +248,20 @@ const SignUp = () => {
                 placeholder="Enter your password here."
                 required
                 // value={values.password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {setPassword(e.target.value)
+                if(e.target.value!==confirmPassword){
+                  setMatch(false);
+                }
+              else{
+                setMatch(true);
+              }}}
                 // isInvalid={!!errors.state}
               />
-
+              {match ? "" :(
+<Form.Text className="text-danger">
+Password and Confirm Password doesn't match.
+              </Form.Text>)
+              }
               <Form.Control.Feedback type="invalid">
                 Please provide a valid password.
               </Form.Control.Feedback>
@@ -248,9 +269,43 @@ const SignUp = () => {
                     {errors.state}
                   </Form.Control.Feedback> */}
             </Form.Group>
+           
+            <Form.Group className="mb-1" controlId="validationCustom05">
+              <Form.Label>
+              <i class="fa-solid fa-lock fa-beat-fade mx-1"></i>
+                <b>Confirm Password:</b>
+              </Form.Label>
+              <Form.Control
+                variant="outlined "
+                type="password"
+                // name="password"
+                placeholder="Enter your password here again."
+                required
+                // value={values.password}
+                onChange={(e) => {setConfirmPassword(e.target.value)
+                  if(password!==e.target.value){
+                    setMatch(false);
+                  }
+                else{
+                  setMatch(true);
+                }}}
+                // isInvalid={!!errors.state}
+              />
+{match?"":
+<Form.Text className="text-danger">
+Password and Confirm Password doesn't match.
+              </Form.Text>
+              }
+              <Form.Control.Feedback type="invalid">
+                Password and Confirm Password doesn't match.
+              </Form.Control.Feedback>
+              {/* <Form.Control.Feedback type="invalid">
+                    {errors.state}
+                  </Form.Control.Feedback> */}
+            </Form.Group>
           </div>
           {/* </Stack> */}
-          <div className="mt-4 mb-2 grid text-center">
+          <div className="mb-2 grid text-center">
             {/* <Button
               variant="outline-success mx-3 p-3 shadow-lg"
               type="submit"
@@ -260,7 +315,8 @@ const SignUp = () => {
             </Button> */}
 
             <Button
-              variant="outline-success mx-2 py-2 px-4 shadow-lg"
+            disabled={!match}
+              variant="outline-success py-2 px-4 shadow-lg"
               type="submit"
               //   onClick={handleSignUp}
             >

@@ -1,7 +1,9 @@
 import React from "react";
+import Sidebar from "./Sidebar";
 
 const Seller = () => {
-  return <div>Sellers</div>;
+  return<><Sidebar/>
+   <div>Sellers</div></>;
 };
 
 export default Seller;

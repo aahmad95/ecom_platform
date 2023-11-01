@@ -9,6 +9,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import { Buffer } from "buffer";
+import Sidebar from "./Sidebar";
 
 // import closeButton from "react-bootstrap/ModalHeader";
 
@@ -56,7 +57,8 @@ const Ads = () => {
     // handleClose();
   };
   return (
-    <div>
+    <>
+      <Sidebar/>
       <div className="mt-2 mx-2 row my-5">
         <h1 style={{ fontSize: "50px", color: "#9b32e0" }}>
           <b>Ads:</b>
@@ -160,7 +162,7 @@ const Ads = () => {
           </Modal.Footer>
         </Modal>
       </div>
-    </div>
+    </>
   );
 };
 

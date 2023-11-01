@@ -4,6 +4,8 @@ import Stack from "react-bootstrap/Stack";
 import Button from "react-bootstrap/Button";
 
 import { Link, useNavigate } from "react-router-dom";
+import Sidebar from "./admin/Sidebar";
+// import Sidebar from "cdbreact/dist/components/Sidebar";
 
 const AdminPage = () => {
   let navigate = useNavigate();
@@ -25,13 +27,14 @@ const AdminPage = () => {
 
   return (
     <>
-      <div class="container">
-        {/* <div className="mt-2 mx-3 ">
+    <Sidebar/>
+      {/* <div class="container1">
+         <div className="mt-2 mx-3 ">
         <h1 style={{ fontSize: "50px", color: "#9b32e0" }}>
           <b>Admin Page:</b>
         </h1>
-      </div>
-      {/* <div className="mt-2 mx-3 "></div> 
+      </div> */}
+       {/* <div className="mt-2 mx-3 "></div> 
       <Stack gap={4} className="mt-5 col-md-4 mx-auto">
         <Button
           onClick={handleDashboard}
@@ -65,50 +68,50 @@ const AdminPage = () => {
         >
           Ads
         </Button>
-      </Stack> */}
+      </Stack>  */}
 
-        <div class="sidebar1">
+        {/* <div class="sidebar1">
           <ul>
             <li>
               <a href="#">
                 <i class="fas fa-clinic-medical"></i>
-                <div class="title">Virtual Therapy</div>
+                <div class="title1">Virtual Therapy</div>
               </a>
             </li>
             <li>
               <a href="#">
                 <i class="fas fa-th-large "></i>
-                <div class="title">Dashboard</div>
+                <div class="title1">Dashboard</div>
               </a>
             </li>
             <li>
               <a href="#">
                 <i class="fas fa-stethoscope "></i>
-                <div class="title">Appointements</div>
+                <div class="title1">Appointements</div>
               </a>
             </li>
             <li>
               <a href="#">
                 <i class="fas fa-user-md "></i>
-                <div class="title">Doctors</div>
+                <div class="title1">Doctors</div>
               </a>
             </li>
             <li>
               <a href="#">
                 <i class="fas fa-puzzle-piece "></i>
-                <div class="title">Departments</div>
+                <div class="title1">Departments</div>
               </a>
             </li>
             <li>
               <a href="#">
                 <i class="fas fa-cog "></i>
-                <div class="title">Settings</div>
+                <div class="title1">Settings</div>
               </a>
             </li>
             <li>
               <a href="#">
                 <i class="fas fa-question"></i>
-                <div class="title">Help</div>
+                <div class="title1">Help</div>
               </a>
             </li>
           </ul>
@@ -131,30 +134,30 @@ const AdminPage = () => {
             </div>
           </div>
 
-          <div class="cards">
-            <div class="card">
-              <div class="card-content">
+          <div class="cards1">
+            <div class="card1">
+              <div class="card-content1">
                 <div class="number1">67</div>
-                <div class="card-name">Appointements</div>
+                <div class="card-name1">Appointements</div>
               </div>
               <div class="icon-box1">
                 <i class="fas fa-briefcase-medical "></i>
               </div>
             </div>
 
-            <div class="card">
-              <div class="card-content">
+            <div class="card1">
+              <div class="card-content1">
                 <div class="number1">105</div>
-                <div class="card-name">New Patients</div>
+                <div class="card-name1">New Patients</div>
               </div>
               <div class="icon-box1">
                 <i class="fas fa-frown"></i>
               </div>
             </div>
-            <div class="card">
-              <div class="card-content">
+            <div class="card1">
+              <div class="card-content1">
                 <div class="number1">8</div>
-                <div class="card-name">Consultants</div>
+                <div class="card-name1">Consultants</div>
               </div>
               <div class="icon-box1">
                 <i class="fas fa-user"></i> <i class="fas fa-user"></i>
@@ -162,16 +165,16 @@ const AdminPage = () => {
             </div>
           </div>
 
-          <div class="tables">
-            <div class="last-appointments">
-              <div class="heading">
+          <div class="tables1">
+            <div class="last-appointments1">
+              <div class="heading1">
                 <h2>Last Appointements</h2>
                 <a href="#" class="btn">
                   View All
                 </a>
               </div>
 
-              <table class="appointments">
+              <table class="appointments1">
                 <thead>
                   <td>Name</td>
                   <td>Psychologist</td>
@@ -237,15 +240,15 @@ const AdminPage = () => {
               </table>
             </div>
 
-            <div class="doctor-visiting">
-              <div class="heading">
+            <div class="doctor-visiting1">
+              <div class="heading1">
                 <h2>Doctor Visiting</h2>
                 <a href="#" class="btn">
                   View All
                 </a>
               </div>
 
-              <table class="visiting">
+              <table class="visiting1">
                 <thead>
                   <td>Photo</td>
                   <td>Name</td>
@@ -255,7 +258,7 @@ const AdminPage = () => {
                 <tbody>
                   <tr>
                     <td>
-                      <div class="img-box-small">
+                      <div class="img-box-small1">
                         <img src="/download (1).jpeg" alt="doctor-profile" />
                       </div>
                     </td>
@@ -268,7 +271,7 @@ const AdminPage = () => {
                   </tr>
                   <tr>
                     <td>
-                      <div class="img-box-small">
+                      <div class="img-box-small1">
                         <img src="/download (2).jpeg" alt="doctor-profile" />
                       </div>
                     </td>
@@ -281,7 +284,7 @@ const AdminPage = () => {
                   </tr>
                   <tr>
                     <td>
-                      <div class="img-box-small">
+                      <div class="img-box-small1">
                         <img src="/OIP.jpeg" alt="doctor-profile" />
                       </div>
                     </td>
@@ -294,8 +297,8 @@ const AdminPage = () => {
                   </tr>
                   <tr>
                     <td>
-                      <div class="img-box-small">
-                        <img src="/OIP (1).jpeg" alt="doctor-profile" />
+                      <div class="img-box-small1">
+                        <img1 src="/OIP (1).jpeg" alt="doctor-profile" />
                       </div>
                     </td>
                     <td>Momina</td>
@@ -309,8 +312,8 @@ const AdminPage = () => {
               </table>
             </div>
           </div>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </>
   );
 };

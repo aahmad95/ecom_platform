@@ -1,21 +1,22 @@
-/* :root {
+ :root {
   background: linear-gradient(45deg, #3854b3, #5698e2, #935bca);
   box-shadow: 0 4px 8px 0 #472baa;
-} */
-/* * {
+} 
+ * {
   padding: 0%;
   margin: 0%;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
-} */
-/* body {
+} 
+
+ body1{
   overflow-x: hidden;
 }
-.container {
+.container1 {
   position: relative;
   width: 100%;
-} */
-/* .container .sidebar {
+}
+ .container1 .sidebar1 {
   position: fixed;
   box-shadow: 0 4px 8px 0 #472baa;
 
@@ -26,11 +27,11 @@
   background: linear-gradient(35deg, #3854b3, #5698e2, #935bca);
 }
 
-.sidebar ul li {
+.sidebar1 ul1 li1 {
   list-style: none;
   width: 100vw;
 }
-.sidebar ul li a {
+.sidebar1 ul1 li1 a1 {
   display: flex;
   text-decoration: none;
   color: #fff;
@@ -39,20 +40,20 @@
   padding: 12px;
 }
 
-.sidebar ul li a i {
+.sidebar1 ul1 li1 a1 i1 {
   padding-left: 22px;
   min-width: 60px;
   font-size: 24px;
 }
 
-.sidebar ul li:hover {
+.sidebar1 ul1 li1:hover1 {
   background: #472baa;
   color: #f5f5f5;
 }
-.sidebar ul li:first-child:hover {
+.sidebar1 ul1 li1:first-child1:hover1 {
   background: none;
 }
-.sidebar ul li:first-child {
+.sidebar1 ul1 li1:first-child1 {
   line-height: 60px;
   border-bottom: 1px solid #fff;
   box-shadow: 0 4px 8px 0 #472baa;
@@ -61,14 +62,14 @@
   margin-bottom: 40px;
 }
 
-.main {
+.main1 {
   position: absolute;
   width: calc(100vw - 25vw);
   height: 100vh;
   left: 331px;
   background: #f5f5f5;
 }
-.main .topbar {
+.main1 .topbar1 {
   position: fixed;
   width: calc(100vw - 25vw);
   height: 9.5vh;
@@ -81,12 +82,12 @@
   box-shadow: 0 4px 8px 0 #472baa;
   z-index: 1;
 }
-.main .topbar .search {
+.main1 .topbar1 .search1 {
   position: relative;
   max-width: 400px;
 }
-.main .topbar .search input {
-  /* width:100vw; */
+.main1 .topbar1 .search1 input1 {
+  width:100vw; 
   min-width: 128px;
   height: 40px;
   padding: 0 60px;
@@ -95,27 +96,27 @@
   border: none;
   background: #f5f5f5;
 }
-.main .topbar .search i {
+.main1 .topbar1 .search1 i1 {
   position: absolute;
   right: 10px;
   top: 15px;
   cursor: pointer;
 }
-.main .topbar .notification {
+.main1 .topbar1 .notification1 {
   display: flex;
   align-items: center;
   margin-left: 53%;
   cursor: pointer;
 }
-.main .topbar .notification i {
+.main1 .topbar1 .notification1 i1 {
   font-size: larger;
 }
-.main .topbar .profilepic {
+.main1 .topbar1 .profilepic1 {
   position: relative;
   min-height: 50px;
   width: 50px;
 }
-.main .topbar .profilepic img {
+.main1 .topbar1 .profilepic1 img1 {
   margin-left: 20px;
   position: absolute;
   width: 50px;
@@ -128,14 +129,14 @@
   border-radius: 100px;
 }
 
-.cards {
+.cards1 {
   margin-top: 60px;
   width: 100%;
   padding: 45px 35px;
   display: flex;
   gap: 70px;
 }
-.cards .card {
+.cards1 .card1 {
   padding: 20px;
   display: flex;
   align-items: center;
@@ -144,53 +145,53 @@
   box-shadow: 0 4px 8px 0 #472baa;
 }
 
-.cards .card .card-content {
+.cards1 .card1 .card-content1 {
   padding-right: 30px;
   font-size: larger;
 }
 
-.cards .card .card-content .number {
+.cards1 .card1 .card-content1 .number1 {
   font-weight: bolder;
   font-size: xx-large;
   color: #f5f5f5;
 }
-.cards .card .card-content .card-name {
+.cards1 .card1 .card-content1 .card-name1 {
   font-size: large;
   font-weight: 600;
   color: #472baa;
 }
-.cards .card .icon-box {
+.cards1 .card1 .icon-box1 {
   margin: 10px;
 }
-.cards .card .icon-box i {
+.cards1 .card1 .icon-box1 i1{
   font-size: xx-large;
   color: #6510bb;
 }
 
-.tables {
+.tables1 {
   display: flex;
   gap: 20px;
 
   padding: 0px 20px 20px 20px;
   align-items: self-start;
 }
-.last-appointments table tbody td:last-child {
+.last-appointments1 table1 tbody1 td1:last-child1 {
   white-space: nowrap;
 }
-.tables .last-appointments {
+.tables1 .last-appointments1 {
   min-height: 350px;
   background: #fff;
   padding: 20px;
   box-shadow: 0 4px 8px 0 #472baa;
   width: 60%;
 }
-.heading {
+.heading1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: #3854b3;
 }
-.btn {
+.btn1 {
   border: 1px solid hidden;
   text-decoration: none;
   background: linear-gradient(45deg, #3854b3, #5698e2, #935bca);
@@ -208,16 +209,16 @@ thead td {
   color: #333;
 }
 
-table tr {
+table tr{
   border-bottom: 1px solid rgb(0, 0, 0, 0.1);
 }
-table tbody tr:last-child {
+table tbody tr:last-child1 {
   border: none;
 }
 td {
   padding: 9px 5px;
 }
-.tables .doctor-visiting {
+.tables1 .doctor-visiting1 {
   min-height: 350px;
   background: #fff;
   padding: 20px;
@@ -243,7 +244,7 @@ td i {
 .fa-trash-alt {
   background: #ed5564;
 }
-.visiting .img-box-small {
+.visiting1 .img-box-small1 {
   position: relative;
   width: 50px;
   height: 50px;
@@ -258,4 +259,4 @@ img {
   left: 0;
   object-fit: cover;
   border: hidden;
-} */
+} 
