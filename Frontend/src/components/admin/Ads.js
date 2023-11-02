@@ -10,6 +10,10 @@ import jwt_decode from "jwt-decode";
 import axios from "axios";
 import { Buffer } from "buffer";
 import Sidebar from "./Sidebar";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Stack from 'react-bootstrap/Stack';
 
 // import closeButton from "react-bootstrap/ModalHeader";
 
@@ -58,7 +62,11 @@ const Ads = () => {
   };
   return (
     <>
-      <Sidebar/>
+    
+    <Stack direction="horizontal">
+      <div ><Sidebar/></div>
+      
+      <div>
       <div className="mt-2 mx-2 row my-5">
         <h1 style={{ fontSize: "50px", color: "#9b32e0" }}>
           <b>Ads:</b>
@@ -162,6 +170,9 @@ const Ads = () => {
           </Modal.Footer>
         </Modal>
       </div>
+    
+      </div>
+</Stack>
     </>
   );
 };

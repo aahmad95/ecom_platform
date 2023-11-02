@@ -125,7 +125,7 @@ const SignUp = () => {
           className="pg-3 bg-white w-50 mt-5 mb-5 mt-5 col-md-5 mx-4"
         > */}
 
-          <div className="justify-content-center align-items-center p-5 mx-5">
+          <div className="justify-content-center align-items-center p-5 mx-4">
             <div className="text-center">
               <img
                 src={icon}

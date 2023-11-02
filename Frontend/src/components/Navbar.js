@@ -111,7 +111,7 @@ function Navbar() {
           </Nav>
         ) : (
           <Nav className=" mx-4">
-            <Nav.Link href="/">
+            <Nav.Link as={Link} to="/">
               <i
                 className="mx-2 fa-solid fa-house fa-bounce"
                 style={{ color: "#ab41f1" }}

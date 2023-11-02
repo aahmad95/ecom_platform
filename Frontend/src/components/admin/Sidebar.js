@@ -7,36 +7,37 @@ import {
   CDBSidebarMenu,
   CDBSidebarMenuItem,
 } from 'cdbreact';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import jwt_decode from "jwt-decode";
+import icon from "../../logo.svg";
 
 const Sidebar = () => {
     const token=localStorage.getItem("token")
   const decoded=jwt_decode(token);
     return (
         <div style={{ display: 'flex', height: '100vh', overflow: 'scroll initial' }}>
-          <CDBSidebar textColor="#fff" backgroundColor="purple">
+          <CDBSidebar textColor="#1ab5e9" backgroundColor="linear-gradient( 160.1deg,  rgba(151, 17, 172, 0.94) 10.2%, rgb(26, 93, 194) 77.3% )" >
             <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-              <a href="/" className="text-decoration-none fs-3" style={{ color: 'inherit' }}>
+              <Link to="/admin" className="text-decoration-none fs-3" style={{ color: 'inherit' }}>
                 Hello {decoded.user.username}!
-              </a>
+              </Link>
             </CDBSidebarHeader>
     
             <CDBSidebarContent className="sidebar-content">
               <CDBSidebarMenu>
-                <NavLink exact to="/admin/ads" activeClassName="activeClicked">
+                <NavLink exact as={Link} to="/admin/ads" activeClassName="activeClicked">
                   <CDBSidebarMenuItem icon="rectangle-ad">Ads</CDBSidebarMenuItem>
                 </NavLink>
-                <NavLink exact to="/admin/category" target="_blank" activeClassName="activeClicked">
+                <NavLink exact as={Link} to="/admin/category" target="_blank" activeClassName="activeClicked">
                   <CDBSidebarMenuItem icon="icons">Categories</CDBSidebarMenuItem>
                 </NavLink>
-                <NavLink exact to="/admin/customers" activeClassName="activeClicked">
+                <NavLink exact as={Link} to="/admin/customers" activeClassName="activeClicked">
                   <CDBSidebarMenuItem icon="users-gear">Customers</CDBSidebarMenuItem>
                 </NavLink>
-                <NavLink exact to="/admin/sellers" activeClassName="activeClicked">
+                <NavLink exact as={Link} to="/admin/sellers" activeClassName="activeClicked">
                   <CDBSidebarMenuItem icon="shop">Shopkeepers</CDBSidebarMenuItem>
                 </NavLink>
-                <NavLink exact to="/admin/analytics" activeClassName="activeClicked">
+                <NavLink exact as={Link} to="/admin/analytics" activeClassName="activeClicked">
                   <CDBSidebarMenuItem icon="chart-line">Analytics</CDBSidebarMenuItem>
                 </NavLink>
     
@@ -50,7 +51,13 @@ const Sidebar = () => {
                   padding: '20px 5px',
                 }}
               >
-                Sidebar Footer
+                 <img
+          src={icon}
+          width="60"
+          height="55"
+          className="d-inline-block align-top mx-2"
+          alt="E-commerce website logo"
+        />
               </div>
             </CDBSidebarFooter>
           </CDBSidebar>

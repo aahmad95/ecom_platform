@@ -10,6 +10,7 @@ import jwt_decode from "jwt-decode";
 import axios from "axios";
 import { Buffer } from "buffer";
 import Sidebar from "./Sidebar";
+import Stack from 'react-bootstrap/Stack';
 // import closeButton from "react-bootstrap/ModalHeader";
 const Category = () => {
   // const context = useContext(categoryContext);
@@ -71,10 +72,12 @@ const Category = () => {
     handleClose();
     // const response= await axios.post('http://localhost:5000/category/createCategory', formData);
   };
-  return (
+  return(
+    <>
+    <Stack direction="horizontal">
+    <div><Sidebar/></div>
     <div>
-      <Sidebar/>
-      <div className="mt-2 mx-2 row my-5">
+    <div className="mt-2 mx-2 row my-5">
         <h1 style={{ fontSize: "50px", color: "#9b32e0" }}>
           <b>Categories:</b>
         </h1>
@@ -214,7 +217,12 @@ const Category = () => {
         </Modal>
       </div>
     </div>
-  );
+     
+    </Stack>
+    </>
+    )
+   
+      
 };
 
 export default Category;

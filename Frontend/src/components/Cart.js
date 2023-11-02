@@ -12,18 +12,20 @@ import Checkout from "./Checkout";
 const Cart = () => {
   const context = useContext(cartContext);
   // orderDetails
-  let array = [];
+
   const { orders, setOrders, orderDetails, setOrderDetails } = context;
-  // const orderItems = [];
+  // orders=[{productDetailId,quantity}]
   const [orderItems, setOrderItems] = useState([]);
   const [orderId, setOrderId] = useState('')
   // { product: {}, productDetails: {}, quantity:0 }
   const [show, setShow] = useState(false);
   const [cancel, setCancel] = useState(false);
+  // const [reload, setReload] = useState(false);
   const navigate = useNavigate();
   const handleClose = () => setShow(false);
   useEffect(() => {
     fetchOrderItems();
+    // setReload(false)
     // console.log("OrderItems------->", orderItems);
   }, []);
   const fetchOrderItems = async () => {
@@ -75,7 +77,7 @@ const Cart = () => {
     await Promise.all(orderPromises);
     console.log("items......", items);
     setOrderItems(items);
-    array=items;
+    // array=items;
   };
   const handleCancel = async (productId) => {
     // showConfirm(true);
@@ -89,6 +91,27 @@ const Cart = () => {
     // console.log("orders-------------", orders);
     // fetchOrderItems();
   };
+  const updateQuantity = async(orderItem) => {
+    console.log("orderItem>>>>>>>",orderItem)
+    
+    const array=orders.map((order)=>{
+      console.log("order>>>>>>>",order)
+      console.log("order.productDetailId>>>>>>>",order.productDetailId)
+      console.log("orderItem.productDetails.id>>>>>>>",orderItem.productDetails.id)
+      
+      if(order.productDetailId==orderItem.productDetails.id){
+        console.log("hello")
+        order.quantity=orderItem.quantity;
+      }
+      return order;
+    });
+    // await Promise.all(promise);
+  setOrders(array);
+console.log(array);
+console.log(orders);
+// reload ? setReload(false) : setReload(true)
+
+  }
   const handleCheckout = async() => {
 console.log("orderItems: ",orderItems);
     await setOrderDetails(orderItems);
@@ -164,9 +187,9 @@ console.log("orderItems: ",orderItems);
             className="mx-auto mt-1"
           />
           <Stack className="mx-auto my-5" gap={3}>
-            {console.log("Array: ",array)}
+            {console.log("Array: ",orderItems)}
             {orderItems.length > 0 ? (
-              array=orderItems.map((orderItem, index) => {
+              orderItems.map((orderItem, index) => {
                 console.log("------> Hi", orderItem);
                 console.log(index);
                 return (
@@ -200,7 +223,9 @@ console.log("orderItems: ",orderItems);
                           disabled={orderItem.quantity < 2}
                           variant="secondary shadow-lg fw-bold p-1  px-2 mx-3"
                           onClick={() => {
+                            console.log("orderItem in button",orderItem)
                             orderItem.quantity = orderItem.quantity - 1;
+updateQuantity(orderItem);
                           }}
                         >
                           &#8722;
@@ -210,6 +235,7 @@ console.log("orderItems: ",orderItems);
                           variant="secondary shadow-lg fw-bold p-1  px-2 mx-3"
                           onClick={() => {
                             orderItem.quantity = orderItem.quantity + 1;
+                            updateQuantity(orderItem);
                           }}
                         >
                           &#43;

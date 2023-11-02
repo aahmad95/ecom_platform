@@ -22,7 +22,7 @@ import Customer from "./components/admin/Customer";
 
 function App() {
   return (
-    <div>
+    <div className=".app">
       <CartState>
         <Router>
           <Navbar />

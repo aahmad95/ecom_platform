@@ -1,12 +1,15 @@
 import React from 'react'
 import Sidebar from './Sidebar'
-
+import Stack from 'react-bootstrap/Stack';
 const Customer = () => {
   return (
-    <><Sidebar/>
-    <div>
-      Customers
-    </div>
+    <>
+    <Stack direction="horizontal">
+      <div><Sidebar/></div>
+      <div>
+        Customers
+      </div>
+      </Stack>
     </>
   )
 }
