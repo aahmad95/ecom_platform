@@ -26,10 +26,13 @@ function Navbar() {
 
   return (
     <NavBar
+    variant="dark"
+  //  fixed="top"
       sticky="top"
       collapseOnSelect
       expand="lg"
       style={{
+        // height:"80px",
         // backgroundColor: "#9b32e0",
         backgroundImage:
           // "radial-gradient( circle farthest-corner at 10% 20%,  rgba(171,102,255,1) 0%, rgba(116,182,247,1) 90% )",

@@ -26,6 +26,7 @@ const Home = () => {
   const handleSearch = (event) => {
     setIsSearch(true);
     const value = event.target.value;
+    console.log(value)
     const searchCategory = categories.filter((category) => {
       return category.name.toLowerCase().includes(value.toLowerCase());
     });

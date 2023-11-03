@@ -15,7 +15,9 @@ const Sidebar = () => {
     const token=localStorage.getItem("token")
   const decoded=jwt_decode(token);
     return (
-        <div style={{ display: 'flex', height: '100vh', overflow: 'scroll initial' }}>
+        <div style={{ position: "fixed",
+          top: "77px",
+          left: 0, display: 'flex', height: '100vh', overflow: 'scroll initial' }}>
           <CDBSidebar textColor="#1ab5e9" backgroundColor="linear-gradient( 160.1deg,  rgba(151, 17, 172, 0.94) 10.2%, rgb(26, 93, 194) 77.3% )" >
             <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
               <Link to="/admin" className="text-decoration-none fs-3" style={{ color: 'inherit' }}>

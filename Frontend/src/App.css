@@ -27,6 +27,16 @@
 .App-link {
   color: #61dafb;
 }
+/* .page-container {
+  display: flex;
+  height: 100vh;
+}
+
+
+.sidebar {
+  flex: 1; 
+} 
+*/
 
 
 @keyframes App-logo-spin {
