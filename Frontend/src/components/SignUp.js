@@ -83,7 +83,7 @@ const SignUp = () => {
       address: address,
       email: email,
       password: password,
-      image:image
+      image:image?image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVz_XdPamId2_uvEeLG23zjW02eAXgZhCfoQ&usqp=CAU"
     });
 
     var requestOptions = {

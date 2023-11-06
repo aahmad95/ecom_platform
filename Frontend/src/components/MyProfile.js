@@ -16,16 +16,15 @@ import { Link } from "react-router-dom";
 
 
 const MyProfile = () => {
-  const token=localStorage.getItem("token")
-  const decoded=jwt_decode(token);
+  
  
-  const [user, setUser] = useState(decoded.user);
+  const [user, setUser] = useState();
   // console.log(decoded.user);
 
-  const [name, setName] = useState(user.username);
-  const [image, setImage] = useState(user.image);
-  const [email, setEmail] = useState(user.email);
-  const [address, setAddress] = useState(user.address);
+  const [name, setName] = useState();
+  const [image, setImage] = useState();
+  const [email, setEmail] = useState();
+  const [address, setAddress] = useState();
   
 
   const [show, setShow] = useState(false);
@@ -43,10 +42,25 @@ const MyProfile = () => {
   //   });
 
 
-  // useEffect(() => {
+  useEffect(() => {
+    if(!localStorage.getItem("token")){
+      navigate("/login")
+    }
+    else{
+      const authToken=localStorage.getItem("token")
+    var decoded =jwt_decode(authToken);
+      setUser(decoded.user);
+      setName(decoded.user.username);
+      setImage(decoded.user.image);
+      setEmail(decoded.user.email);
+      setAddress(decoded.user.address)
+      
+
+    }
+   
     
-  //   // console.log("OrderItems------->", orderItems);
-  // }, []);
+    // console.log("OrderItems------->", orderItems);
+  }, []);
 
 
   

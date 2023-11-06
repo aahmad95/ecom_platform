@@ -1,8 +1,8 @@
-import Image1 from "./CarouselImages/Image1.jpg";
-import Image2 from "./CarouselImages/Image2.jpeg";
-import Image3 from "./CarouselImages/Image3.jpeg";
-import Image4 from "./CarouselImages/Image4.jpeg";
-import Image5 from "./CarouselImages/Image5.jpeg";
+// import Image1 from "./CarouselImages/Image1.jpg";
+// import Image2 from "./CarouselImages/Image2.jpeg";
+// import Image3 from "./CarouselImages/Image3.jpeg";
+// import Image4 from "./CarouselImages/Image4.jpeg";
+// import Image5 from "./CarouselImages/Image5.jpeg";
 
 import Carousel from "react-bootstrap/Carousel";
 // import ExampleCarouselImage from "components/ExampleCarouselImage";

@@ -24,7 +24,14 @@ const Cart = () => {
   const navigate = useNavigate();
   const handleClose = () => setShow(false);
   useEffect(() => {
-    fetchOrderItems();
+    if(!localStorage.getItem("token")){
+      navigate("/login")
+    }
+    else{
+      fetchOrderItems();
+    }
+   
+    
     // setReload(false)
     // console.log("OrderItems------->", orderItems);
   }, []);

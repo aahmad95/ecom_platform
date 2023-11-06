@@ -37,11 +37,11 @@ const createCategory = async (req, res) => {
       image,
       userId,
     });
-    return res.json(category);
+    return res.status(201).json(category);
   } catch (err) {
     console.log(err);
     // return res.status(500).json({ error: "something went wrong" });
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not create a new category",
     });
   }
@@ -77,7 +77,7 @@ const updateCategory = async (req, res) => {
     });
 
     if (category) {
-      return res.json({
+      return res.status(204).json({
         message: "Category updated successfully.",
         Category: await Category.findOne({
           where: { id },
@@ -104,7 +104,7 @@ const deleteCategory = async (req, res) => {
     });
     if (category) {
       await category.destroy();
-      return res.json({
+      return res.status(204).json({
         message: "Category deleted successfully.",
       });
     }

@@ -7,9 +7,9 @@ const getAllAds = async (req, res) => {
   try {
     const ads = await Ads.findAll();
     if (ads.length) {
-      return res.json(ads);
+      return res.status(200).json(ads);
     }
-    return res.json({ message: "There isn't any Ads yet." });
+    return res.status(200).json({ message: "There isn't any Ads yet." });
   } catch (err) {
     console.log(err);
 
@@ -35,7 +35,7 @@ const createAds = async (req, res) => {
       image,
       userId,
     });
-    return res.json(ads);
+    return res.status(201).json(ads);
   } catch (err) {
     console.log(err);
     res.status(501).send({
@@ -64,7 +64,7 @@ const getAdsById = async (req, res) => {
   }
 };
 
-// Update a Category:
+// Update a Ad:
 const updateAds = async (req, res) => {
   try {
     const { id } = req.params;
@@ -75,7 +75,7 @@ const updateAds = async (req, res) => {
     });
     console.log("ads", ads);
     if (ads) {
-      return res.json({
+      return res.status(204).json({
         message: "Ad updated successfully.",
         Ads: await Ads.findOne({
           where: { id },
@@ -101,7 +101,7 @@ const deleteAds = async (req, res) => {
     });
     if (ads) {
       // await ads.destroy();
-      return res.json({
+      return res.status(204).json({
         message: "Ad deleted successfully.",
       });
     }

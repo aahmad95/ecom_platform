@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import Image1 from "./CarouselImages/Image1.jpg";
+// import Image1 from "./CarouselImages/Image1.jpg";
 import { Carousel } from "react-responsive-carousel";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
