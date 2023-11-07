@@ -15,6 +15,8 @@ import Image from "react-bootstrap/Image";
 const Sidebar = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState("");
+  const [location, setLocation] = useState();
+
   useEffect(() => {
     // console.log(localStorage.getItem("token"))
     if (!localStorage.getItem("token")) {
@@ -22,9 +24,16 @@ const Sidebar = () => {
     } else {
       const authToken = localStorage.getItem("token");
       const decoded = jwt_decode(authToken);
-      decoded.user.role === "admin" ? setUser(decoded.user) : navigate("/404");
+      if (decoded.user.role !== "admin") {
+        navigate("/404");
+      } else {
+        if (!user) {
+          setUser(decoded.user);
+        }
+      }
     }
-
+    setLocation(window.location.href);
+    console.log(location);
     // eslint-disable-next-line
   }, [user]);
 
@@ -47,16 +56,16 @@ const Sidebar = () => {
           prefix={<i class="fa-solid fa-bars fa-flip"></i>}
           // {<i class="fa-solid fa-greater-than fa-flip"></i>}
         >
-          <Link
+          {/* <Link
             to="/admin"
             className="text-decoration-none fs-3 fa-beat-fade"
             style={{ color: "inherit" }}
-          >
-            Hello {user.username}!
-          </Link>
+          > */}
+          <h4 className="fa-beat-fade mt-2 fw-bold">Hello {user.username}!</h4>
+          {/* </Link> */}
           <div className="text-center" opacity="1">
             <Image
-              className="shadow-lg mt-2"
+              className="shadow-lg mt-1"
               height="150px"
               width="130px"
               alt="Profile Image"
@@ -71,10 +80,36 @@ const Sidebar = () => {
             <NavLink
               exact
               as={Link}
-              to="/admin/ads"
-              activeClassName="activeClicked"
+              to="/admin"
+              // activeClassName="activeClicked"
             >
-              <CDBSidebarMenuItem icon="rectangle-ad" className="fa-beat">
+              <CDBSidebarMenuItem
+                className={
+                  location === "http://localhost:3000/admin"
+                    ? "text-light fw-bold fa-beat-fade"
+                    : "fa-beat-fade"
+                }
+                icon="house-user"
+                // className="fa-beat"
+              >
+                Admin Home
+              </CDBSidebarMenuItem>
+            </NavLink>
+            <NavLink
+              exact
+              as={Link}
+              to="/admin/ads"
+              // activeClassName="activeClicked"
+            >
+              <CDBSidebarMenuItem
+                className={
+                  location === "http://localhost:3000/admin/ads"
+                    ? "text-light fw-bold fa-beat-fade"
+                    : "fa-beat-fade"
+                }
+                icon="rectangle-ad"
+                // className="fa-beat"
+              >
                 Ads
               </CDBSidebarMenuItem>
             </NavLink>
@@ -85,18 +120,15 @@ const Sidebar = () => {
               // target="_blank"
               activeClassName="activeClicked"
             >
-              <CDBSidebarMenuItem icon="icons" className="fa-beat">
+              <CDBSidebarMenuItem
+                icon="icons"
+                className={
+                  location === "http://localhost:3000/admin/category"
+                    ? "text-light fw-bold fa-beat-fade"
+                    : "fa-beat-fade"
+                }
+              >
                 Categories
-              </CDBSidebarMenuItem>
-            </NavLink>
-            <NavLink
-              exact
-              as={Link}
-              to="/admin/customers"
-              activeClassName="activeClicked"
-            >
-              <CDBSidebarMenuItem icon="users-gear" className="fa-beat">
-                Customers
               </CDBSidebarMenuItem>
             </NavLink>
             <NavLink
@@ -105,20 +137,53 @@ const Sidebar = () => {
               to="/admin/sellers"
               activeClassName="activeClicked"
             >
-              <CDBSidebarMenuItem icon="shop" className="fa-beat">
+              <CDBSidebarMenuItem
+                icon="shop"
+                className={
+                  location === "http://localhost:3000/admin/sellers" ||
+                  location === "http://localhost:3000/admin/sellers/"
+                    ? "text-light fw-bold fa-beat-fade"
+                    : "fa-beat-fade"
+                }
+              >
                 Shopkeepers
               </CDBSidebarMenuItem>
             </NavLink>
             <NavLink
               exact
               as={Link}
+              to="/admin/customers"
+              activeClassName="activeClicked"
+            >
+              <CDBSidebarMenuItem
+                icon="users-gear"
+                className={
+                  location === "http://localhost:3000/admin/customers"
+                    ? "text-light fw-bold fa-beat-fade"
+                    : "fa-beat-fade"
+                }
+              >
+                Customers
+              </CDBSidebarMenuItem>
+            </NavLink>
+
+            {/* <NavLink
+              exact
+              as={Link}
               to="/admin/analytics"
               activeClassName="activeClicked"
             >
-              <CDBSidebarMenuItem icon="chart-line" className="fa-beat">
+              <CDBSidebarMenuItem
+                icon="chart-line"
+                className={
+                  location === "http://localhost:3000/admin/analytics"
+                    ? "text-light fw-bold fa-beat-fade"
+                    : "fa-beat-fade"
+                }
+              >
                 Analytics
               </CDBSidebarMenuItem>
-            </NavLink>
+            </NavLink> */}
           </CDBSidebarMenu>
         </CDBSidebarContent>
 

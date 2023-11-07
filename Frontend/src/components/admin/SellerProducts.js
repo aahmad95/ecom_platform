@@ -14,20 +14,22 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Stack from "react-bootstrap/Stack";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import Dropdown from "react-bootstrap/Dropdown";
 import Image from "react-bootstrap/Image";
+import Badge from "react-bootstrap/Badge";
 
 // import closeButton from "react-bootstrap/ModalHeader";
 
-const Ads = () => {
+const SellerProducts = () => {
+  const params = useParams();
   const [load, setLoad] = useState(false);
 
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [priority, setPriority] = useState(false);
-  const [userId, setUserId] = useState();
+  const [sellerName, setSellerName] = useState();
 
   const [edit, setEdit] = useState(false);
   const [idEdit, setIdEdit] = useState("");
@@ -37,7 +39,7 @@ const Ads = () => {
 
   const [doneEdit, setDoneEdit] = useState(false);
 
-  const [ads, setAds] = useState([]);
+  const [products, setProducts] = useState([]);
 
   const [show, setShow] = useState(false);
 
@@ -49,7 +51,7 @@ const Ads = () => {
   const [adId, setAdId] = useState();
 
   const [searchValue, setSearchValue] = useState("Search Filter");
-  const [filteredAds, setFilteredAds] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
 
   const navigate = useNavigate();
@@ -61,46 +63,59 @@ const Ads = () => {
       const authToken = localStorage.getItem("token");
       const decoded = jwt_decode(authToken);
       if (decoded.user.role === "admin") {
-        setUserId(decoded.user.id);
-        getAds();
+        // setUserId(decoded.user.id);
+        getProducts();
+        getSeller(params.sellerId);
       } else navigate("/404");
     }
     setLoad(false);
 
     // eslint-disable-next-line
-  }, [load, userId]);
+  }, [load]);
   // useEffect(()=>{
   //   console.log('Ads', ads);
   // }, [ads])
 
-  const getAds = async () => {
+  const getProducts = async () => {
+    // console.log("get Products");
     var requestOptions = {
       method: "GET",
       redirect: "follow",
     };
 
     const response = await fetch(
-      "http://localhost:5000/api/v1/get/getAll",
+      `http://localhost:5000/api/v1/product/getProductsOfUser/${params.sellerId}`,
+      requestOptions
+    );
+    // console.log(response);
+    if (response.status === 401) {
+      setProducts([]);
+    } else if (response.status === 200) {
+      const json = await response.json();
+      const categoryNamePromises = json.map(async (j) => {
+        j["category"] = await getCategoryName(j.categoryId);
+        return j;
+      });
+      await Promise.all(categoryNamePromises);
+      setProducts(json);
+      console.log("json response", json);
+      // setAds(json);
+      console.log("products:    ", products);
+    }
+  };
+  const getCategoryName = async (id) => {
+    console.log(id);
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    const response = await fetch(
+      `http://localhost:5000/api/v1/category/getCategory/${id}`,
       requestOptions
     );
     const json = await response.json();
-
-    // json.map(async (j) => {
-    //   // let username
-    //   // let name = await getUserName(j.userId);
-    //   return (j["user"] = await getUserName(j.userId));
-    // });
-    const userNamePromises = json.map(async (j) => {
-      j["user"] = await getUserName(j.userId);
-      return j;
-    });
-    await Promise.all(userNamePromises);
-
-    setAds(json);
-
-    console.log(json);
-    // setAds(json);
-    console.log(ads);
+    return json.name;
   };
 
   const handleSearch = (event) => {
@@ -108,8 +123,7 @@ const Ads = () => {
     //  const value = `${document.getElementById("validationCustom03").value}`;
     const value = event.target.value;
     console.log(value);
-
-    const searchAd = ads.filter((ad) => {
+    const searchProduct = products.filter((ad) => {
       if (searchValue === "Name") {
         return ad.name.toLowerCase().includes(value.toLowerCase());
       }
@@ -122,8 +136,8 @@ const Ads = () => {
         return str.toLowerCase().includes(value.toLowerCase());
       } else return false;
     });
-    setFilteredAds(searchAd);
-    console.log(filteredAds);
+    setFilteredProducts(searchProduct);
+    console.log(filteredProducts);
   };
 
   // const context = useContext(categoryContext);
@@ -135,35 +149,35 @@ const Ads = () => {
   const handleAdd = async (e) => {
     e.preventDefault();
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    // var myHeaders = new Headers();
+    // myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify({
-      name: name,
-      image: image,
-      priority: priority,
-      userId: userId,
-    });
+    // var raw = JSON.stringify({
+    //   name: name,
+    //   image: image,
+    //   priority: priority,
+    //   userId: userId,
+    // });
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
+    // var requestOptions = {
+    //   method: "POST",
+    //   headers: myHeaders,
+    //   body: raw,
+    //   redirect: "follow",
+    // };
 
-    const response = await fetch(
-      "http://localhost:5000/api/v1/get/createAds",
-      requestOptions
-    );
-    if (response.status === 201) {
-      setModal(true);
-      setLoad(true);
-    }
+    // const response = await fetch(
+    //   "http://localhost:5000/api/v1/get/createAds",
+    //   requestOptions
+    // );
+    // if (response.status === 201) {
+    //   setModal(true);
+    //   setLoad(true);
+    // }
   };
 
-  const getUserName = async (id) => {
-    console.log(id);
+  const getSeller = async (id) => {
+    // console.log(id);
     var requestOptions = {
       method: "GET",
       redirect: "follow",
@@ -174,8 +188,9 @@ const Ads = () => {
       requestOptions
     );
     const json = await response.json();
-    // console.log('Usename ---->>>', json)
-    return json.username;
+    // console.log("jsonnnnnnnn", json);
+    setSellerName(json.username);
+    // console.log(sellerName);
   };
 
   const handleDelete = async (adId) => {
@@ -236,12 +251,12 @@ const Ads = () => {
         <div className="mx-3">
           <div className="mx-3 my-5">
             <h1 className="text-center " style={{ color: "#9b32e0" }}>
-              <b>Ads</b>
+              <b>{sellerName}'s Products</b>
             </h1>
             <hr style={{ border: "3px solid purple" }} className="mx-auto" />
           </div>
 
-          <div className="container text-center">
+          {/* <div className="container text-center">
             <Button
               variant="outline-dark py-2 px-3 my-5 fw-bold shadow-lg fs-5"
               onClick={() => {
@@ -250,7 +265,7 @@ const Ads = () => {
             >
               Add New Ad
             </Button>
-          </div>
+          </div> */}
 
           <div className="d-flex justify-content-center align-items-center my-4">
             <Form.Group
@@ -270,7 +285,7 @@ const Ads = () => {
                   disabled={searchValue === "Search Filter"}
                   style={{ width: "350px", border: "1px solid skyBlue" }}
                   type="text"
-                  placeholder="Type to search Ad."
+                  placeholder="Type to search Products."
                   className="text-center shadow-lg"
                   aria-label="Search"
                   // onClick={handleSearch}
@@ -335,12 +350,12 @@ const Ads = () => {
           </div>
 
           <div className="mt-5 mr-5">
-            <div className="row my-4 mx-2">
-              {isSearch && filteredAds ? (
-                filteredAds.length ? (
-                  filteredAds.map((ad) => {
+            <div className="row my-4 mx-5">
+              {isSearch && filteredProducts ? (
+                filteredProducts.length ? (
+                  filteredProducts.map((ad) => {
                     //  userName=getUserName(ad.userId)
-                    console.log("ads", ads);
+                    // console.log("ads", ads);
                     console.log("Username", ad, ad.user);
                     return (
                       <div className="my-4 col-md-6 " key={ad.id}>
@@ -350,7 +365,7 @@ const Ads = () => {
                       > */}
                         <Card
                           border="info"
-                          style={{ width: "32rem" }}
+                          style={{ width: "30rem" }}
                           className="text-center shadow-lg mx-auto"
                         >
                           <Card.Header className="fs-3 fw-bold">
@@ -416,81 +431,113 @@ const Ads = () => {
                   })
                 ) : (
                   <div className="text-center fw-bold fs-3 mb-3 text-danger">
-                    No Ads to display.
+                    No Products to display.
                   </div>
                 )
-              ) : ads.length ? (
-                ads.map((ad) => {
+              ) : products.length ? (
+                products.map((product) => {
                   //  userName=getUserName(ad.userId)
-                  // console.log("ads", ads);
-                  // console.log("Username", ad, ad.user);
+                  //   console.log("ads", ads);
+                  //   console.log("Username", ad, ad.user);
                   return (
-                    <div className="my-4 col-md-6 " key={ad.id}>
+                    <div className="my-4 col-md-6" key={product.id}>
                       {/* <Link
                         className="text-decoration-none"
                         to={`/Product/${product.id}`}
                       > */}
                       <Card
                         border="info"
-                        style={{ width: "32rem" }}
+                        style={{ width: "22rem" }}
                         className="text-center shadow-lg mx-auto"
                       >
-                        <Card.Header className="fs-3 fw-bold">
-                          {ad.name}
+                        <Card.Header className="fs-3 fw-bold px-0">
+                          <Stack direction="horizontal" gap={3}>
+                            <div className="text-end col"> {product.name}</div>
+
+                            <div className="text-center col-4">
+                              <Badge
+                                pill
+                                bg={
+                                  product.status != "Active"
+                                    ? "danger"
+                                    : "success"
+                                }
+                              >
+                                {product.status}
+                              </Badge>
+                            </div>
+                          </Stack>
                         </Card.Header>
                         <Card.Img
                           width="32rem"
                           height="260px"
                           variant="top"
-                          src={ad.image}
-                          alt={`${ad.name} Image`}
+                          src={product.image}
+                          alt={`${product.name} Image`}
                         />
 
-                        <Card.Body>
-                          {/* <Card.Title className="fs-3">
-                              {ad.name}
-                            </Card.Title> */}
-
-                          <Card.Text className="fs-4">
-                            <Stack direction="horizontal" className="mx-3">
+                        <Card.Body className="text-info">
+                          <Card.Title className="fs-5">
+                            Description:{" "}
+                            <b className="text-dark">{product.description}</b>
+                          </Card.Title>
+                          <hr />
+                          <Card.Text className="fs-5">
+                            <Stack direction="horizontal">
                               <div>
-                                {console.log(ad.user)}
-                                Username: <b>{ad.user}</b>
+                                Category:{" "}
+                                <b className="text-dark">{product.category}</b>
                               </div>
 
                               <div className="ms-auto">
-                                Priority: <b>{`${ad.priority}`}</b>
+                                Price:{" "}
+                                <b className="text-dark">{`${product.price}`}</b>
                               </div>
                             </Stack>
                           </Card.Text>
+                          <hr />
+                          <Card.Text className="fs-5">
+                            <Stack direction="horizontal">
+                              <div>
+                                Brand:{" "}
+                                <b className="text-dark">{product.brand}</b>
+                              </div>
+
+                              <div className="ms-auto">
+                                Warranty:{" "}
+                                <b className="text-dark">{`${product.warranty}`}</b>
+                              </div>
+                            </Stack>
+                          </Card.Text>
+                          <hr />
 
                           {/* <Stack direction="horizontal" className=" px-5 text-primary"> */}
 
                           <div className="text-center">
-                            <Button
+                            {/* <Button
                               variant="info shadow-lg mb-3 mx-2 px-4"
                               onClick={() => {
-                                setIdEdit(ad.id);
-                                setImageEdit(ad.image);
-                                setPriorityEdit(ad.priority);
-                                setNameEdit(ad.name);
-                                setEdit(true);
+                                // setIdEdit(ad.id);
+                                // setImageEdit(ad.image);
+                                // setPriorityEdit(ad.priority);
+                                // setNameEdit(ad.name);
+                                // setEdit(true);
                               }}
                             >
                               Edit Ad
-                            </Button>
+                            </Button> */}
                             {/* </div>
                             
                                 <div className="ms-auto"> */}
                             <Button
-                              variant="danger shadow-lg mb-3 mx-2"
+                              variant="info fw-bold shadow-lg mb-2 mx-2"
                               onClick={() => {
                                 //   navigate(`/Category/${category.id}`);
-                                setAdId(ad.id);
-                                setCancel(true);
+                                // setAdId(ad.id);
+                                // setCancel(true);
                               }}
                             >
-                              Delete Ad
+                              Product Details
                             </Button>
                           </div>
                           {/* </Stack> */}
@@ -502,7 +549,7 @@ const Ads = () => {
                 })
               ) : (
                 <div className="text-center fw-bold fs-3 text-danger">
-                  No Ads to display.
+                  No Products to display.
                 </div>
               )}
             </div>
@@ -852,4 +899,4 @@ const Ads = () => {
   );
 };
 
-export default Ads;
+export default SellerProducts;

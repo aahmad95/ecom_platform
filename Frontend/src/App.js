@@ -20,6 +20,7 @@ import MyProfile from "./components/MyProfile";
 import Checkout from "./components/Checkout";
 import Customer from "./components/admin/Customer";
 import NotFound from "./components/NotFound";
+import SellerProducts from "./components/admin/SellerProducts";
 
 function App() {
   return (
@@ -37,7 +38,7 @@ function App() {
               path="/product/:productId"
               element={<ProductDetails />}
             />
-{/* if(!localStorage.getItem("token")) */}
+            {/* if(!localStorage.getItem("token")) */}
             <Route exact path="/navbar" element={<Navbar />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/signup" element={<SignUp />} />
@@ -52,18 +53,23 @@ function App() {
 
             <Route exact path="/admin/customers" element={<Customer />} />
             <Route exact path="/admin/sellers" element={<Seller />} />
+            <Route
+              exact
+              path="/admin/sellers/:sellerId"
+              element={<SellerProducts />}
+            />
             <Route exact path="/admin/ads" element={<Ads />} />
             <Route exact path="/admin/dashboard" element={<Dashboard />} />
             {/* The catch-all route for undefined URLs */}
-           
-            <Route  path="*" element={<NotFound />} />
+
+            <Route path="*" element={<NotFound />} />
             <Route exact path="404" element={<NotFound />} />
           </Routes>
         </Router>
       </CartState>
       <Footer />
-     
-        {/* <Router>
+
+      {/* <Router>
         <Routes>
       
       </Routes>

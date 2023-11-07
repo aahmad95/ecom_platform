@@ -30,8 +30,9 @@ function ShowCarousel() {
   return (
     <Carousel>
       {ads.length ? (
-        ads.map((ad) => {
-          if (ad.priority) {
+        ads
+          .filter((ad) => ad.priority)
+          .map((ad) => {
             return (
               <Carousel.Item interval={2000}>
                 {/* <Image1 text="Second slide" /> */}
@@ -44,8 +45,7 @@ function ShowCarousel() {
                 />
               </Carousel.Item>
             );
-          }
-        })
+          })
       ) : (
         <div className="text-center my-5 fw-bold fs-3">
           No Ads to display now.

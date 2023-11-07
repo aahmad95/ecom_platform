@@ -65,6 +65,9 @@ const AdminPage = () => {
       }
       if (searchValue === "Role") {
         return user.role.toLowerCase().includes(value.toLowerCase());
+      }
+      if (searchValue === "Address") {
+        return user.address.toLowerCase().includes(value.toLowerCase());
       } else return;
     });
     setFilteredUsers(searchUser);
@@ -156,6 +159,17 @@ const AdminPage = () => {
 
                       <Dropdown.Item
                         onClick={() => {
+                          document.getElementById("validationCustom03").value =
+                            null;
+                          setIsSearch(false);
+                          setSearchValue("Address");
+                        }}
+                      >
+                        Address
+                      </Dropdown.Item>
+
+                      <Dropdown.Item
+                        onClick={() => {
                           console.log(
                             document.getElementById("validationCustom03").value
                           );
@@ -174,21 +188,52 @@ const AdminPage = () => {
             </div>
 
             <div className="mx-2">
-              <Table striped bordered hover responsive>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Role</th>
-                    <th>Image</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {isSearch && filteredUsers ? (
-                    filteredUsers.length ? (
-                      filteredUsers.map((user) => {
+              {(!isSearch && users.length) ||
+              (isSearch && filteredUsers.length) ? (
+                <Table striped bordered hover responsive>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Role</th>
+                      <th>Image</th>
+                      <th>Username</th>
+                      <th>Email</th>
+                      <th>Address</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {isSearch && filteredUsers ? (
+                      filteredUsers.length ? (
+                        filteredUsers.map((user) => {
+                          return (
+                            <tr>
+                              <td>{user.id}</td>
+                              <td>{user.role}</td>
+                              <td>
+                                {user.image ? (
+                                  <img
+                                    width="40px"
+                                    height="35px"
+                                    src={user.image}
+                                    alt={`Profile Pic`}
+                                  />
+                                ) : (
+                                  "No Image"
+                                )}
+                              </td>
+                              <td>{user.username}</td>
+                              <td>{user.email}</td>
+                              <td>{user.address}</td>
+                            </tr>
+                          );
+                        })
+                      ) : (
+                        <div className="text-center fw-bold fs-3 text-danger">
+                          No Users to display.
+                        </div>
+                      )
+                    ) : users.length ? (
+                      users.map((user) => {
                         return (
                           <tr>
                             <td>{user.id}</td>
@@ -215,38 +260,14 @@ const AdminPage = () => {
                       <div className="text-center fw-bold fs-3 text-danger">
                         No Users to display.
                       </div>
-                    )
-                  ) : users.length ? (
-                    users.map((user) => {
-                      return (
-                        <tr>
-                          <td>{user.id}</td>
-                          <td>{user.role}</td>
-                          <td>
-                            {user.image ? (
-                              <img
-                                width="40px"
-                                height="35px"
-                                src={user.image}
-                                alt={`Profile Pic`}
-                              />
-                            ) : (
-                              "No Image"
-                            )}
-                          </td>
-                          <td>{user.username}</td>
-                          <td>{user.email}</td>
-                          <td>{user.address}</td>
-                        </tr>
-                      );
-                    })
-                  ) : (
-                    <div className="text-center fw-bold fs-3 text-danger">
-                      No Users to display.
-                    </div>
-                  )}
-                </tbody>
-              </Table>
+                    )}
+                  </tbody>
+                </Table>
+              ) : (
+                <div className="text-center fw-bold fs-3 text-danger">
+                  No Users to display.
+                </div>
+              )}
             </div>
           </div>
 

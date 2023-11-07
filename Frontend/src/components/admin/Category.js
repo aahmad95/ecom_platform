@@ -67,7 +67,7 @@ const Category = () => {
     setLoad(false);
 
     // eslint-disable-next-line
-  }, [load]);
+  }, [load, userId]);
   // useEffect(()=>{
   //   console.log('Ads', ads);
   // }, [ads])
@@ -114,7 +114,7 @@ const Category = () => {
       }
       if (searchValue === "User") {
         return category.user.toLowerCase().includes(value.toLowerCase());
-      } else return;
+      } else return false;
     });
     setFilteredCategories(searchCategory);
     console.log(filteredCategories);
@@ -320,7 +320,7 @@ const Category = () => {
           </div>
 
           <div className="mt-5 mr-5">
-            <div className="row my-4">
+            <div className="row my-4 mx-2">
               {isSearch && filteredCategories ? (
                 filteredCategories.length ? (
                   filteredCategories.map((category) => {
