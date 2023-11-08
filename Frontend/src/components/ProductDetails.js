@@ -68,12 +68,15 @@ const ProductDetails = (props) => {
     // console.log("Products Details Response => ", response);
     const json = await response.json();
     // console.log(json);
-    await setProductDetails(json);
+    const available = json.filter((productDetail) => {
+      return productDetail.stock > 0;
+    });
+    setProductDetails(available);
 
     // console.log("product details====>", productDetails);
     // console.groupEnd();
     const imageArr = [];
-    json.forEach(async (productDetail) => {
+    available.forEach(async (productDetail) => {
       // console.log(productDetail);
       productDetail.image.forEach(async (i) => {
         if (!imageArr.includes(i)) {

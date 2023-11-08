@@ -110,11 +110,31 @@ const deleteOrderItem = async (req, res) => {
     });
   }
 };
-
+// Get all OrderItems By OrderId:
+const getOrderItemsByOrderId = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const orderItems = await OrderItem.findAll({
+      where: { orderId },
+    });
+    if (orderItems.length) {
+      return res.status(200).json(orderItems);
+    }
+    return res
+      .status(404)
+      .json({ message: "There isn't any OrderItem of this id exist." });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      error: "Internal Server Error: Could not find the OrderItem.",
+    });
+  }
+};
 module.exports = {
   getAllOrderItems,
   createOrderItem,
   getOrderItemById,
   updateOrderItem,
   deleteOrderItem,
+  getOrderItemsByOrderId,
 };

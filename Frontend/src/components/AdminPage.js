@@ -193,7 +193,7 @@ const AdminPage = () => {
                 <Table striped bordered hover responsive>
                   <thead>
                     <tr>
-                      <th>ID</th>
+                      <th>Id</th>
                       <th>Role</th>
                       <th>Image</th>
                       <th>Username</th>
@@ -206,7 +206,7 @@ const AdminPage = () => {
                       filteredUsers.length ? (
                         filteredUsers.map((user) => {
                           return (
-                            <tr>
+                            <tr key={user.id}>
                               <td>{user.id}</td>
                               <td>{user.role}</td>
                               <td>
@@ -235,7 +235,7 @@ const AdminPage = () => {
                     ) : users.length ? (
                       users.map((user) => {
                         return (
-                          <tr>
+                          <tr key={user.id}>
                             <td>{user.id}</td>
                             <td>{user.role}</td>
                             <td>

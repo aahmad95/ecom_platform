@@ -6,6 +6,7 @@ const {
   getOrderItemById,
   deleteOrderItem,
   updateOrderItem,
+  getOrderItemsByOrderId,
 } = require("../controllers/orderItem");
 
 router.post("/createOrderItem", createOrderItem);
@@ -13,5 +14,6 @@ router.get("/getOrderItems", getAllOrderItems);
 router.get("/getOrderItem/:id", getOrderItemById);
 router.delete("/deleteOrderItem/:id", deleteOrderItem);
 router.put("/updateOrderItem/:id", updateOrderItem);
+router.get("/getOrderItemsByOrderId/:orderId", getOrderItemsByOrderId);
 
 module.exports = router;

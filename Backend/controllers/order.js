@@ -110,10 +110,32 @@ const deleteOrder = async (req, res) => {
   }
 };
 
+// Get a Order By UserId:
+const getOrdersByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const orders = await Order.findAll({
+      where: { userId },
+    });
+    if (orders.length) {
+      return res.status(200).json(orders);
+    }
+    return res
+      .status(404)
+      .json({ message: "There isn't any Order of this id exist." });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      error: "Internal Server Error: Could not find the Order.",
+    });
+  }
+};
+
 module.exports = {
   getAllOrders,
   createOrder,
   getOrderById,
   updateOrder,
   deleteOrder,
+  getOrdersByUserId,
 };

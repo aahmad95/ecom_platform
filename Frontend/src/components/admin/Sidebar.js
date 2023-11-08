@@ -32,8 +32,9 @@ const Sidebar = () => {
         }
       }
     }
-    setLocation(window.location.href);
+    setLocation(window.location.pathname);
     console.log(location);
+    console.log(window.location.href);
     // eslint-disable-next-line
   }, [user]);
 
@@ -85,7 +86,7 @@ const Sidebar = () => {
             >
               <CDBSidebarMenuItem
                 className={
-                  location === "http://localhost:3000/admin"
+                  location === "/admin"
                     ? "text-light fw-bold fa-beat-fade"
                     : "fa-beat-fade"
                 }
@@ -103,7 +104,7 @@ const Sidebar = () => {
             >
               <CDBSidebarMenuItem
                 className={
-                  location === "http://localhost:3000/admin/ads"
+                  location === "/admin/ads"
                     ? "text-light fw-bold fa-beat-fade"
                     : "fa-beat-fade"
                 }
@@ -118,12 +119,12 @@ const Sidebar = () => {
               as={Link}
               to="/admin/category"
               // target="_blank"
-              activeClassName="activeClicked"
+              // activeClassName="activeClicked"
             >
               <CDBSidebarMenuItem
                 icon="icons"
                 className={
-                  location === "http://localhost:3000/admin/category"
+                  location === "/admin/category"
                     ? "text-light fw-bold fa-beat-fade"
                     : "fa-beat-fade"
                 }
@@ -135,13 +136,12 @@ const Sidebar = () => {
               exact
               as={Link}
               to="/admin/sellers"
-              activeClassName="activeClicked"
+              // activeClassName="activeClicked"
             >
               <CDBSidebarMenuItem
                 icon="shop"
                 className={
-                  location === "http://localhost:3000/admin/sellers" ||
-                  location === "http://localhost:3000/admin/sellers/"
+                  location?.toString().includes("/admin/sellers")
                     ? "text-light fw-bold fa-beat-fade"
                     : "fa-beat-fade"
                 }
@@ -153,12 +153,12 @@ const Sidebar = () => {
               exact
               as={Link}
               to="/admin/customers"
-              activeClassName="activeClicked"
+              // activeClassName="activeClicked"
             >
               <CDBSidebarMenuItem
                 icon="users-gear"
                 className={
-                  location === "http://localhost:3000/admin/customers"
+                  location?.toString().includes("/admin/customers")
                     ? "text-light fw-bold fa-beat-fade"
                     : "fa-beat-fade"
                 }

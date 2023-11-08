@@ -17,7 +17,7 @@ const Seller = () => {
   // let navigate = useNavigate();
   const [sellers, setSellers] = useState([]);
   const [searchValue, setSearchValue] = useState("Search Filter");
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [filteredSellers, setFilteredSellers] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
 
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const Seller = () => {
     // const value = event.target.value;
     console.log(value);
 
-    const searchUser = sellers.filter((user) => {
+    const searchSeller = sellers.filter((user) => {
       if (searchValue === "Name") {
         return user.username.toLowerCase().includes(value.toLowerCase());
       }
@@ -70,8 +70,8 @@ const Seller = () => {
         return user.address.toLowerCase().includes(value.toLowerCase());
       } else return false;
     });
-    setFilteredUsers(searchUser);
-    console.log(filteredUsers);
+    setFilteredSellers(searchSeller);
+    // console.log(filteredSellers);
   };
 
   return (
@@ -110,7 +110,7 @@ const Seller = () => {
                     disabled={searchValue === "Search Filter"}
                     style={{ width: "350px", border: "1px solid skyBlue" }}
                     type="text"
-                    placeholder="Type to search user."
+                    placeholder="Type to search sellers."
                     className="text-center shadow-lg"
                     aria-label="Search"
                     // onClick={handleSearch}
@@ -176,11 +176,11 @@ const Seller = () => {
 
             <div className="mx-2">
               {(!isSearch && sellers.length) ||
-              (isSearch && filteredUsers.length) ? (
+              (isSearch && filteredSellers.length) ? (
                 <Table striped bordered hover responsive>
                   <thead>
                     <tr>
-                      <th>ID</th>
+                      <th>Id</th>
                       <th>Image</th>
                       <th>Username</th>
                       <th>Email</th>
@@ -189,9 +189,9 @@ const Seller = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {isSearch && filteredUsers ? (
-                      filteredUsers.length ? (
-                        filteredUsers.map((user) => {
+                    {isSearch && filteredSellers ? (
+                      filteredSellers.length ? (
+                        filteredSellers.map((user) => {
                           return (
                             <tr>
                               <td>{user.id}</td>

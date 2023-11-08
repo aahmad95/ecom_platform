@@ -21,6 +21,9 @@ import Checkout from "./components/Checkout";
 import Customer from "./components/admin/Customer";
 import NotFound from "./components/NotFound";
 import SellerProducts from "./components/admin/SellerProducts";
+import SellerProductDetails from "./components/admin/SellerProductDetails";
+import CustomerOrders from "./components/admin/CustomerOrders";
+import Orders from "./components/Orders";
 
 function App() {
   return (
@@ -45,6 +48,7 @@ function App() {
             <Route exact path="/cart" element={<Cart />} />
             <Route exact path="/profile" element={<MyProfile />} />
             <Route exact path="/checkout" element={<Checkout />} />
+            <Route exact path="/orders" element={<Orders />} />
             {/* 
 
             <Route exact path="/signup" element={<Signup />} /> */}
@@ -52,11 +56,21 @@ function App() {
             <Route exact path="/admin/category" element={<Category />} />
 
             <Route exact path="/admin/customers" element={<Customer />} />
+            <Route
+              exact
+              path="/admin/customers/:customerId"
+              element={<CustomerOrders />}
+            />
             <Route exact path="/admin/sellers" element={<Seller />} />
             <Route
               exact
               path="/admin/sellers/:sellerId"
               element={<SellerProducts />}
+            />
+            <Route
+              exact
+              path="/admin/sellers/product/:productId"
+              element={<SellerProductDetails />}
             />
             <Route exact path="/admin/ads" element={<Ads />} />
             <Route exact path="/admin/dashboard" element={<Dashboard />} />

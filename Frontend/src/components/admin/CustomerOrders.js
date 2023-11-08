@@ -22,7 +22,7 @@ import Badge from "react-bootstrap/Badge";
 
 // import closeButton from "react-bootstrap/ModalHeader";
 
-const SellerProducts = () => {
+const CustomerOrders = () => {
   const params = useParams();
 
   const [load, setLoad] = useState(false);
@@ -249,7 +249,7 @@ const SellerProducts = () => {
         <div className="mx-3">
           <div className="mx-3 my-5">
             <h1 className="text-center " style={{ color: "#9b32e0" }}>
-              <b>{sellerName}'s Products</b>
+              <b>{sellerName}'s Orders</b>
             </h1>
             <hr style={{ border: "3px solid purple" }} className="mx-auto" />
           </div>
@@ -975,4 +975,4 @@ const SellerProducts = () => {
   );
 };
 
-export default SellerProducts;
+export default CustomerOrders;
