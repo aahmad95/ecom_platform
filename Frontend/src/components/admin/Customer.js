@@ -177,7 +177,8 @@ const Customer = () => {
             <div className="mx-2">
               {(!isSearch && customers.length) ||
               (isSearch && filteredCustomers.length) ? (
-                <Table striped bordered hover responsive>
+                // responsive
+                <Table striped bordered hover className="shadow-lg">
                   <thead>
                     <tr>
                       <th>Id</th>

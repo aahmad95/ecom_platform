@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 // import { decode } from "jsonwebtoken";
 // import jwt_decode from "jsonwebtoken";
 // import { jwt_decode } from "jsonwebtoken";
-const SignUp = () => {
+const SellerSignUp = () => {
   //   const jwt = require("jsonwebtoken");
   //   var jwt = require("jsonwebtoken");
   const [name, setName] = useState("");
@@ -76,7 +76,7 @@ const SignUp = () => {
 
     var raw = JSON.stringify({
       username: name,
-      role: "customer",
+      role: "seller",
       address: address,
       email: email,
       password: password,
@@ -136,10 +136,10 @@ const SignUp = () => {
             </div>
 
             <h1
-              className="text-center mb-4 "
+              className="text-center mb-4"
               // style={{ fontSize: "50px", color: "#9b32e0" }}
             >
-              <b>SignUp</b> <h3>(Customer)</h3>
+              <b>SignUp</b> <h3>(Seller)</h3>
             </h1>
 
             <Form.Group className="mb-3" controlId="fileName">
@@ -327,15 +327,17 @@ const SignUp = () => {
               Create Account
             </Button>
           </div>
-          <Stack className=" mb-5 grid text-center">
-            <Form.Text>
-              Create a Seller Account.{" "}
-              <Link to="/sellerSignUp">SellerSignUp</Link>
-            </Form.Text>
-            <Form.Text>
-              Already have an account. <Link to="/login">Login </Link>
-            </Form.Text>
-          </Stack>
+          <div className=" mb-5 grid text-center">
+            <Stack className=" mb-5 grid text-center">
+              <Form.Text>
+                Create a Customer Account.{" "}
+                <Link to="/SignUp">CustomerSignUp</Link>
+              </Form.Text>
+              <Form.Text>
+                Already have an account. <Link to="/login">Login </Link>
+              </Form.Text>
+            </Stack>
+          </div>
         </div>
       </div>
     </Form>
@@ -344,4 +346,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SellerSignUp;

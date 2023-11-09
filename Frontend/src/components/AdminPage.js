@@ -190,7 +190,7 @@ const AdminPage = () => {
             <div className="mx-2">
               {(!isSearch && users.length) ||
               (isSearch && filteredUsers.length) ? (
-                <Table striped bordered hover responsive>
+                <Table striped bordered hover className="shadow-lg">
                   <thead>
                     <tr>
                       <th>Id</th>

@@ -114,10 +114,50 @@ const deleteOrderItem = async (req, res) => {
 const getOrderItemsByOrderId = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const orderItems = await OrderItem.findAll({
+    const items = await OrderItem.findAll({
       where: { orderId },
     });
-    if (orderItems.length) {
+    const orderItems = [];
+    // {orderItem: orderItems, productDetail: productDetail, product: product}
+    if (items.length) {
+      const orderItemsPromises = items.map(async (item) => {
+        var requestOptions = {
+          method: "GET",
+          redirect: "follow",
+        };
+
+        const response = await fetch(
+          `http://localhost:5000/api/v1/productDetail/getProductDetail/${item.productDetailId}`,
+          requestOptions
+        );
+        const json = await response.json();
+        const productDetail = json;
+
+        const response1 = await fetch(
+          `http://localhost:5000/api/v1/product/getProduct/${productDetail.productId}`,
+          requestOptions
+        );
+        const json1 = await response1.json();
+
+        // Adding Category Name
+
+        const response2 = await fetch(
+          `http://localhost:5000/api/v1/category/getCategory/${json1.categoryId}`,
+          requestOptions
+        );
+        const json2 = await response2.json();
+
+        json1["category"] = json2.name;
+
+        const product = json1;
+        const orderItem = {
+          orderItem: item,
+          productDetail,
+          product,
+        };
+        orderItems.push(orderItem);
+      });
+      await Promise.all(orderItemsPromises);
       return res.status(200).json(orderItems);
     }
     return res

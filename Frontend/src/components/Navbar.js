@@ -26,8 +26,8 @@ function Navbar() {
 
   return (
     <NavBar
-    variant="dark"
-  //  fixed="top"
+      variant="dark"
+      //  fixed="top"
       sticky="top"
       collapseOnSelect
       expand="lg"
@@ -97,6 +97,16 @@ function Navbar() {
               Cart
               <i
                 className="mx-2 fa-solid fa-cart-plus fa-bounce"
+                style={{ color: "#ab41f1" }}
+              ></i>
+              {/* </h6> */}
+            </Nav.Link>
+            <Nav.Link as={Link} to="/orders">
+              {/* <h6> */}
+              Orders
+              {/* <i class="fa-duotone fa-cubes"></i> */}
+              <i
+                className="mx-2 fa-solid fa-cubes fa-spin"
                 style={{ color: "#ab41f1" }}
               ></i>
               {/* </h6> */}

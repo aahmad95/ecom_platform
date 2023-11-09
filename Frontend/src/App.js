@@ -24,6 +24,7 @@ import SellerProducts from "./components/admin/SellerProducts";
 import SellerProductDetails from "./components/admin/SellerProductDetails";
 import CustomerOrders from "./components/admin/CustomerOrders";
 import Orders from "./components/Orders";
+import SellerSignUp from "./components/SellerSignUp";
 
 function App() {
   return (
@@ -49,9 +50,9 @@ function App() {
             <Route exact path="/profile" element={<MyProfile />} />
             <Route exact path="/checkout" element={<Checkout />} />
             <Route exact path="/orders" element={<Orders />} />
-            {/* 
 
-            <Route exact path="/signup" element={<Signup />} /> */}
+            <Route exact path="/sellerSignup" element={<SellerSignUp />} />
+
             <Route exact path="/admin" element={<AdminPage />} />
             <Route exact path="/admin/category" element={<Category />} />
 
