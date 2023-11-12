@@ -180,7 +180,15 @@ const CartState = (props) => {
 
   return (
     <CartContext.Provider
-      value={{ orders, setOrders, checkout, orderDetails, setOrderDetails }}
+      value={{
+        orders,
+        setOrders,
+        checkout,
+        orderDetails,
+        setOrderDetails,
+        user,
+        setUser,
+      }}
     >
       {props.children}
     </CartContext.Provider>

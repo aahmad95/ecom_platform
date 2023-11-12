@@ -3,14 +3,10 @@ const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 // var email_template = require('../views/email.handlebars')
 
-
 const nodemailer = require("nodemailer");
 
 const hbs = require("nodemailer-express-handlebars");
 const path = require("path");
-
-
-
 
 const Mailgen = require("mailgen");
 // require("dotenv").config();
@@ -36,7 +32,7 @@ const getAllUsers = async (req, res) => {
 
 // Create a new User:
 const createUser = async (req, res) => {
-  const { username, role, address, email, password,image } = req.body;
+  const { username, role, address, email, password, image } = req.body;
   try {
     const Email = await User.findOne({
       where: { email },
@@ -52,7 +48,7 @@ const createUser = async (req, res) => {
       address,
       email,
       password: secPass,
-      image
+      image,
     });
     const data = {
       user: {
@@ -66,7 +62,7 @@ const createUser = async (req, res) => {
     };
     const authToken = jwt.sign(data, JWT_SECRET);
 
-    return res.json({ authToken });
+    return res.staus(200).json({ authToken });
   } catch (err) {
     console.log(err);
     // res.status(500).json(err);
@@ -127,11 +123,24 @@ const updateUser = async (req, res) => {
     });
 
     if (user) {
-      return res.json({
+      const user = await User.findOne({
+        where: { id },
+      });
+      const data = {
+        user: {
+          id: user.id,
+          role: user.role,
+          username: user.username,
+          email: user.email,
+          address: user.address,
+          image: user.image,
+        },
+      };
+      const authToken = jwt.sign(data, JWT_SECRET);
+      // return res.json({ authToken });
+      return res.status(200).json({
         message: "User updated successfully.",
-        User: await User.findOne({
-          where: { id },
-        }),
+        authToken,
       });
     }
     return res.json({ message: "There isn't any User of this id exist." });
@@ -176,7 +185,7 @@ const loginUser = async (req, res) => {
         username: user.username,
         email: user.email,
         address: user.address,
-        image:user.image
+        image: user.image,
       },
     };
     const authToken = jwt.sign(data, JWT_SECRET);
@@ -190,44 +199,37 @@ const loginUser = async (req, res) => {
   }
 };
 const emailConfirmation = async (req, res) => {
-
-  const { name,items,subtotal,deliveryFee,email} = req.body;
-  console.log("Email:  ",email)
+  const { name, items, subtotal, deliveryFee, email } = req.body;
+  console.log("Email:  ", email);
   {
-  // let testAccount = await nodemailer.createTestAccount();
-
-  // const transporter = nodemailer.createTransport({
-  //   host: "smtp.ethereal.email",
-  //   port: 465,
-  //   secure: true, // only true for 465 and false for other ports.
-  //   auth: {
-  //     // TODO: replace `user` and `pass` values from <https://forwardemail.net>
-  //     user: testAccount.user,
-  //     pass: testAccount.pass,
-  //   },
-  // });
-
-  // let message = {
-  //   from: '"Fred Foo 👻" <foo@example.com>', // sender address
-  //   to: "bar@example.com, baz@example.com", // list of receivers
-  //   subject: "Hello ✔", // Subject line
-  //   text: "Hello world?", // plain text body
-  //   html: "<b>Hello world?</b>", // html body
-  // };
-  // transporter
-  //   .sendMail(message)
-  //   .then(() => {
-  //     return res.json({ msg: "Email sent successfully." });
-  //   })
-  //   .catch((error) => {
-  //     return res.json({ Error: error });
-  //   });
-
-  // console.log("Message sent: %s", info.messageId);
+    // let testAccount = await nodemailer.createTestAccount();
+    // const transporter = nodemailer.createTransport({
+    //   host: "smtp.ethereal.email",
+    //   port: 465,
+    //   secure: true, // only true for 465 and false for other ports.
+    //   auth: {
+    //     // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+    //     user: testAccount.user,
+    //     pass: testAccount.pass,
+    //   },
+    // });
+    // let message = {
+    //   from: '"Fred Foo 👻" <foo@example.com>', // sender address
+    //   to: "bar@example.com, baz@example.com", // list of receivers
+    //   subject: "Hello ✔", // Subject line
+    //   text: "Hello world?", // plain text body
+    //   html: "<b>Hello world?</b>", // html body
+    // };
+    // transporter
+    //   .sendMail(message)
+    //   .then(() => {
+    //     return res.json({ msg: "Email sent successfully." });
+    //   })
+    //   .catch((error) => {
+    //     return res.json({ Error: error });
+    //   });
+    // console.log("Message sent: %s", info.messageId);
   }
-
-
-
 
   let config = {
     service: "gmail",
@@ -238,76 +240,75 @@ const emailConfirmation = async (req, res) => {
   };
   let transporter = nodemailer.createTransport(config);
 
-
   // point to the template folder
   const handlebarOptions = {
     viewEngine: {
       extName: ".handlebars",
-      partialsDir: path.resolve('./views'),
+      partialsDir: path.resolve("./views"),
       defaultLayout: false,
     },
-    viewPath: path.resolve('./views'),
+    viewPath: path.resolve("./views"),
     extName: ".handlebars",
-  }
+  };
 
   // use a template file with nodemailer
   transporter.use("compile", hbs(handlebarOptions));
   // /Users/algolix/Documents/Final Project/ecom_platform/Backend/views/email
 
-// {
-//   let MailGenerator = new Mailgen({
-//     theme: "default",
-//     product: {
-//       name: "Mailgen",
-//       link: "https://mailgen.js/",
-//     },
-//   });
+  // {
+  //   let MailGenerator = new Mailgen({
+  //     theme: "default",
+  //     product: {
+  //       name: "Mailgen",
+  //       link: "https://mailgen.js/",
+  //     },
+  //   });
 
-//   let response = {
-//     body: {
-//       name: "Sehar",
-//       intro: "Order Placed Succesfully.",
-//       table: {
-//         data: [
-//           {
-//             item: "T-Shirt",
-//             description: "T-Shirt",
-//             price: 1000,
-//           },
-//           {
-//             item: "T-Shirt",
-//             description: "T-Shirt",
-//             price: 1000,
-//           },
-//         ],
-//       },
-//       outro: "Looking forward to do more business",
-//     },
-//   };
-//   let mail = MailGenerator.generate(response);
+  //   let response = {
+  //     body: {
+  //       name: "Sehar",
+  //       intro: "Order Placed Succesfully.",
+  //       table: {
+  //         data: [
+  //           {
+  //             item: "T-Shirt",
+  //             description: "T-Shirt",
+  //             price: 1000,
+  //           },
+  //           {
+  //             item: "T-Shirt",
+  //             description: "T-Shirt",
+  //             price: 1000,
+  //           },
+  //         ],
+  //       },
+  //       outro: "Looking forward to do more business",
+  //     },
+  //   };
+  //   let mail = MailGenerator.generate(response);
 
-// }
+  // }
   var mailOptions = {
     from: '"E-Commerce Website" <sehar.algolix@gmail.com>',
-    
+
     to: "seharsaleem08@gmail.com", //email
     subject: "Order Placed Successfully",
-    template: 'email',
+    template: "email",
     // html: mail,// template: email.handlebars,
-   
+
     context: {
-                name: name,
-                orderItems:items,
-                subtotal:subtotal,
-                deliveryFee:deliveryFee,
-                total: subtotal+deliveryFee
-              },
+      name: name,
+      orderItems: items,
+      subtotal: subtotal,
+      deliveryFee: deliveryFee,
+      total: subtotal + deliveryFee,
+    },
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       return res.status(400).json({ error });
     } else {
-      console.log('Email sent: ' + info.response);
+      console.log("Email sent: " + info.response);
       return res.status(201).json({ msg: "Mail has been sent successfully" });
     }
   });

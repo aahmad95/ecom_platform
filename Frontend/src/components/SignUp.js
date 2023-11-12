@@ -329,8 +329,8 @@ const SignUp = () => {
           </div>
           <Stack className=" mb-5 grid text-center">
             <Form.Text>
-              Create a Seller Account.{" "}
-              <Link to="/sellerSignUp">SellerSignUp</Link>
+              Register as Seller Account.{" "}
+              <Link to="/sellerSignUp">SellerAccount</Link>
             </Form.Text>
             <Form.Text>
               Already have an account. <Link to="/login">Login </Link>

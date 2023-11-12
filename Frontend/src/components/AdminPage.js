@@ -7,22 +7,17 @@ import Table from "react-bootstrap/Table";
 import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-bootstrap/Form";
 import jwt_decode from "jwt-decode";
-
 import Col from "react-bootstrap/Col";
-
 import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "./admin/Sidebar";
 // import Sidebar from "cdbreact/dist/components/Sidebar";
-
 const AdminPage = () => {
   // let navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [searchValue, setSearchValue] = useState("Search Filter");
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
-
   const navigate = useNavigate();
-
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
@@ -31,16 +26,13 @@ const AdminPage = () => {
       var decoded = jwt_decode(authToken);
       decoded.user.role === "admin" ? getUsers() : navigate("/404");
     }
-
     // eslint-disable-next-line
   }, []);
-
   const getUsers = async () => {
     var requestOptions = {
       method: "GET",
       redirect: "follow",
     };
-
     const response = await fetch(
       "http://localhost:5000/api/v1/users/getUsers",
       requestOptions
@@ -55,7 +47,6 @@ const AdminPage = () => {
     const value = `${document.getElementById("validationCustom03").value}`;
     // const value = event.target.value;
     console.log(value);
-
     const searchUser = users.filter((user) => {
       if (searchValue === "Name") {
         return user.username.toLowerCase().includes(value.toLowerCase());
@@ -73,7 +64,6 @@ const AdminPage = () => {
     setFilteredUsers(searchUser);
     console.log(filteredUsers);
   };
-
   return (
     <>
       <Stack direction="horizontal">
@@ -106,7 +96,6 @@ const AdminPage = () => {
                     <b>Search:</b>
                   </Stack>
                 </Form.Label>
-
                 <Col sm="6" className="py-2 mx-1">
                   <Form.Control
                     disabled={searchValue === "Search Filter"}
@@ -124,7 +113,6 @@ const AdminPage = () => {
                     <Dropdown.Toggle variant="info" id="dropdown-basic">
                       {searchValue}
                     </Dropdown.Toggle>
-
                     <Dropdown.Menu>
                       <Dropdown.Item
                         onClick={() => {
@@ -156,7 +144,6 @@ const AdminPage = () => {
                       >
                         Role
                       </Dropdown.Item>
-
                       <Dropdown.Item
                         onClick={() => {
                           document.getElementById("validationCustom03").value =
@@ -167,7 +154,6 @@ const AdminPage = () => {
                       >
                         Address
                       </Dropdown.Item>
-
                       <Dropdown.Item
                         onClick={() => {
                           console.log(
@@ -186,7 +172,6 @@ const AdminPage = () => {
                 </Col>
               </Form.Group>
             </div>
-
             <div className="mx-2">
               {(!isSearch && users.length) ||
               (isSearch && filteredUsers.length) ? (
@@ -270,7 +255,6 @@ const AdminPage = () => {
               )}
             </div>
           </div>
-
           {/* </div> */}
           {/* </Row> */}
         </Stack>
@@ -278,5 +262,4 @@ const AdminPage = () => {
     </>
   );
 };
-
 export default AdminPage;

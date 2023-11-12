@@ -170,6 +170,53 @@ const getOrderItemsByOrderId = async (req, res) => {
     });
   }
 };
+
+// Get all OrderItems By ProductId:
+const getOrderItemsByProductId = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    const response = await fetch(
+      `http://localhost:5000/api/v1/productDetail/getProductDetailsByProduct/${productId}`,
+      requestOptions
+    );
+    if (response.status === 204) {
+      return res.status(204).json({
+        message: "There isn't any ProductDetail of this productId exist.",
+      });
+    } else if (response.status === 200) {
+      const json = await response.json();
+      console.log(json);
+      const productDetailIds = [];
+      await json.map(async (productDetail) => {
+        console.log(productDetail);
+        await productDetailIds.push(productDetail.id);
+      });
+
+      const orderItems = await OrderItem.findAll({
+        where: { productDetailId: productDetailIds },
+      });
+      if (orderItems) {
+        return res.status(200).json(orderItems);
+      }
+      return res.status(204).json({
+        message: "There isn't any OrderItem of these ProductDetails exist.",
+      });
+    }
+
+    // await Promise.all(orderItemsPromises);
+    // return res.status(200).json(orderItems);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      error: "Internal Server Error: Could not find the OrderItem.",
+    });
+  }
+};
 module.exports = {
   getAllOrderItems,
   createOrderItem,
@@ -177,4 +224,5 @@ module.exports = {
   updateOrderItem,
   deleteOrderItem,
   getOrderItemsByOrderId,
+  getOrderItemsByProductId,
 };

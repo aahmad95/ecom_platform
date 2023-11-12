@@ -87,7 +87,7 @@ const Seller = () => {
           >
             <div className="mx-5 my-5">
               <h1 className="text-center " style={{ color: "#9b32e0" }}>
-                <b>Shopkeepers</b>
+                <b>Sellers</b>
               </h1>
               <hr style={{ border: "3px solid purple" }} className="mx-auto" />
             </div>
@@ -194,7 +194,7 @@ const Seller = () => {
                       filteredSellers.length ? (
                         filteredSellers.map((user) => {
                           return (
-                            <tr>
+                            <tr key={user.id}>
                               <td>{user.id}</td>
                               <td>
                                 {user.image ? (
@@ -233,7 +233,7 @@ const Seller = () => {
                     ) : sellers.length ? (
                       sellers.map((user) => {
                         return (
-                          <tr>
+                          <tr key={user.id}>
                             <td>{user.id}</td>
                             <td>
                               {user.image ? (

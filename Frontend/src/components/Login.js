@@ -60,7 +60,7 @@ const Login = () => {
     if (json.authToken) {
       var decoded = await jwt_decode(json.authToken);
       console.log(decoded);
-      await setUser(decoded.user);
+      setUser(decoded.user);
       console.log(user);
 
       //saving the auth-token in local-Storage and redirect

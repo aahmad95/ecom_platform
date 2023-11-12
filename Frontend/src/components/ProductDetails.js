@@ -23,7 +23,7 @@ const ProductDetails = (props) => {
   const [quantity, setQuantity] = useState(0);
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState(false);
-  let q = 0;
+  // let q = 0;
 
   const [productDetailId, setProductDetailId] = useState(0);
   //   console.log(param);
@@ -99,6 +99,7 @@ const ProductDetails = (props) => {
     // console.log(productDetails[0].id);
     if (event.target.checked) {
       setProductDetailId(event.target.id);
+      setQuantity(0);
       for (let i = 0; i < productDetails.length; i++) {
         let element = document.getElementById(productDetails[i].id);
         console.log(element);
@@ -112,7 +113,7 @@ const ProductDetails = (props) => {
     // event.target.checked = "true";
   };
   const handleAddToCart = () => {
-    q = quantity;
+    // q = quantity;
     if (!localStorage.getItem("token")) {
       setShow(true);
     } else if (localStorage.getItem("token")) {
@@ -300,6 +301,14 @@ const ProductDetails = (props) => {
               </Button>
               {quantity}
               <Button
+                disabled={
+                  productDetailId !== 0
+                    ? quantity ===
+                      productDetails?.filter(
+                        (details) => details.id === parseInt(productDetailId)
+                      )[0]["stock"]
+                    : true
+                }
                 variant="secondary shadow-lg fw-bold p-1  px-2 mx-3"
                 onClick={() => {
                   setQuantity(quantity + 1);

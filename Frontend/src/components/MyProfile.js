@@ -4,20 +4,17 @@ import Stack from "react-bootstrap/Stack";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Image from 'react-bootstrap/Image';
-import Row from 'react-bootstrap/Row';
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import Image from "react-bootstrap/Image";
+import Row from "react-bootstrap/Row";
 import icon from "../logo.svg";
 import Modal from "react-bootstrap/Modal";
 import * as formik from "formik";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
 
-
 const MyProfile = () => {
-  
- 
   const [user, setUser] = useState();
   // console.log(decoded.user);
 
@@ -25,14 +22,11 @@ const MyProfile = () => {
   const [image, setImage] = useState();
   const [email, setEmail] = useState();
   const [address, setAddress] = useState();
-  
 
   const [show, setShow] = useState(false);
-  
+
   const [validated, setValidated] = useState(false);
   let navigate = useNavigate();
-  
-
 
   //   const { Formik } = formik;
 
@@ -41,29 +35,22 @@ const MyProfile = () => {
   //     password: yup.string().required(),
   //   });
 
-
   useEffect(() => {
-    if(!localStorage.getItem("token")){
-      navigate("/login")
-    }
-    else{
-      const authToken=localStorage.getItem("token")
-    var decoded =jwt_decode(authToken);
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    } else {
+      const authToken = localStorage.getItem("token");
+      var decoded = jwt_decode(authToken);
       setUser(decoded.user);
       setName(decoded.user.username);
       setImage(decoded.user.image);
       setEmail(decoded.user.email);
-      setAddress(decoded.user.address)
-      
-
+      setAddress(decoded.user.address);
     }
-   
-    
+
     // console.log("OrderItems------->", orderItems);
   }, []);
 
-
-  
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -73,27 +60,35 @@ const MyProfile = () => {
 
     setValidated(true);
     var myHeaders = new Headers();
-myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Content-Type", "application/json");
 
-var raw = JSON.stringify({
-  "username": name,
-  "email": email,
-  "address": address,
-  "image": image
-});
+    var raw = JSON.stringify({
+      username: name,
+      email: email,
+      address: address,
+      image: image,
+    });
 
-var requestOptions = {
-  method: 'PUT',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
 
-const response = await fetch(`http://localhost:5000/api/v1/users/updateUser/${user.id}`, requestOptions)
+    const response = await fetch(
+      `http://localhost:5000/api/v1/users/updateUser/${user.id}`,
+      requestOptions
+    );
     const json = await response.json();
     console.log(json);
-
-    setShow(true);
+    if (response.status === 200) {
+      localStorage.setItem("token", json.authToken);
+      setShow(true);
+      const authToken = localStorage.getItem("token");
+      var decoded = jwt_decode(authToken);
+      console.log(decoded);
+    }
 
     // if (json.authToken) {
     //   var decoded = await jwt_decode(json.authToken);
@@ -137,46 +132,49 @@ const response = await fetch(`http://localhost:5000/api/v1/users/updateUser/${us
             >
               <b>My Profile</b>
             </h1>
-           
 
+            <div className="text-center">
+              <Image
+                //  className="shadow-lg"
+                height="130px"
+                width="130px"
+                alt="Profile Image"
+                src={
+                  image
+                    ? image
+                    : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVz_XdPamId2_uvEeLG23zjW02eAXgZhCfoQ&usqp=CAU"
+                }
+                roundedCircle
+              />
+            </div>
 
-       <div className="text-center">
-       <Image 
-      //  className="shadow-lg"
-       height="130px"
-       width="130px"
-       alt="Profile Image"
-       src={image?image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVz_XdPamId2_uvEeLG23zjW02eAXgZhCfoQ&usqp=CAU"} roundedCircle />
-       </div>
-       
             <Form.Group controlId="fileName" className="mb-3">
-                <Form.Label>
+              <Form.Label>
                 <i class="fa-solid fa-circle-user fa-beat-fade mx-1"></i>
-                <b>
-                  Profile Image:</b>
-                </Form.Label>
-                <Form.Control
-                  type="file"
-                  name="image"
-                  size="sm"
-                  onChange={(event) => {
-                    //   setImage(e.target.files[0]);
-                    const file = event.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
+                <b>Profile Image:</b>
+              </Form.Label>
+              <Form.Control
+                type="file"
+                name="image"
+                size="sm"
+                onChange={(event) => {
+                  //   setImage(e.target.files[0]);
+                  const file = event.target.files[0];
+                  if (file) {
+                    const reader = new FileReader();
 
-                      reader.onload = (e) => {
-                        const imageDataURL = e.target.result;
-                        // console.log("Base 64 -> ", base64);
-                        // You can use imageDataURL as a base64-encoded image string.
-                        // console.log(imageDataURL);
-                        setImage(imageDataURL);
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                />
-              </Form.Group>
+                    reader.onload = (e) => {
+                      const imageDataURL = e.target.result;
+                      // console.log("Base 64 -> ", base64);
+                      // You can use imageDataURL as a base64-encoded image string.
+                      // console.log(imageDataURL);
+                      setImage(imageDataURL);
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+            </Form.Group>
             <Form.Group className="mb-3" controlId="validationCustom01">
               <Form.Label>
                 <i class="fa-solid fa-user fa-beat-fade mx-1"></i>
@@ -216,7 +214,8 @@ const response = await fetch(`http://localhost:5000/api/v1/users/updateUser/${us
                 We'll never share your email with anyone else.
               </Form.Text>
               <Form.Control.Feedback type="invalid">
-                Please provide a different email as this email has already been registered.
+                Please provide a different email as this email has already been
+                registered.
               </Form.Control.Feedback>
               {/* <Form.Control.Feedback type="invalid">
                     {errors.email}
@@ -265,25 +264,22 @@ const response = await fetch(`http://localhost:5000/api/v1/users/updateUser/${us
         </div>
       ))} */}
             <div className="mt-5 grid text-center">
-
-<Button
-  variant="outline-success fw-bold mx-2 py-2 px-4 shadow-lg m-3"
-  type="submit"
-  //   onClick={handleSignUp}
->
-  Update Profile
-</Button>
-</div>
+              <Button
+                variant="outline-success fw-bold mx-2 py-2 px-4 shadow-lg m-3"
+                type="submit"
+                //   onClick={handleSignUp}
+              >
+                Update Profile
+              </Button>
+            </div>
           </div>
-          
-          
-
         </div>
-        
       </div>
       <Modal
         show={show}
-        onHide={()=>{setShow(false)}}
+        onHide={() => {
+          setShow(false);
+        }}
         // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -318,4 +314,3 @@ const response = await fetch(`http://localhost:5000/api/v1/users/updateUser/${us
 };
 
 export default MyProfile;
-

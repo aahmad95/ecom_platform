@@ -24,12 +24,11 @@ const Sidebar = () => {
     } else {
       const authToken = localStorage.getItem("token");
       const decoded = jwt_decode(authToken);
-      if (decoded.user.role !== "admin") {
+      if (!user) {
+        setUser(decoded.user);
+      }
+      if (!["admin", "seller"].includes(decoded.user.role)) {
         navigate("/404");
-      } else {
-        if (!user) {
-          setUser(decoded.user);
-        }
       }
     }
     setLocation(window.location.pathname);
@@ -77,97 +76,98 @@ const Sidebar = () => {
         </CDBSidebarHeader>
 
         <CDBSidebarContent className="sidebar-content">
-          <CDBSidebarMenu>
-            <NavLink
-              exact
-              as={Link}
-              to="/admin"
-              // activeClassName="activeClicked"
-            >
-              <CDBSidebarMenuItem
-                className={
-                  location === "/admin"
-                    ? "text-light fw-bold fa-beat-fade"
-                    : "fa-beat-fade"
-                }
-                icon="house-user"
-                // className="fa-beat"
+          {user.role === "admin" ? (
+            <CDBSidebarMenu>
+              <NavLink
+                exact
+                as={Link}
+                to="/admin"
+                // activeClassName="activeClicked"
               >
-                Admin Home
-              </CDBSidebarMenuItem>
-            </NavLink>
-            <NavLink
-              exact
-              as={Link}
-              to="/admin/ads"
-              // activeClassName="activeClicked"
-            >
-              <CDBSidebarMenuItem
-                className={
-                  location === "/admin/ads"
-                    ? "text-light fw-bold fa-beat-fade"
-                    : "fa-beat-fade"
-                }
-                icon="rectangle-ad"
-                // className="fa-beat"
+                <CDBSidebarMenuItem
+                  className={
+                    location === "/admin"
+                      ? "text-light fw-bold fa-beat-fade"
+                      : "fa-beat-fade"
+                  }
+                  icon="house-user"
+                  // className="fa-beat"
+                >
+                  Admin Home
+                </CDBSidebarMenuItem>
+              </NavLink>
+              <NavLink
+                exact
+                as={Link}
+                to="/admin/ads"
+                // activeClassName="activeClicked"
               >
-                Ads
-              </CDBSidebarMenuItem>
-            </NavLink>
-            <NavLink
-              exact
-              as={Link}
-              to="/admin/category"
-              // target="_blank"
-              // activeClassName="activeClicked"
-            >
-              <CDBSidebarMenuItem
-                icon="icons"
-                className={
-                  location === "/admin/category"
-                    ? "text-light fw-bold fa-beat-fade"
-                    : "fa-beat-fade"
-                }
+                <CDBSidebarMenuItem
+                  className={
+                    location === "/admin/ads"
+                      ? "text-light fw-bold fa-beat-fade"
+                      : "fa-beat-fade"
+                  }
+                  icon="rectangle-ad"
+                  // className="fa-beat"
+                >
+                  Ads
+                </CDBSidebarMenuItem>
+              </NavLink>
+              <NavLink
+                exact
+                as={Link}
+                to="/admin/category"
+                // target="_blank"
+                // activeClassName="activeClicked"
               >
-                Categories
-              </CDBSidebarMenuItem>
-            </NavLink>
-            <NavLink
-              exact
-              as={Link}
-              to="/admin/sellers"
-              // activeClassName="activeClicked"
-            >
-              <CDBSidebarMenuItem
-                icon="shop"
-                className={
-                  location?.toString().includes("/admin/sellers")
-                    ? "text-light fw-bold fa-beat-fade"
-                    : "fa-beat-fade"
-                }
+                <CDBSidebarMenuItem
+                  icon="icons"
+                  className={
+                    location === "/admin/category"
+                      ? "text-light fw-bold fa-beat-fade"
+                      : "fa-beat-fade"
+                  }
+                >
+                  Categories
+                </CDBSidebarMenuItem>
+              </NavLink>
+              <NavLink
+                exact
+                as={Link}
+                to="/admin/sellers"
+                // activeClassName="activeClicked"
               >
-                Shopkeepers
-              </CDBSidebarMenuItem>
-            </NavLink>
-            <NavLink
-              exact
-              as={Link}
-              to="/admin/customers"
-              // activeClassName="activeClicked"
-            >
-              <CDBSidebarMenuItem
-                icon="users-gear"
-                className={
-                  location?.toString().includes("/admin/customers")
-                    ? "text-light fw-bold fa-beat-fade"
-                    : "fa-beat-fade"
-                }
+                <CDBSidebarMenuItem
+                  icon="shop"
+                  className={
+                    location?.toString().includes("/admin/sellers")
+                      ? "text-light fw-bold fa-beat-fade"
+                      : "fa-beat-fade"
+                  }
+                >
+                  Sellers
+                </CDBSidebarMenuItem>
+              </NavLink>
+              <NavLink
+                exact
+                as={Link}
+                to="/admin/customers"
+                // activeClassName="activeClicked"
               >
-                Customers
-              </CDBSidebarMenuItem>
-            </NavLink>
+                <CDBSidebarMenuItem
+                  icon="users-gear"
+                  className={
+                    location?.toString().includes("/admin/customers")
+                      ? "text-light fw-bold fa-beat-fade"
+                      : "fa-beat-fade"
+                  }
+                >
+                  Customers
+                </CDBSidebarMenuItem>
+              </NavLink>
 
-            {/* <NavLink
+              {/* <NavLink
               exact
               as={Link}
               to="/admin/analytics"
@@ -184,7 +184,118 @@ const Sidebar = () => {
                 Analytics
               </CDBSidebarMenuItem>
             </NavLink> */}
-          </CDBSidebarMenu>
+            </CDBSidebarMenu>
+          ) : (
+            <CDBSidebarMenu>
+              <NavLink
+                exact
+                as={Link}
+                to="/seller"
+                // activeClassName="activeClicked"
+              >
+                <CDBSidebarMenuItem
+                  className={
+                    location === "/seller"
+                      ? "text-light fw-bold fa-beat-fade"
+                      : "fa-beat-fade"
+                  }
+                  icon="house-user"
+                  // className="fa-beat"
+                >
+                  Seller Home
+                </CDBSidebarMenuItem>
+              </NavLink>
+              {/* <NavLink
+                exact
+                as={Link}
+                to="/admin/ads"
+                // activeClassName="activeClicked"
+              >
+                <CDBSidebarMenuItem
+                  className={
+                    location === "/admin/ads"
+                      ? "text-light fw-bold fa-beat-fade"
+                      : "fa-beat-fade"
+                  }
+                  icon="rectangle-ad"
+                  // className="fa-beat"
+                >
+                  Ads
+                </CDBSidebarMenuItem>
+              </NavLink> */}
+              {/* <NavLink
+                exact
+                as={Link}
+                to="/admin/category"
+                // target="_blank"
+                // activeClassName="activeClicked"
+              >
+                <CDBSidebarMenuItem
+                  icon="icons"
+                  className={
+                    location === "/admin/category"
+                      ? "text-light fw-bold fa-beat-fade"
+                      : "fa-beat-fade"
+                  }
+                >
+                  Categories
+                </CDBSidebarMenuItem>
+              </NavLink> */}
+              <NavLink
+                exact
+                as={Link}
+                to="/seller/products"
+                // activeClassName="activeClicked"
+              >
+                <CDBSidebarMenuItem
+                  icon="shop"
+                  className={
+                    location?.toString().includes("/seller/products")
+                      ? "text-light fw-bold fa-beat-fade"
+                      : "fa-beat-fade"
+                  }
+                >
+                  Products
+                </CDBSidebarMenuItem>
+              </NavLink>
+
+              {/* <NavLink
+                exact
+                as={Link}
+                to="/admin/customers"
+                // activeClassName="activeClicked"
+              >
+                <CDBSidebarMenuItem
+                  icon="users-gear"
+                  className={
+                    location?.toString().includes("/admin/customers")
+                      ? "text-light fw-bold fa-beat-fade"
+                      : "fa-beat-fade"
+                  }
+                >
+                  Customers
+                </CDBSidebarMenuItem>
+              </NavLink> */}
+
+              {/* <NavLink
+              exact
+              as={Link}
+              to="/admin/analytics"
+              activeClassName="activeClicked"
+            >
+              <CDBSidebarMenuItem
+                icon="chart-line"
+                className={
+                  location === "http://localhost:3000/admin/analytics"
+                    ? "text-light fw-bold fa-beat-fade"
+                    : "fa-beat-fade"
+                }
+              >
+                Analytics
+              </CDBSidebarMenuItem>
+            </NavLink> */}
+            </CDBSidebarMenu>
+          )}
         </CDBSidebarContent>
 
         <CDBSidebarFooter style={{ textAlign: "right" }}>

@@ -330,8 +330,8 @@ const SellerSignUp = () => {
           <div className=" mb-5 grid text-center">
             <Stack className=" mb-5 grid text-center">
               <Form.Text>
-                Create a Customer Account.{" "}
-                <Link to="/SignUp">CustomerSignUp</Link>
+                Register as Customer Account.{" "}
+                <Link to="/SignUp">CustomerAccount</Link>
               </Form.Text>
               <Form.Text>
                 Already have an account. <Link to="/login">Login </Link>

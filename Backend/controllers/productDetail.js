@@ -170,14 +170,14 @@ const getProductDetailsByProduct = async (req, res) => {
       where: { productId },
     });
     if (productDetails.length) {
-      return res.json(productDetails);
+      return res.status(200).json(productDetails);
     }
-    return res.json({
+    return res.status(204).json({
       message: "There isn't any Product Details of this Product exist.",
     });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not find the Product Details of Product.",
     });
   }

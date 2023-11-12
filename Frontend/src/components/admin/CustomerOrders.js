@@ -189,7 +189,7 @@ const CustomerOrders = () => {
                                     width="45px"
                                     height="45px"
                                     src={orderItem.productDetail.image}
-                                    alt={"Image"}
+                                    alt={`${orderItem.product.name} Image`}
                                   />
                                 </td>
                                 <td>{orderItem.product.description}</td>
@@ -234,6 +234,7 @@ const CustomerOrders = () => {
                                             );
                                           }
                                         }
+                                        return false;
                                       }
                                     )}
                                     <div></div>
