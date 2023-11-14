@@ -42,11 +42,10 @@ const createProduct = async (req, res) => {
       warranty,
       status,
     });
-
-    return res.json(product);
+    return res.status(200).json(product);
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not create a new Product.",
     });
   }
@@ -81,17 +80,19 @@ const updateProduct = async (req, res) => {
     });
 
     if (product) {
-      return res.json({
+      return res.status(200).json({
         message: "Product updated successfully.",
         Product: await Product.findOne({
           where: { id },
         }),
       });
     }
-    return res.json({ message: "There isn't any Product of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any Product of this id exist." });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not update the Product.",
     });
   }
@@ -106,16 +107,18 @@ const deleteProduct = async (req, res) => {
       where: { id },
     });
     if (product) {
-      //   await product.destroy();
-      return res.json({
+      await product.destroy();
+      return res.status(200).json({
         message: "Product deleted successfully.",
       });
     }
 
-    return res.json({ message: "There isn't any Product of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any Product of this id exist." });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not delete the Product",
     });
   }

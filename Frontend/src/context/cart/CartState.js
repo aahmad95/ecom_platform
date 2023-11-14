@@ -50,14 +50,17 @@ const CartState = (props) => {
         totalPrice: order.product.price * order.quantity,
       };
       items.push(item1);
-      await createOrderItem(
-        order.product.price,
-        order.quantity,
-        order.productDetails.id,
-        orderId
-      );
+      if (await updateStock(order.productDetails.id, order.quantity)) {
+        await createOrderItem(
+          order.product.price,
+          order.quantity,
+          order.productDetails.id,
+          orderId
+        );
+      }
     });
     await Promise.all(orderPromises);
+
     console.log("done");
     setOrders([]);
 
@@ -66,17 +69,17 @@ const CartState = (props) => {
     // console.log("payment",payment);
     // console.log("deliveryFee",deliveryFee);
     // send email for order placed confirmation:
-    sendEmail(user.username, items, payment, deliveryFee, user.email);
+    sendEmail(user.username, items, subtotal, deliveryFee, user.email);
   };
 
-  const sendEmail = async (name, items, payment, deliveryFee, email) => {
+  const sendEmail = async (name, items, subtotal, deliveryFee, email) => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
       name,
       items,
-      subtotal: payment,
+      subtotal,
       deliveryFee,
       email,
     });
@@ -155,6 +158,47 @@ const CartState = (props) => {
     console.log("orderItem:  ", data);
   };
 
+  const updateStock = async (productDetailId, quantity) => {
+    var stock = 0;
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    const response = await fetch(
+      `http://localhost:5000/api/v1/productDetail/getProductDetail/${productDetailId}`,
+      requestOptions
+    );
+    if (response.status === 200) {
+      const json = await response.json();
+      stock = json.stock;
+    }
+
+    if (stock) {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        stock: stock - quantity,
+      });
+
+      var requestOptions1 = {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      const response1 = await fetch(
+        `http://localhost:5000/api/v1/productDetail/updateProductDetail/${productDetailId}`,
+        requestOptions1
+      );
+      if (response1.status === 200) {
+        return true;
+      }
+    }
+    return false;
+  };
   // const updateOrder = async (price) => {
   //   var myHeaders = new Headers();
   //   myHeaders.append("Content-Type", "application/json");

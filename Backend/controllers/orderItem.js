@@ -194,7 +194,7 @@ const getOrderItemsByProductId = async (req, res) => {
       const productDetailIds = [];
       await json.map(async (productDetail) => {
         console.log(productDetail);
-        await productDetailIds.push(productDetail.id);
+        productDetailIds.push(productDetail.id);
       });
 
       const orderItems = await OrderItem.findAll({
@@ -217,6 +217,27 @@ const getOrderItemsByProductId = async (req, res) => {
     });
   }
 };
+
+// Get OrderItems of PrdouctDetailsId:
+const getOrderItemOfProductDetail = async (req, res) => {
+  try {
+    const { productDetailId } = req.params;
+    const orderItem = await OrderItem.findAll({
+      where: { productDetailId },
+    });
+    if (orderItem.length) {
+      return res.status(200).json(orderItem);
+    }
+    return res
+      .status(204)
+      .json({ message: "There isn't any OrderItem of this id exist." });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      error: "Server Error: Could not find the OrderItem.",
+    });
+  }
+};
 module.exports = {
   getAllOrderItems,
   createOrderItem,
@@ -225,4 +246,5 @@ module.exports = {
   deleteOrderItem,
   getOrderItemsByOrderId,
   getOrderItemsByProductId,
+  getOrderItemOfProductDetail,
 };

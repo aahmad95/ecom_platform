@@ -27,8 +27,6 @@ const ProductsOfSeller = () => {
 
   const [load, setLoad] = useState(false);
 
-  // const [name, setName] = useState("");
-  // const [image, setImage] = useState("");
   // const [priority, setPriority] = useState(false);
   const [sellerName, setSellerName] = useState();
   const [seller, setSeller] = useState();
@@ -43,15 +41,43 @@ const ProductsOfSeller = () => {
 
   const [products, setProducts] = useState([]);
 
-  // const [show, setShow] = useState(false);
+  // Add Product
 
-  // const [modal, setModal] = useState(false);
+  const [show, setShow] = useState(false);
+  const [categories, setCategories] = useState([]);
 
-  // const [cancel, setCancel] = useState(false);
-  // const [del, setDel] = useState(false);
+  const [name, setName] = useState("");
+  const [brand, setBrand] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
+  const [price, setPrice] = useState("");
+  const [warranty, setWarranty] = useState("");
+  const [status, setStatus] = useState("");
 
-  // const [adId, setAdId] = useState();
+  const [modal, setModal] = useState(false);
 
+  // Delete Product:
+  const [cancel, setCancel] = useState(false);
+  const [del, setDel] = useState(false);
+  const [productId, setProductId] = useState();
+
+  // Edit Product:
+  const [edit, setEdit] = useState(false);
+  // const [categories, setCategories] = useState([]);
+  const [editId, setEditId] = useState("");
+  const [editName, setEditName] = useState("");
+  const [editBrand, setEditBrand] = useState("");
+  const [editCategoryId, setEditCategoryId] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editImage, setEditImage] = useState("");
+  const [editPrice, setEditPrice] = useState("");
+  const [editWarranty, setEditWarranty] = useState("");
+  const [editStatus, setEditStatus] = useState("");
+
+  const [doneEdit, setDoneEdit] = useState(false);
+
+  // Search:
   const [searchValue, setSearchValue] = useState("Search Filter");
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
@@ -72,6 +98,7 @@ const ProductsOfSeller = () => {
       if (decoded.user.role === "seller") {
         // setUserId(decoded.user.id);
         getProducts(decoded.user.id);
+        getCategories();
         // getSeller(seller.id);
       } else navigate("/404");
     }
@@ -144,6 +171,43 @@ const ProductsOfSeller = () => {
     }
   };
 
+  const handleAdd = async (event) => {
+    event.preventDefault();
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      name: name,
+      userId: seller.id,
+      categoryId: categoryId,
+      brand: brand,
+      description: description,
+      image: image,
+      price: price,
+      warranty: warranty,
+      status: status,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    const response = await fetch(
+      "http://localhost:5000/api/v1/product/createProduct",
+      requestOptions
+    );
+    // console.log("response-------", response);
+    if (response.status === 200) {
+      setModal(true);
+      setLoad(true);
+    }
+    const json = await response.json();
+    // console.log("json------", json);
+  };
+
   const handleSearch = (event) => {
     setIsSearch(true);
     //  const value = `${document.getElementById("validationCustom03").value}`;
@@ -163,30 +227,84 @@ const ProductsOfSeller = () => {
     console.log(filteredProducts);
   };
 
-  // const getSeller = async () => {
-  //   const authToken = localStorage.getItem("token");
-  //   const decoded = await jwt_decode(authToken);
+  const getCategories = async () => {
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+    // const category = [];
+    const response = await fetch(
+      "http://localhost:5000/api/v1/category/getAllCategory",
+      requestOptions
+    );
+    // console.log(response);
+    if (response.status === 200) {
+      const json = await response.json();
+      // json.map((category) => {
+      //   const cat = { category.id: `${category.name}` }
+      //   category.push(cat);
+      // })
+      setCategories(json);
+      // console.log("categories", json);
+    }
+  };
 
-  //   setSeller(decoded.user);
-  // };
+  const handleEdit = async (event) => {
+    event.preventDefault();
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-  // const getSeller = async (id) => {
-  //   // console.log(id);
-  //   var requestOptions = {
-  //     method: "GET",
-  //     redirect: "follow",
-  //   };
+    var raw = JSON.stringify({
+      name: editName,
+      // userId: seller.id,
+      categoryId: editCategoryId,
+      brand: editBrand,
+      description: editDescription,
+      image: editImage,
+      price: editPrice,
+      warranty: editWarranty,
+      status: editStatus,
+    });
 
-  //   const response = await fetch(
-  //     `http://localhost:5000/api/v1/users/getUser/${id}`,
-  //     requestOptions
-  //   );
-  //   const json = await response.json();
-  //   // console.log("jsonnnnnnnn", json);
-  //   setSellerName(json.username);
-  //   // console.log(sellerName);
-  // };
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
 
+    const response = await fetch(
+      `http://localhost:5000/api/v1/product/updateProduct/${editId}`,
+      requestOptions
+    );
+    if (response.status === 200) {
+      setDoneEdit(true);
+      setLoad(true);
+    }
+  };
+
+  const handleDelete = async (productId) => {
+    console.log(productId);
+    var requestOptions = {
+      method: "DELETE",
+      redirect: "follow",
+    };
+
+    const response = await fetch(
+      `http://localhost:5000/api/v1/productDetail/deleteProductDetailsOfProduct/${productId}`,
+      requestOptions
+    );
+    if (response !== 500) {
+      const response1 = await fetch(
+        `http://localhost:5000/api/v1/product/deleteProduct/${productId}`,
+        requestOptions
+      );
+      if (response1 !== 500) {
+        setDel(true);
+        setLoad(true);
+      }
+    }
+  };
   return (
     <>
       {/* <Stack direction="horizontal"> */}
@@ -200,16 +318,16 @@ const ProductsOfSeller = () => {
             <hr style={{ border: "3px solid purple" }} className="mx-auto" />
           </div>
 
-          {/* <div className="container text-center">
+          <div className="container text-center">
             <Button
               variant="outline-dark py-2 px-3 my-5 fw-bold shadow-lg fs-5"
               onClick={() => {
                 setShow(true);
               }}
             >
-              Add New Ad
+              Add New Product
             </Button>
-          </div> */}
+          </div>
 
           <div className="d-flex justify-content-center align-items-center my-4">
             <Form.Group
@@ -432,13 +550,45 @@ const ProductsOfSeller = () => {
                             {/* <Stack direction="horizontal" className=" px-5 text-primary"> */}
 
                             <div className="text-center">
+                              {/* Edit */}
+
+                              <Button
+                                variant="info fw-bold shadow-lg mb-2 mx-2"
+                                onClick={() => {
+                                  // navigate(`/seller/product/${product.id}`);
+                                  setEditId(product.id);
+                                  setEditName(product.name);
+                                  setEditBrand(product.brand);
+                                  setEditCategoryId(product.categoryId);
+                                  setEditDescription(product.description);
+                                  setEditImage(product.image);
+                                  setEditPrice(product.price);
+                                  setEditStatus(product.status);
+                                  setEditWarranty(product.warranty);
+                                  setEdit(true);
+                                }}
+                              >
+                                <i class="fa-solid fa-pen-to-square fa-beat-fade"></i>
+                              </Button>
                               <Button
                                 variant="info fw-bold shadow-lg mb-2 mx-2"
                                 onClick={() => {
                                   navigate(`/seller/product/${product.id}`);
+                                  // setAdId(ad.id);
+                                  // setCancel(true);
                                 }}
                               >
                                 Product Details
+                              </Button>
+                              {/* Delete */}
+                              <Button
+                                variant="info fw-bold shadow-lg mb-2 mx-2"
+                                onClick={() => {
+                                  setProductId(product.id);
+                                  setCancel(true);
+                                }}
+                              >
+                                <i class="fa-solid fa-trash-can fa-beat-fade"></i>
                               </Button>
                             </div>
                             {/* </Stack> */}
@@ -543,6 +693,26 @@ const ProductsOfSeller = () => {
                           {/* <Stack direction="horizontal" className=" px-5 text-primary"> */}
 
                           <div className="text-center">
+                            {/* Edit */}
+
+                            <Button
+                              variant="info fw-bold shadow-lg mb-2 mx-2"
+                              onClick={() => {
+                                // navigate(`/seller/product/${product.id}`);
+                                setEditId(product.id);
+                                setEditName(product.name);
+                                setEditBrand(product.brand);
+                                setEditCategoryId(product.categoryId);
+                                setEditDescription(product.description);
+                                setEditImage(product.image);
+                                setEditPrice(product.price);
+                                setEditStatus(product.status);
+                                setEditWarranty(product.warranty);
+                                setEdit(true);
+                              }}
+                            >
+                              <i class="fa-solid fa-pen-to-square fa-beat-fade"></i>
+                            </Button>
                             <Button
                               variant="info fw-bold shadow-lg mb-2 mx-2"
                               onClick={() => {
@@ -552,6 +722,16 @@ const ProductsOfSeller = () => {
                               }}
                             >
                               Product Details
+                            </Button>
+                            {/* Delete */}
+                            <Button
+                              variant="info fw-bold shadow-lg mb-2 mx-2"
+                              onClick={() => {
+                                setProductId(product.id);
+                                setCancel(true);
+                              }}
+                            >
+                              <i class="fa-solid fa-trash-can fa-beat-fade"></i>
                             </Button>
                           </div>
                           {/* </Stack> */}
@@ -576,6 +756,499 @@ const ProductsOfSeller = () => {
         <Sidebar />
       </div>
       {/* </Stack> */}
+
+      <div>
+        {/* Add new Product */}
+        <Modal
+          show={show}
+          onHide={() => {
+            setShow(false);
+          }}
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Form onSubmit={handleAdd}>
+            <Modal.Header className="mx-2" closeButton>
+              <Modal.Title id="contained-modal-title-vcenter" className="fs-1">
+                Add new Product
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="mx-2">
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label className="fs-4">Product Name:</Form.Label>
+                <Form.Control
+                  className="shadow-lg"
+                  // value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  type="text"
+                  required
+                  autoFocus
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label className="fs-4">Product Category:</Form.Label>
+
+                <div key={`inline-radio`} className="mb-3">
+                  {categories.map((category) => {
+                    return (
+                      <Form.Check
+                        required
+                        inline
+                        label={category.name}
+                        name="category"
+                        type="radio"
+                        id={category.id}
+                        onClick={(e) => {
+                          console.log(e);
+                          if (e.target.checked) {
+                            // console.log(e.target.id);
+                            setCategoryId(e.target.id);
+                            // console.log("category", categoryId);
+                          }
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label className="fs-4">Product Description:</Form.Label>
+                <Form.Control
+                  className="shadow-lg"
+                  // value={name}
+                  onChange={(e) => setDescription(e.target.value)}
+                  type="text"
+                  required
+                />
+              </Form.Group>
+
+              <Form.Group controlId="fileName" className="mb-3">
+                <Form.Label className="fs-4">Product Image:</Form.Label>
+                <Form.Control
+                  className="shadow-lg"
+                  type="file"
+                  size="md"
+                  required
+                  onChange={(event) => {
+                    //   setImage(e.target.files[0]);
+
+                    const file = event.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+
+                      reader.onload = (e) => {
+                        const imageDataURL = e.target.result;
+
+                        // console.log("Base 64 -> ", base64);
+                        // You can use imageDataURL as a base64-encoded image string.
+                        // console.log(imageDataURL);
+                        setImage(imageDataURL);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label className="fs-4">Product Brand:</Form.Label>
+                <Form.Control
+                  className="shadow-lg"
+                  // value={name}
+                  onChange={(e) => setBrand(e.target.value)}
+                  type="text"
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label className="fs-4">Product Warranty:</Form.Label>
+                <Form.Control
+                  className="shadow-lg"
+                  // value={name}
+                  onChange={(e) => setWarranty(e.target.value)}
+                  type="text"
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label className="fs-4">Product Price:</Form.Label>
+                <Form.Control
+                  className="shadow-lg"
+                  // value={name}
+                  onChange={(e) =>
+                    e.target.value > 0
+                      ? setPrice(e.target.value)
+                      : (e.target.value = "")
+                  }
+                  type="number"
+                  min="0"
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="priority">
+                <Form.Label className="fs-4">Product Status:</Form.Label>
+                <Form.Check // prettier-ignore
+                  className="mx-3 fs-5"
+                  type="switch"
+                  id="custom-switch"
+                  // defaultChecked={priority}
+                  label="Active"
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setStatus("Active");
+                    } else {
+                      setStatus("Not Active");
+                    }
+                  }}
+                />
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer className="mx-3">
+              <Button
+                variant="secondary shadow-lg fw-bold p-2 px-4"
+                onClick={() => {
+                  setShow(false);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="success shadow-lg fw-bold p-2"
+                // onClick={handleAdd}
+                type="submit"
+              >
+                Add new Product
+              </Button>
+            </Modal.Footer>
+          </Form>
+        </Modal>
+        {/* Successfully Added the Product */}
+        <Modal
+          show={modal}
+          onHide={() => {
+            setModal(false);
+            setShow(false);
+          }}
+          // size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          className="text-center"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title
+              id="contained-modal-title-vcenter "
+              className="fw-bold text-center fs-3"
+            >
+              Successfully Added the Product
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+            <div className="text-success fs-4">
+              <i class="fa-solid fa-circle-check fa-bounce"></i> 1 new Product
+              has been added successfully.
+            </div>
+            <Button
+              variant="outline-danger shadow-lg fs-5 fw-bold px-2 my-4"
+              onClick={() => {
+                setModal(false);
+                setShow(false);
+              }}
+            >
+              Close
+            </Button>
+          </Modal.Body>
+        </Modal>
+
+        {/* Handle Delete  */}
+        <Modal
+          show={cancel}
+          onHide={() => {
+            setCancel(false);
+          }}
+          // size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          className="text-center"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title
+              id="contained-modal-title-vcenter "
+              className="fw-bold text-center fs-2"
+            >
+              Delete Product
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="fs-2 text-danger">
+            All the product details related to this product will be deleted. Are
+            you sure?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="info shadow-lg fw-bold px-4"
+              onClick={() => {
+                // if(orderId)
+                handleDelete(productId);
+                setCancel(false);
+              }}
+            >
+              Yes
+            </Button>
+            <Button
+              variant="danger shadow-lg fw-bold px-4"
+              onClick={() => {
+                setCancel(false);
+              }}
+            >
+              No
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        {/* Successfully deleted the Product. */}
+        <Modal
+          show={del}
+          onHide={() => {
+            setDel(false);
+          }}
+          // size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          className="text-center"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title
+              id="contained-modal-title-vcenter "
+              className="fw-bold text-center fs-3"
+            >
+              Successfully Deleted the Product and
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+            <div className="text-success fs-4">
+              <i class="fa-solid fa-circle-check fa-bounce"></i> 1 Product and
+              its ProductDetails has been deleted successfully.
+            </div>
+            <Button
+              variant="outline-danger shadow-lg fs-5 fw-bold px-2 my-4"
+              onClick={() => {
+                setDel(false);
+              }}
+            >
+              Close
+            </Button>
+          </Modal.Body>
+        </Modal>
+
+        {/* Edit Product */}
+        <Modal
+          show={edit}
+          onHide={() => {
+            setEdit(false);
+          }}
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Form onSubmit={handleEdit}>
+            <Modal.Header className="mx-2" closeButton>
+              <Modal.Title id="contained-modal-title-vcenter" className="fs-1">
+                Edit Product
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="mx-2">
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label className="fs-4">Product Name:</Form.Label>
+                <Form.Control
+                  className="shadow-lg"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  type="text"
+                  required
+                  autoFocus
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label className="fs-4">Product Category:</Form.Label>
+
+                <div key={`inline-radio`} className="mb-3">
+                  {categories.map((category) => {
+                    return (
+                      <Form.Check
+                        required
+                        inline
+                        label={category.name}
+                        name="category"
+                        type="radio"
+                        id={category.id}
+                        defaultChecked={category.id === editCategoryId}
+                        onClick={(e) => {
+                          console.log(e);
+                          if (e.target.checked) {
+                            // console.log(e.target.id);
+                            setEditCategoryId(e.target.id);
+                            // console.log("category", categoryId);
+                          }
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label className="fs-4">Product Description:</Form.Label>
+                <Form.Control
+                  className="shadow-lg"
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  type="text"
+                  required
+                />
+              </Form.Group>
+
+              <Form.Group controlId="fileName" className="mb-3">
+                <Form.Label className="fs-4">Product Image:</Form.Label>
+                <div className="text-center">
+                  <Image
+                    className="shadow-lg mb-2"
+                    height="160px"
+                    width="320px"
+                    alt={`${editName} Image`}
+                    src={editImage}
+                    rounded
+                  />
+                </div>
+                <Form.Control
+                  className="shadow-lg"
+                  type="file"
+                  size="md"
+                  onChange={(event) => {
+                    //   setImage(e.target.files[0]);
+
+                    const file = event.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+
+                      reader.onload = (e) => {
+                        const imageDataURL = e.target.result;
+
+                        // console.log("Base 64 -> ", base64);
+                        // You can use imageDataURL as a base64-encoded image string.
+                        // console.log(imageDataURL);
+                        setEditImage(imageDataURL);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label className="fs-4">Product Brand:</Form.Label>
+                <Form.Control
+                  className="shadow-lg"
+                  value={editBrand}
+                  onChange={(e) => setEditBrand(e.target.value)}
+                  type="text"
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label className="fs-4">Product Warranty:</Form.Label>
+                <Form.Control
+                  className="shadow-lg"
+                  value={editWarranty}
+                  onChange={(e) => setEditWarranty(e.target.value)}
+                  type="text"
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label className="fs-4">Product Price:</Form.Label>
+                <Form.Control
+                  className="shadow-lg"
+                  value={editPrice}
+                  onChange={(e) =>
+                    e.target.value > 0
+                      ? setEditPrice(e.target.value)
+                      : (e.target.value = "")
+                  }
+                  type="number"
+                  min="0"
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="priority">
+                <Form.Label className="fs-4">Product Status:</Form.Label>
+                <Form.Check // prettier-ignore
+                  checked={editStatus === "Active"}
+                  className="mx-3 fs-5"
+                  type="switch"
+                  id="custom-switch"
+                  // defaultChecked={priority}
+                  label="Active"
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setEditStatus("Active");
+                    } else {
+                      setEditStatus("Not Active");
+                    }
+                  }}
+                />
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer className="mx-3">
+              <Button
+                variant="secondary shadow-lg fw-bold p-2 px-4"
+                onClick={() => {
+                  setEdit(false);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="success shadow-lg fw-bold p-2"
+                // onClick={handleAdd}
+                type="submit"
+              >
+                Edit Product
+              </Button>
+            </Modal.Footer>
+          </Form>
+        </Modal>
+
+        {/* Successfully edited the Product. */}
+        <Modal
+          show={doneEdit}
+          onHide={() => {
+            setDoneEdit(false);
+          }}
+          // size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          className="text-center"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title
+              id="contained-modal-title-vcenter "
+              className="fw-bold text-center fs-3"
+            >
+              Successfully Edited the Product
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+            <div className="text-success fs-4">
+              <i class="fa-solid fa-circle-check fa-bounce"></i> 1 Product has
+              been updated successfully.
+            </div>
+            <Button
+              variant="outline-danger shadow-lg fs-5 fw-bold px-2 my-4"
+              onClick={() => {
+                setDoneEdit(false);
+                setEdit(false);
+              }}
+            >
+              Close
+            </Button>
+          </Modal.Body>
+        </Modal>
+      </div>
     </>
   );
 };

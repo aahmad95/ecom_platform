@@ -78,10 +78,10 @@ const createProductDetail = async (req, res) => {
       shelfLife,
     });
 
-    return res.json(productDetail);
+    return res.status(200).json(productDetail);
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not create a new ProductDetail.",
     });
   }
@@ -95,14 +95,14 @@ const getProductDetailById = async (req, res) => {
       where: { id },
     });
     if (productDetail) {
-      return res.json(productDetail);
+      return res.status(200).json(productDetail);
     }
-    return res.json({
+    return res.status(204).json({
       message: "There isn't any Product Detail of this id exist.",
     });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not find the Product Detail.",
     });
   }
@@ -118,19 +118,19 @@ const updateProductDetail = async (req, res) => {
     });
 
     if (productDetail) {
-      return res.json({
+      return res.status(200).json({
         message: "ProductDetail updated successfully.",
         ProductDetail: await ProductDetail.findOne({
           where: { id },
         }),
       });
     }
-    return res.json({
+    return res.status(204).json({
       message: "There isn't any Product Detail of this id exist.",
     });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not update the Product Detail.",
     });
   }
@@ -182,6 +182,35 @@ const getProductDetailsByProduct = async (req, res) => {
     });
   }
 };
+// Delete all ProductDetails of a Product:
+const deleteProductDetailsOfProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    const productDetail = await ProductDetail.findAll({
+      where: { productId },
+    });
+    if (productDetail.length) {
+      // No of deleted rows
+      const detail = await ProductDetail.destroy({
+        where: { productId },
+      });
+      console.log("detail", detail);
+      return res.status(200).json({
+        message: "All ProductDetails of this product deleted successfully.",
+      });
+    }
+
+    return res.status(204).json({
+      message: "There isn't any ProductDetail of this ProductId exist.",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      error: "Server Error: Could not delete the ProductDetail",
+    });
+  }
+};
 module.exports = {
   getAllProductDetails,
   createProductDetail,
@@ -189,4 +218,5 @@ module.exports = {
   updateProductDetail,
   deleteProductDetail,
   getProductDetailsByProduct,
+  deleteProductDetailsOfProduct,
 };

@@ -190,12 +190,12 @@ const Sidebar = () => {
               <NavLink
                 exact
                 as={Link}
-                to="/seller"
+                to="/seller/categories"
                 // activeClassName="activeClicked"
               >
                 <CDBSidebarMenuItem
                   className={
-                    location === "/seller"
+                    location === "/seller/categories"
                       ? "text-light fw-bold fa-beat-fade"
                       : "fa-beat-fade"
                   }

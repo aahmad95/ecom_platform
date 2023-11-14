@@ -7,6 +7,7 @@ const {
   deleteProductDetail,
   updateProductDetail,
   getProductDetailsByProduct,
+  deleteProductDetailsOfProduct,
 } = require("../controllers/productDetail");
 const { upload } = require("../controllers/image");
 
@@ -18,6 +19,10 @@ router.put("/updateProductDetail/:id", updateProductDetail);
 router.get(
   "/getProductDetailsByProduct/:productId",
   getProductDetailsByProduct
+);
+router.delete(
+  "/deleteProductDetailsOfProduct/:productId",
+  deleteProductDetailsOfProduct
 );
 
 module.exports = router;

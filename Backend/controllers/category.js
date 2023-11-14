@@ -7,9 +7,9 @@ const getAllCategory = async (req, res) => {
   try {
     const category = await Category.findAll();
     if (category.length) {
-      return res.json(category);
+      return res.status(200).json(category);
     }
-    return res.json([]);
+    return res.status(204).json([]);
   } catch (err) {
     console.log(err);
     // return res.status(500).json({ error: "something went wrong" });

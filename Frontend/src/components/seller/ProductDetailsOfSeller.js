@@ -66,23 +66,48 @@ const ProductDetailsOfSeller = (props) => {
       `http://localhost:5000/api/v1/productDetail/getProductDetailsByProduct/${param.productId}`,
       requestOptions
     );
+    if (response.status === 200) {
+      const json = await response.json();
+      // console.log(json);
 
-    const json = await response.json();
-    // console.log(json);
-
-    const imageArr = [];
-    json.forEach(async (productDetail) => {
-      // console.log(productDetail);
-      //   json["NoOfProductsSold"] = 0;
-      productDetail.image.forEach(async (i) => {
-        if (!imageArr.includes(i)) {
-          imageArr.push(i);
-        }
+      const imageArr = [];
+      const soldProductCount = json.map(async (productDetail) => {
+        // console.log(productDetail);
+        productDetail["SoldProducts"] = await getSoldProductCount(
+          productDetail.id
+        );
+        productDetail.image.forEach(async (i) => {
+          if (!imageArr.includes(i)) {
+            imageArr.push(i);
+          }
+        });
+        return productDetail;
       });
-    });
+      await Promise.all(soldProductCount);
+      setImages(imageArr);
+      setProductDetails(json);
+    }
+    // if (response.status === 204) {
+    //   setImages
+    // }
+  };
+  const getSoldProductCount = async (productDetailId) => {
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
 
-    setImages(imageArr);
-    setProductDetails(json);
+    const response = await fetch(
+      `http://localhost:5000/api/v1/orderItem/getOrderItemOfProductDetail/${productDetailId}`,
+      requestOptions
+    );
+
+    if (response.status === 204) {
+      return 0;
+    } else if (response.status === 200) {
+      const json = await response.json();
+      return json.length;
+    }
   };
 
   return (
@@ -90,7 +115,7 @@ const ProductDetailsOfSeller = (props) => {
       {/* <Stack direction="horizontal"> */}
 
       <Stack style={{ paddingLeft: "80px" }}>
-        <div className="mx-3">
+        <div className="mx-3 mb-5">
           <div className="mx-3 my-5">
             <h1 className="text-center " style={{ color: "#9b32e0" }}>
               <b>{product.name}</b>
@@ -100,30 +125,7 @@ const ProductDetailsOfSeller = (props) => {
 
           <Container>
             <Row>
-              <Col className="gx-0 col-3">
-                <Carousel className="border border-info shadow-lg mb-5">
-                  {images.length ? (
-                    images.map((image) => {
-                      return (
-                        <div key={image}>
-                          <img
-                            className="shadow-lg"
-                            width="50%"
-                            height="70%"
-                            // className="d-inline-block align-top mx-4"
-                            alt="Product Image"
-                            src={image}
-                          />
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <div>No Images to show.</div>
-                  )}
-                </Carousel>
-              </Col>
-
-              <Col className="gx-0 mx-3">
+              <Col className="gx-3 mx-3">
                 <h2>{product.description}</h2>
                 <Stack direction="horizontal" gap={1}>
                   <div className="p-2 fs-5 text-muted">Warranty:</div>
@@ -145,12 +147,12 @@ const ProductDetailsOfSeller = (props) => {
                 </div>
 
                 <div className="mx-4 mt-3">
-                  {productDetails &&
+                  {productDetails?.length ? (
                     productDetails.map((product, index) => {
                       return (
                         <Stack
                           direction="horizontal"
-                          className="my-3 text-wrap"
+                          className="my-5 text-wrap"
                           gap={2}
                         >
                           <Button
@@ -161,6 +163,7 @@ const ProductDetailsOfSeller = (props) => {
                           >
                             {index + 1}
                           </Button>
+
                           {Object.keys(product).map((key) => {
                             if (
                               ![
@@ -177,8 +180,8 @@ const ProductDetailsOfSeller = (props) => {
                                   return (
                                     <img
                                       className="border border-dark shadow-lg mx-2"
-                                      width="50px"
-                                      height="50px"
+                                      width="60px"
+                                      height="60px"
                                       // className="d-inline-block align-top mx-4"
                                       alt="Ad"
                                       src={product[key]}
@@ -200,9 +203,45 @@ const ProductDetailsOfSeller = (props) => {
                               }
                             }
                           })}
+                          <Button
+                            variant="info fw-bold shadow-lg mb-2 mx-2"
+                            // onClick={() => {
+                            //   // navigate(`/seller/product/${product.id}`);
+                            //   setEditId(product.id);
+                            //   setEditName(product.name);
+                            //   setEditBrand(product.brand);
+                            //   setEditCategoryId(product.categoryId);
+                            //   setEditDescription(product.description);
+                            //   setEditImage(product.image);
+                            //   setEditPrice(product.price);
+                            //   setEditStatus(product.status);
+                            //   setEditWarranty(product.warranty);
+                            //   setEdit(true);
+                            // }}
+                          >
+                            <i class="fa-solid fa-pen-to-square fa-beat-fade"></i>
+                          </Button>
+                          <Button
+                            variant="info fw-bold shadow-lg mb-2 mx-2"
+                            // onClick={() => {
+                            //   setProductId(product.id);
+                            //   setCancel(true);
+                            // }}
+                          >
+                            <i class="fa-solid fa-trash-can fa-beat-fade"></i>
+                          </Button>
                         </Stack>
                       );
-                    })}
+                    })
+                  ) : (
+                    <div className="text-center fs-3 text-danger">
+                      You haven't added any ProductDetails of this product yet.
+                    </div>
+                  )}
+                  {/* <Stack direction="horizontal" gap={1}>
+                    <div className="p-2 fs-5">Sold : </div>
+                    <div className="p-2 fs-5 text-success">{0}</div>
+                  </Stack> */}
                 </div>
                 <div className="text-center my-5">
                   <Button
@@ -215,6 +254,32 @@ const ProductDetailsOfSeller = (props) => {
                 </div>
               </Col>
             </Row>
+            {/* <Row>
+              <Col className="gx-3 col-4">
+                <Carousel className="border border-info shadow-lg mb-5">
+                  {images?.length ? (
+                    images.map((image) => {
+                      return (
+                        <div key={image}>
+                          <img
+                            className="shadow-lg"
+                            width="50%"
+                            height="70%"
+                            // className="d-inline-block align-top mx-4"
+                            alt="Product Image"
+                            src={image}
+                          />
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center fw-bold fs-3 text-danger mt-5">
+                      No Images to show.
+                    </div>
+                  )}
+                </Carousel>
+              </Col>
+            </Row> */}
           </Container>
         </div>
       </Stack>
