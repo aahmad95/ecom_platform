@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import NavBar from "react-bootstrap/NavBar";
@@ -12,8 +12,10 @@ import icon from "../logo.svg";
 import "font-awesome/css/font-awesome.min.css";
 import Stack from "react-bootstrap/Stack";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+function Navbar({ reload }) {
+  const [user, setUser] = useState("");
 
-function Navbar() {
   let navigate = useNavigate();
 
   const handleLogout = () => {
@@ -23,6 +25,14 @@ function Navbar() {
     navigate("/login");
     // props.showAlert("Logged Out Successfully.", "success");
   };
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      const authToken = localStorage.getItem("token");
+      const decoded = jwt_decode(authToken);
+
+      setUser(decoded.user.role);
+    }
+  }, [reload]);
 
   return (
     <NavBar
@@ -44,7 +54,18 @@ function Navbar() {
       }}
     >
       {/* <Container> */}
-      <NavBar.Brand as={Link} to="/">
+      <NavBar.Brand
+        as={Link}
+        to={
+          !user
+            ? "/"
+            : user === "admin"
+            ? "/admin"
+            : user === "seller"
+            ? "/seller/products"
+            : ""
+        }
+      >
         <img
           src={icon}
           width="60"
@@ -57,7 +78,15 @@ function Navbar() {
         className="text-wrap"
         style={{ color: "#1ab5e9", fontSize: "36px" }}
         as={Link}
-        to="/"
+        to={
+          !user
+            ? "/"
+            : user === "admin"
+            ? "/admin"
+            : user === "seller"
+            ? "/seller/products"
+            : ""
+        }
       >
         <b> E-commerce Website </b>
       </NavBar.Brand>
@@ -75,7 +104,7 @@ function Navbar() {
         id="responsive-navbar-nav"
         className="justify-content-end"
       >
-        {localStorage.getItem("token") ? (
+        {localStorage.getItem("token") && user === "customer" ? (
           <Nav className=" mx-4">
             <Nav.Link as={Link} to="/">
               Home
@@ -121,6 +150,53 @@ function Navbar() {
               {/* </h6> */}
             </Nav.Link>
             {/* </Stack> */}
+          </Nav>
+        ) : localStorage.getItem("token") && user === "admin" ? (
+          <Nav className=" mx-4">
+            <Nav.Link as={Link} to="/admin/profile">
+              Profile
+              <i
+                className="mx-2 fa-solid fa-id-card fa-flip"
+                style={{ color: "#ab41f1" }}
+              ></i>
+            </Nav.Link>
+
+            <Nav.Link onClick={handleLogout}>
+              {/* <h6> */}
+              Logout
+              <i
+                className="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
+                style={{ color: "#ab41f1" }}
+              ></i>
+              {/* </h6> */}
+            </Nav.Link>
+            {/* </Stack> */}
+          </Nav>
+        ) : localStorage.getItem("token") && user === "seller" ? (
+          <Nav className=" mx-4">
+            {/* <Nav.Link as={Link} to="/">
+              Home
+              <i
+                className="mx-2 fa-solid fa-house fa-flip"
+                style={{ color: "#ab41f1" }}
+              ></i>
+            </Nav.Link>
+           
+            <Nav.Link as={Link} to="/profile">
+              Profile
+              <i
+                className="mx-2 fa-solid fa-id-card fa-flip"
+                style={{ color: "#ab41f1" }}
+              ></i>
+            </Nav.Link>*/}
+
+            <Nav.Link onClick={handleLogout}>
+              Logout
+              <i
+                className="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
+                style={{ color: "#ab41f1" }}
+              ></i>
+            </Nav.Link>
           </Nav>
         ) : (
           <Nav className=" mx-4">

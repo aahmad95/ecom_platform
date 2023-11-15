@@ -9,7 +9,7 @@ import * as formik from "formik";
 import * as yup from "yup";
 // import jwt_decode from "jsonwebtoken";
 // import { jwt_decode } from "jsonwebtoken";
-const Login = () => {
+const Login = ({ reload }) => {
   //   const jwt = require("jsonwebtoken");
   //   var jwt = require("jsonwebtoken");
   const [email, setEmail] = useState("");
@@ -67,12 +67,13 @@ const Login = () => {
       localStorage.setItem("token", json.authToken);
 
       //   props.showAlert("Logged in Successfully.", "success");
+      reload();
       if (decoded.user.role === "admin") {
         setValidated(true);
         navigate("/admin");
       } else if (decoded.user.role === "seller") {
         setValidated(true);
-        navigate("/seller");
+        navigate("/seller/products");
       } else if (decoded.user.role === "customer") {
         setValidated(true);
         navigate("/home");

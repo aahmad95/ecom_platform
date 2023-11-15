@@ -12,6 +12,7 @@ import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
 import cartContext from "../context/cart/cartContext";
 import Login from "./Login";
+import jwt_decode from "jwt-decode";
 // import { renderItem } from CarouselProps;
 const ProductDetails = (props) => {
   const param = useParams();
@@ -34,6 +35,11 @@ const ProductDetails = (props) => {
   };
 
   useEffect(() => {
+    // if (localStorage.getItem("token")) {
+    //   const authToken = localStorage.getItem("token");
+    //   var decoded = jwt_decode(authToken);
+    //   decoded.user.role !== "customer" && navigate("/404");
+    // }
     var requestOptions = {
       method: "GET",
       redirect: "follow",

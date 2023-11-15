@@ -26,12 +26,19 @@ const Category = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
+    // if (!localStorage.getItem("token")) {
+    //   navigate("/login");
+    // } else {
+    //   const authToken = localStorage.getItem("token");
+    //   var decoded = jwt_decode(authToken);
+    //   decoded.user.role === "admin" ? getCategories() : navigate("/404");
+    // }
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
       const authToken = localStorage.getItem("token");
       var decoded = jwt_decode(authToken);
-      decoded.user.role === "admin" ? getCategories() : navigate("/404");
+      decoded.user.role === "admin" && getCategories();
     }
     const getCategories = async () => {
       const { data } = await axios.get(

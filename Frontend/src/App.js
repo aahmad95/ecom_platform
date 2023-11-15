@@ -36,92 +36,167 @@ import jwt_decode from "jwt-decode";
 import ProductsOfSeller from "./components/seller/ProductsOfSeller";
 import SellerCategories from "./components/seller/SellerCategories";
 import ProductDetailsOfSeller from "./components/seller/ProductDetailsOfSeller";
+import Profile from "./components/Profile";
+import ProductsOfCategory from "./components/seller/ProductsOfCategory";
 
 function App() {
-  // const [user, setUser] = useState("");
+  const [reload, setReload] = useState(false);
+  const [user, setUser] = useState("");
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      const authToken = localStorage.getItem("token");
+      const decoded = jwt_decode(authToken);
 
-  // useEffect(() => {
-  //   // console.log(localStorage.getItem("token"))
-  //   if (localStorage.getItem("token")) {
-  //     const authToken = localStorage.getItem("token");
-  //     const decoded = jwt_decode(authToken);
-  //     if (!user) {
-  //       setUser(decoded.user);
-  //     }
-  //   } else {
-  //     setUser("");
-  //   }
-  //   // eslint-disable-next-line
-  // }, [user]);
+      setUser(decoded.user.role);
+    }
+    if (reload === true) {
+      setReload(false);
+    }
+  }, [reload]);
+
+  const refreshHandler = () => {
+    setReload(true);
+  };
 
   return (
     <div className=".app">
       <CartState>
         <Router>
-          <Navbar />
+          <Navbar reload={reload} />
           {/* {user.role  === "seller" ? <Sidebar /> : ""} */}
-          <Routes>
-            <Route exact path="/" element={<Home />} />
-            <Route exact path="/home" element={<Home />} />
-            <Route exact path="/category/:categoryId" element={<Products />} />
-            <Route
-              exact
-              path="/product/:productId"
-              element={<ProductDetails />}
-            />
-            {/* if(!localStorage.getItem("token")) */}
-            <Route exact path="/navbar" element={<Navbar />} />
-            <Route exact path="/login" element={<Login />} />
-            <Route exact path="/signup" element={<SignUp />} />
-            <Route exact path="/cart" element={<Cart />} />
-            <Route exact path="/profile" element={<MyProfile />} />
-            <Route exact path="/checkout" element={<Checkout />} />
-            <Route exact path="/orders" element={<Orders />} />
 
-            <Route exact path="/sellerSignup" element={<SellerSignUp />} />
-            <Route exact path="/seller" element={<SellerHome />} />
-            <Route
-              exact
-              path="/seller/products"
-              element={<ProductsOfSeller />}
-            />
-            <Route
-              exact
-              path="/seller/categories"
-              element={<SellerCategories />}
-            />
-            <Route
-              exact
-              path="/seller/product/:productId"
-              element={<ProductDetailsOfSeller />}
-            />
+          {/* <Route exact path="/navbar" element={<Navbar />} /> */}
+          {!localStorage.getItem("token") && (
+            <Routes>
+              <Route
+                exact
+                path="/login"
+                element={<Login reload={refreshHandler} />}
+              />
 
-            <Route exact path="/admin" element={<AdminPage />} />
-            <Route exact path="/admin/category" element={<Category />} />
+              <Route exact path="/signup" element={<SignUp />} />
+              <Route exact path="/sellerSignup" element={<SellerSignUp />} />
+              <Route exact path="/" element={<Home />} />
+              <Route exact path="/home" element={<Home />} />
+              <Route
+                exact
+                path="/category/:categoryId"
+                element={<Products />}
+              />
+              <Route
+                exact
+                path="/product/:productId"
+                element={<ProductDetails />}
+              />
+              <Route path="*" element={<NotFound user={user} />} />
+            </Routes>
+          )}
+          {localStorage.getItem("token") && user === "customer" && (
+            <Routes>
+              <Route
+                exact
+                path="/login"
+                element={<Login reload={refreshHandler} />}
+              />
+              <Route exact path="/profile" element={<MyProfile />} />
+              {/* Customer */}
+              <Route exact path="/" element={<Home />} />
+              <Route exact path="/home" element={<Home />} />
+              <Route
+                exact
+                path="/category/:categoryId"
+                element={<Products />}
+              />
+              <Route
+                exact
+                path="/product/:productId"
+                element={<ProductDetails />}
+              />
+              <Route exact path="/cart" element={<Cart />} />
+              <Route exact path="/checkout" element={<Checkout />} />
+              <Route exact path="/orders" element={<Orders />} />
+              <Route path="*" element={<NotFound user={user} />} />
+            </Routes>
+          )}
+          {localStorage.getItem("token") && user === "seller" && (
+            <Routes>
+              <Route
+                exact
+                path="/login"
+                element={<Login reload={refreshHandler} />}
+              />
+              <Route exact path="/seller/profile" element={<Profile />} />
+              <Route
+                exact
+                path="/seller/products"
+                element={<ProductsOfSeller />}
+              />
+              <Route
+                exact
+                path="/seller/categories"
+                element={<SellerCategories />}
+              />
+              <Route
+                exact
+                path="/seller/product/:productId"
+                element={<ProductDetailsOfSeller />}
+              />
+              <Route
+                exact
+                path="/seller/category/product/:productId"
+                element={<ProductDetailsOfSeller />}
+              />
+              <Route
+                exact
+                path="/seller/category/:categoryId"
+                element={<ProductsOfCategory />}
+              />
+              <Route path="*" element={<NotFound user={user} />} />
+            </Routes>
+          )}
+          {localStorage.getItem("token") && user === "admin" && (
+            <Routes>
+              <Route
+                exact
+                path="/login"
+                element={<Login reload={refreshHandler} />}
+              />
+              <Route exact path="/admin" element={<AdminPage />} />
+              <Route exact path="/admin/profile" element={<Profile />} />
+              <Route exact path="/admin/category" element={<Category />} />
+              <Route exact path="/admin/customers" element={<Customer />} />
+              <Route
+                exact
+                path="/admin/customers/:customerId"
+                element={<CustomerOrders />}
+              />
+              <Route exact path="/admin/sellers" element={<Seller />} />
+              <Route
+                exact
+                path="/admin/sellers/:sellerId"
+                element={<SellerProducts />}
+              />
+              <Route
+                exact
+                path="/admin/sellers/product/:productId"
+                element={<SellerProductDetails />}
+              />
 
-            <Route exact path="/admin/customers" element={<Customer />} />
-            <Route
-              exact
-              path="/admin/customers/:customerId"
-              element={<CustomerOrders />}
-            />
-            <Route exact path="/admin/sellers" element={<Seller />} />
-            <Route
-              exact
-              path="/admin/sellers/:sellerId"
-              element={<SellerProducts />}
-            />
-            <Route
-              exact
-              path="/admin/sellers/product/:productId"
-              element={<SellerProductDetails />}
-            />
-            <Route exact path="/admin/ads" element={<Ads />} />
-            <Route exact path="/admin/dashboard" element={<Dashboard />} />
-            {/* The catch-all route for undefined URLs */}
-            <Route path="*" element={<NotFound />} />
-            <Route exact path="404" element={<NotFound />} />
-          </Routes>
+              <Route exact path="/admin/ads" element={<Ads />} />
+              <Route path="*" element={<NotFound user={user} />} />
+            </Routes>
+          )}
+          {/* <Routes> */}
+          {/* Seller */}
+
+          {/* Admin */}
+
+          {/* The catch-all route for undefined URLs */}
+
+          {/* <Route exact path="404" element={<NotFound />} /> */}
+          {/* <Route exact path="/admin/dashboard" element={<Dashboard />} /> */}
+          {/* <Route exact path="/seller" element={<SellerHome />} /> */}
+          {/* </Routes> */}
         </Router>
       </CartState>
       <Footer />

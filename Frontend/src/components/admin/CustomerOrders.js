@@ -39,6 +39,19 @@ const CustomerOrders = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // if (!localStorage.getItem("token")) {
+    //   navigate("/login");
+    // } else {
+    //   const authToken = localStorage.getItem("token");
+    //   const decoded = jwt_decode(authToken);
+    //   if (decoded.user.role === "admin") {
+    //     // setUserId(decoded.user.id);
+
+    //     getCustomer(params.customerId);
+    //     getOrders(params.customerId);
+    //   } else navigate("/404");
+    // }
+
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
@@ -49,7 +62,7 @@ const CustomerOrders = () => {
 
         getCustomer(params.customerId);
         getOrders(params.customerId);
-      } else navigate("/404");
+      }
     }
 
     // eslint-disable-next-line

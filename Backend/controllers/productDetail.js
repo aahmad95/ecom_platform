@@ -145,13 +145,13 @@ const deleteProductDetail = async (req, res) => {
       where: { id },
     });
     if (productDetail) {
-      //   await productDetail.destroy();
-      return res.json({
+      await productDetail.destroy();
+      return res.status(200).json({
         message: "ProductDetail deleted successfully.",
       });
     }
 
-    return res.json({
+    return res.status(204).json({
       message: "There isn't any ProductDetail of this id exist.",
     });
   } catch (err) {

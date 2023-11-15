@@ -62,7 +62,7 @@ const SellerCategories = () => {
       if (decoded.user.role === "seller") {
         setUserId(decoded.user.id);
         getCategories();
-      } else navigate("/404");
+      }
     }
     setLoad(false);
 
@@ -92,6 +92,7 @@ const SellerCategories = () => {
     // });
     const userNamePromises = json.map(async (j) => {
       j["user"] = await getUserName(j.userId);
+
       return j;
     });
     await Promise.all(userNamePromises);
@@ -266,54 +267,6 @@ const SellerCategories = () => {
                   filteredCategories.length ? (
                     filteredCategories.map((category) => (
                       <div className="my-4 col-md-4" key={category.id}>
-                        <Link
-                          className="text-decoration-none"
-                          to={`/Category/${category.id}`}
-                        >
-                          <Card
-                            style={{ width: "19rem" }}
-                            className="text-center shadow-lg mx-auto"
-                          >
-                            <Card.Img
-                              width="19rem"
-                              height="250px"
-                              variant="top"
-                              src={category.image}
-                              alt={`${category.name} Image`}
-                            />
-                            <Card.Body>
-                              <Card.Title className=" fs-3 mb-3">
-                                {category.name}
-                              </Card.Title>
-                              {/* <Card.Text>
-              Some quick example text to build on the card title and make up
-              the bulk of the card's content.
-            </Card.Text> */}
-                              <Button
-                                variant="info shadow-lg mb-3"
-                                onClick={() => {
-                                  navigate(`/Category/${category.id}`);
-                                }}
-                              >
-                                Products
-                              </Button>
-                            </Card.Body>
-                          </Card>
-                        </Link>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-center fw-bold fs-3 text-danger">
-                      No Categories to display.
-                    </div>
-                  )
-                ) : categories.length ? (
-                  categories.map((category) => (
-                    <div className="my-4 col-md-4" key={category.id}>
-                      <Link
-                        className="text-decoration-none"
-                        to={`/Category/${category.id}`}
-                      >
                         <Card
                           style={{ width: "19rem" }}
                           className="text-center shadow-lg mx-auto"
@@ -330,20 +283,58 @@ const SellerCategories = () => {
                               {category.name}
                             </Card.Title>
                             {/* <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Card.Text> */}
+              Some quick example text to build on the card title and make up
+              the bulk of the card's content.
+            </Card.Text> */}
                             <Button
                               variant="info shadow-lg mb-3"
                               onClick={() => {
-                                navigate(`/Category/${category.id}`);
+                                navigate(`/seller/category/${category.id}`);
                               }}
                             >
                               Products
                             </Button>
                           </Card.Body>
                         </Card>
-                      </Link>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center fw-bold fs-3 text-danger">
+                      No Categories to display.
+                    </div>
+                  )
+                ) : categories.length ? (
+                  categories.map((category) => (
+                    <div className="my-4 col-md-4" key={category.id}>
+                      <Card
+                        style={{ width: "19rem" }}
+                        className="text-center shadow-lg mx-auto"
+                      >
+                        <Card.Img
+                          width="19rem"
+                          height="250px"
+                          variant="top"
+                          src={category.image}
+                          alt={`${category.name} Image`}
+                        />
+                        <Card.Body>
+                          <Card.Title className=" fs-3 mb-3">
+                            {category.name}
+                          </Card.Title>
+                          {/* <Card.Text>
+                  Some quick example text to build on the card title and make up
+                  the bulk of the card's content.
+                </Card.Text> */}
+                          <Button
+                            variant="info shadow-lg mb-3"
+                            onClick={() => {
+                              navigate(`/seller/category/${category.id}`);
+                            }}
+                          >
+                            Products
+                          </Button>
+                        </Card.Body>
+                      </Card>
                     </div>
                   ))
                 ) : (

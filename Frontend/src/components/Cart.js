@@ -8,7 +8,7 @@ import icon from "../logo.svg";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import Checkout from "./Checkout";
-
+import jwt_decode from "jwt-decode";
 const Cart = () => {
   const context = useContext(cartContext);
   // orderDetails
@@ -16,7 +16,7 @@ const Cart = () => {
   const { orders, setOrders, orderDetails, setOrderDetails } = context;
   // orders=[{productDetailId,quantity}]
   const [orderItems, setOrderItems] = useState([]);
-  const [orderId, setOrderId] = useState('')
+  const [orderId, setOrderId] = useState("");
   // { product: {}, productDetails: {}, quantity:0 }
   const [show, setShow] = useState(false);
   const [cancel, setCancel] = useState(false);
@@ -24,21 +24,28 @@ const Cart = () => {
   const navigate = useNavigate();
   const handleClose = () => setShow(false);
   useEffect(() => {
-    if(!localStorage.getItem("token")){
-      navigate("/login")
-    }
-    else{
+    // if (!localStorage.getItem("token")) {
+    //   navigate("/login");
+    // } else {
+    //   const authToken = localStorage.getItem("token");
+    //   const decoded = jwt_decode(authToken);
+
+    //   if (decoded.user.role === "cutomer") {
+    //     fetchOrderItems();
+    //   } else navigate("/404");
+    // }
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    } else {
       fetchOrderItems();
     }
-   
-    
+
     // setReload(false)
     // console.log("OrderItems------->", orderItems);
   }, []);
   const fetchOrderItems = async () => {
     const items = [];
     const orderPromises = orders.map(async (order) => {
-      
       // orders.forEach(async (order) => {
       // console.log(order);
       // const orderItem = {
@@ -98,37 +105,39 @@ const Cart = () => {
     // console.log("orders-------------", orders);
     // fetchOrderItems();
   };
-  const updateQuantity = async(orderItem) => {
-    console.log("orderItem>>>>>>>",orderItem)
-    
-    const array=orders.map((order)=>{
-      console.log("order>>>>>>>",order)
-      console.log("order.productDetailId>>>>>>>",order.productDetailId)
-      console.log("orderItem.productDetails.id>>>>>>>",orderItem.productDetails.id)
-      
-      if(order.productDetailId==orderItem.productDetails.id){
-        console.log("hello")
-        order.quantity=orderItem.quantity;
+  const updateQuantity = async (orderItem) => {
+    console.log("orderItem>>>>>>>", orderItem);
+
+    const array = orders.map((order) => {
+      console.log("order>>>>>>>", order);
+      console.log("order.productDetailId>>>>>>>", order.productDetailId);
+      console.log(
+        "orderItem.productDetails.id>>>>>>>",
+        orderItem.productDetails.id
+      );
+
+      if (order.productDetailId == orderItem.productDetails.id) {
+        console.log("hello");
+        order.quantity = orderItem.quantity;
       }
       return order;
     });
     // await Promise.all(promise);
-  setOrders(array);
-console.log(array);
-console.log(orders);
-// reload ? setReload(false) : setReload(true)
-
-  }
-  const handleCheckout = async() => {
-console.log("orderItems: ",orderItems);
+    setOrders(array);
+    console.log(array);
+    console.log(orders);
+    // reload ? setReload(false) : setReload(true)
+  };
+  const handleCheckout = async () => {
+    console.log("orderItems: ", orderItems);
     await setOrderDetails(orderItems);
-    console.log("orderDetails: ",orderDetails);
+    console.log("orderDetails: ", orderDetails);
     if (!localStorage.getItem("token")) {
       setShow(true);
     } else if (localStorage.getItem("token")) {
       // checkout(orderItems);
       // <Checkout orderItems={orderItems}/>
-      navigate("/checkout")
+      navigate("/checkout");
     }
     //  let newOrder = orders.filter((order) => {
     //    return order.productDetailId != productId;
@@ -194,7 +203,7 @@ console.log("orderItems: ",orderItems);
             className="mx-auto mt-1"
           />
           <Stack className="mx-auto my-5" gap={3}>
-            {console.log("Array: ",orderItems)}
+            {console.log("Array: ", orderItems)}
             {orderItems.length > 0 ? (
               orderItems.map((orderItem, index) => {
                 console.log("------> Hi", orderItem);
@@ -230,9 +239,9 @@ console.log("orderItems: ",orderItems);
                           disabled={orderItem.quantity < 2}
                           variant="secondary shadow-lg fw-bold p-1  px-2 mx-3"
                           onClick={() => {
-                            console.log("orderItem in button",orderItem)
+                            console.log("orderItem in button", orderItem);
                             orderItem.quantity = orderItem.quantity - 1;
-updateQuantity(orderItem);
+                            updateQuantity(orderItem);
                           }}
                         >
                           &#8722;
@@ -278,7 +287,7 @@ updateQuantity(orderItem);
                         variant="dark shadow-lg fs-5 "
                         onClick={() => {
                           // handleCancel(orderItem.productDetails.id);
-                          setOrderId(orderItem.productDetails.id)
+                          setOrderId(orderItem.productDetails.id);
                           setCancel(true);
                         }}
                       >
@@ -348,7 +357,9 @@ updateQuantity(orderItem);
 
       <Modal
         show={cancel}
-        onHide={()=>{setCancel(false)}}
+        onHide={() => {
+          setCancel(false);
+        }}
         // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -362,9 +373,7 @@ updateQuantity(orderItem);
             Cancel Order
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="fs-2">
-          Are you sure?
-        </Modal.Body>
+        <Modal.Body className="fs-2">Are you sure?</Modal.Body>
         <Modal.Footer>
           <Button
             variant="danger shadow-lg fw-bold px-4"
@@ -376,7 +385,7 @@ updateQuantity(orderItem);
           </Button>
           <Button
             variant="info shadow-lg fw-bold px-4"
-            onClick={()=>{
+            onClick={() => {
               // if(orderId)
               handleCancel(orderId);
               setCancel(false);

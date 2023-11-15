@@ -10,15 +10,24 @@ const SellerHome = () => {
   const [products, setProducts] = useState("");
 
   useEffect(() => {
+    // if (!localStorage.getItem("token")) {
+    //   navigate("/login");
+    // } else {
+    //   const authToken = localStorage.getItem("token");
+    //   var decoded = jwt_decode(authToken);
+    //   setSeller(decoded.user);
+    //   decoded.user.role === "seller"
+    //     ? getProducts(seller.id)
+    //     : navigate("/404");
+    // }
+
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
       const authToken = localStorage.getItem("token");
       var decoded = jwt_decode(authToken);
       setSeller(decoded.user);
-      decoded.user.role === "seller"
-        ? getProducts(seller.id)
-        : navigate("/404");
+      decoded.user.role === "seller" && getProducts(seller.id);
     }
     // eslint-disable-next-line
   }, []);

@@ -22,11 +22,11 @@ import Badge from "react-bootstrap/Badge";
 
 // import closeButton from "react-bootstrap/ModalHeader";
 
-const ProductsOfSeller = () => {
-  // const params = useParams();
+const ProductsOfCategory = () => {
+  const params = useParams();
 
   const [load, setLoad] = useState(false);
-
+  const [category, setCategory] = useState(false);
   // const [priority, setPriority] = useState(false);
   const [sellerName, setSellerName] = useState();
   const [seller, setSeller] = useState();
@@ -97,6 +97,7 @@ const ProductsOfSeller = () => {
 
       if (decoded.user.role === "seller") {
         // setUserId(decoded.user.id);
+
         getProducts(decoded.user.id);
         getCategories();
         // getSeller(seller.id);
@@ -111,6 +112,7 @@ const ProductsOfSeller = () => {
   // }, [ads])
 
   const getProducts = async (sellerId) => {
+    setCategory(await getCategoryName(params.categoryId));
     // console.log("get Products");
     var requestOptions = {
       method: "GET",
@@ -126,20 +128,32 @@ const ProductsOfSeller = () => {
       setProducts([]);
     } else if (response.status === 200) {
       const json = await response.json();
-      const categoryNamePromises = json.map(async (j) => {
-        j["category"] = await getCategoryName(j.categoryId);
-        j["soldProductCount"] = await getSoldProductCount(j.id);
-        return j;
+      const categoryNamePromises = await json.map(async (j) => {
+        console.log(j);
+        console.log(params.categoryId);
+        if (j.categoryId == params.categoryId) {
+          j["category"] = await getCategoryName(j.categoryId);
+          j["soldProductCount"] = await getSoldProductCount(j.id);
+
+          console.log("match");
+          return j;
+        }
+        return null;
       });
-      await Promise.all(categoryNamePromises);
-      setProducts(json);
-      console.log("json response", json);
+      const matchedProducts = await Promise.all(categoryNamePromises);
+      const filteredProducts = matchedProducts.filter(
+        (product) => product !== null
+      );
+      // console.log(json);
+      // console.log(filteredProducts);
+      setProducts(filteredProducts);
+      // console.log("json response", json);
       // setAds(json);
-      console.log("products:    ", products);
+      // console.log("products:    ", products);
     }
   };
   const getCategoryName = async (id) => {
-    console.log(id);
+    // console.log(id);
     var requestOptions = {
       method: "GET",
       redirect: "follow",
@@ -313,7 +327,9 @@ const ProductsOfSeller = () => {
         <div className="mx-3">
           <div className="mx-3 my-5">
             <h1 className="text-center " style={{ color: "#9b32e0" }}>
-              <b>{sellerName}'s Products</b>
+              <b>
+                {sellerName}'s Products in {category}
+              </b>
             </h1>
             <hr style={{ border: "3px solid purple" }} className="mx-auto" />
           </div>
@@ -381,7 +397,7 @@ const ProductsOfSeller = () => {
                     >
                       Description
                     </Dropdown.Item>
-                    <Dropdown.Item
+                    {/* <Dropdown.Item
                       onClick={() => {
                         document.getElementById("validationCustom03").value =
                           null;
@@ -390,7 +406,7 @@ const ProductsOfSeller = () => {
                       }}
                     >
                       Category
-                    </Dropdown.Item>
+                    </Dropdown.Item> */}
 
                     <Dropdown.Item
                       onClick={() => {
@@ -573,7 +589,9 @@ const ProductsOfSeller = () => {
                               <Button
                                 variant="info fw-bold shadow-lg mb-2 mx-2"
                                 onClick={() => {
-                                  navigate(`/seller/product/${product.id}`);
+                                  navigate(
+                                    `/seller/category/product/${product.id}`
+                                  );
                                   // setAdId(ad.id);
                                   // setCancel(true);
                                 }}
@@ -716,7 +734,9 @@ const ProductsOfSeller = () => {
                             <Button
                               variant="info fw-bold shadow-lg mb-2 mx-2"
                               onClick={() => {
-                                navigate(`/seller/product/${product.id}`);
+                                navigate(
+                                  `/seller/category/product/${product.id}`
+                                );
                                 // setAdId(ad.id);
                                 // setCancel(true);
                               }}
@@ -743,7 +763,7 @@ const ProductsOfSeller = () => {
                 })
               ) : (
                 <div className="text-center fw-bold fs-3 text-danger">
-                  No Products to display.
+                  You don't have any Product of this category.
                 </div>
               )}
             </div>
@@ -1253,4 +1273,4 @@ const ProductsOfSeller = () => {
   );
 };
 
-export default ProductsOfSeller;
+export default ProductsOfCategory;

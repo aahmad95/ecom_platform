@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const NotFound = () => {
+const NotFound = ({ user }) => {
   return (
     <div className="text-center my-5 mx-5">
       <div className="fw-bold m-5 text-danger" style={{ fontSize: "52px" }}>
@@ -13,7 +13,18 @@ const NotFound = () => {
         temporarily unavailable.
       </h3>
       <h3>
-        <Link class="button" to="/">
+        <Link
+          class="button"
+          to={
+            user === "customer"
+              ? "/home"
+              : user === "seller"
+              ? "/seller/products"
+              : user === "admin"
+              ? "/admin"
+              : "/"
+          }
+        >
           Back to Homepage
         </Link>
       </h3>

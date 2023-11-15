@@ -167,6 +167,32 @@ const getProductsOfUser = async (req, res) => {
   }
 };
 
+// Get all Products By userId of Category:
+const getProductsOfUserByCategory = async (req, res) => {
+  try {
+    const { sellerId } = await req.params;
+    console.log(sellerId);
+    const { categoryId } = req.body;
+    const product = await Product.findAll({
+      where: {
+        userId: sellerId,
+        categoryId,
+      },
+    });
+    if (product) {
+      return res.status(200).json(product);
+    }
+    return res.status(204).json({
+      message: "There isn't any Product of this user in this category exist.",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      error: "Internal Server Error: Could not find the Products.",
+    });
+  }
+};
+
 module.exports = {
   getAllProducts,
   createProduct,
@@ -175,4 +201,5 @@ module.exports = {
   deleteProduct,
   getProductsByCategory,
   getProductsOfUser,
+  getProductsOfUserByCategory,
 };

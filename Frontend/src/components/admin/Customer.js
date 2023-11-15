@@ -23,12 +23,20 @@ const Customer = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // if (!localStorage.getItem("token")) {
+    //   navigate("/login");
+    // } else {
+    //   const authToken = localStorage.getItem("token");
+    //   var decoded = jwt_decode(authToken);
+    //   decoded.user.role === "admin" ? getCustomers() : navigate("/404");
+    // }
+
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
       const authToken = localStorage.getItem("token");
       var decoded = jwt_decode(authToken);
-      decoded.user.role === "admin" ? getCustomers() : navigate("/404");
+      decoded.user.role === "admin" && getCustomers();
     }
 
     // eslint-disable-next-line

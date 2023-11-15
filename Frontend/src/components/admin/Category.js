@@ -54,6 +54,17 @@ const Category = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // if (!localStorage.getItem("token")) {
+    //   navigate("/login");
+    // } else {
+    //   const authToken = localStorage.getItem("token");
+    //   const decoded = jwt_decode(authToken);
+    //   if (decoded.user.role === "admin") {
+    //     setUserId(decoded.user.id);
+    //     getCategories();
+    //   } else navigate("/404");
+    // }
+
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
@@ -62,7 +73,7 @@ const Category = () => {
       if (decoded.user.role === "admin") {
         setUserId(decoded.user.id);
         getCategories();
-      } else navigate("/404");
+      }
     }
     setLoad(false);
 

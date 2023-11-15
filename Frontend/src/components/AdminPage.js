@@ -19,13 +19,19 @@ const AdminPage = () => {
   const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
+    // if (!localStorage.getItem("token")) {
+    //   navigate("/login");
+    // } else {
+    //   const authToken = localStorage.getItem("token");
+    //   var decoded = jwt_decode(authToken);
+    //   decoded.user.role === "admin" ? getUsers() : navigate("/404");
+    // }
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
-      const authToken = localStorage.getItem("token");
-      var decoded = jwt_decode(authToken);
-      decoded.user.role === "admin" ? getUsers() : navigate("/404");
+      getUsers();
     }
+
     // eslint-disable-next-line
   }, []);
   const getUsers = async () => {

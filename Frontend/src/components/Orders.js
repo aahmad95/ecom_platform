@@ -13,14 +13,29 @@ const Orders = () => {
   // [{order: order, orderItems: {orderItem:orderItem, productDetail:productDetail, product: product}}]
   const navigate = useNavigate();
   useEffect(() => {
+    // if (!localStorage.getItem("token")) {
+    //   navigate("/login");
+    // } else {
+    //   const authToken = localStorage.getItem("token");
+    //   const decoded = jwt_decode(authToken);
+
+    //   if (decoded.user.role === "cutomer") {
+    //     setUser(decoded.user);
+    //     getOrders(decoded.user.id);
+    //   } else navigate("/404");
+    // }
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
       const authToken = localStorage.getItem("token");
-      var decoded = jwt_decode(authToken);
-      setUser(decoded.user);
-      getOrders(decoded.user.id);
+      const decoded = jwt_decode(authToken);
+
+      if (decoded.user.role === "cutomer") {
+        setUser(decoded.user);
+        getOrders(decoded.user.id);
+      }
     }
+
     // console.log("props:    ",props.orderItems)
     // console.log("orderDetails: ",orderDetails);
 

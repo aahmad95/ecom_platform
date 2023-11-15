@@ -23,6 +23,19 @@ const SellerProductDetails = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // if (!localStorage.getItem("token")) {
+    //   navigate("/login");
+    // } else {
+    //   const authToken = localStorage.getItem("token");
+    //   const decoded = jwt_decode(authToken);
+    //   if (decoded.user.role === "admin") {
+    //     // setUserId(decoded.user.id);
+    //     getProduct();
+    //     getProductDetails();
+    //     // getSeller(params.sellerId);
+    //   } else navigate("/404");
+    // }
+
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
@@ -33,7 +46,7 @@ const SellerProductDetails = (props) => {
         getProduct();
         getProductDetails();
         // getSeller(params.sellerId);
-      } else navigate("/404");
+      }
     }
 
     // eslint-disable-next-line

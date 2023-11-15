@@ -27,9 +27,9 @@ const Sidebar = () => {
       if (!user) {
         setUser(decoded.user);
       }
-      if (!["admin", "seller"].includes(decoded.user.role)) {
-        navigate("/404");
-      }
+      // if (!["admin", "seller"].includes(decoded.user.role)) {
+      //   navigate("/404");
+      // }
     }
     setLocation(window.location.pathname);
     console.log(location);
@@ -187,7 +187,7 @@ const Sidebar = () => {
             </CDBSidebarMenu>
           ) : (
             <CDBSidebarMenu>
-              <NavLink
+              {/* <NavLink
                 exact
                 as={Link}
                 to="/seller/categories"
@@ -204,7 +204,7 @@ const Sidebar = () => {
                 >
                   Seller Home
                 </CDBSidebarMenuItem>
-              </NavLink>
+              </NavLink> */}
               {/* <NavLink
                 exact
                 as={Link}
@@ -223,24 +223,7 @@ const Sidebar = () => {
                   Ads
                 </CDBSidebarMenuItem>
               </NavLink> */}
-              {/* <NavLink
-                exact
-                as={Link}
-                to="/admin/category"
-                // target="_blank"
-                // activeClassName="activeClicked"
-              >
-                <CDBSidebarMenuItem
-                  icon="icons"
-                  className={
-                    location === "/admin/category"
-                      ? "text-light fw-bold fa-beat-fade"
-                      : "fa-beat-fade"
-                  }
-                >
-                  Categories
-                </CDBSidebarMenuItem>
-              </NavLink> */}
+
               <NavLink
                 exact
                 as={Link}
@@ -250,12 +233,42 @@ const Sidebar = () => {
                 <CDBSidebarMenuItem
                   icon="shop"
                   className={
-                    location?.toString().includes("/seller/products")
+                    location?.toString().includes("/seller/product")
                       ? "text-light fw-bold fa-beat-fade"
                       : "fa-beat-fade"
                   }
                 >
                   Products
+                </CDBSidebarMenuItem>
+              </NavLink>
+              <NavLink
+                exact
+                as={Link}
+                to="/seller/categories"
+                // target="_blank"
+                // activeClassName="activeClicked"
+              >
+                <CDBSidebarMenuItem
+                  icon="icons"
+                  className={
+                    location?.toString().includes("/seller/categor")
+                      ? "text-light fw-bold fa-beat-fade"
+                      : "fa-beat-fade"
+                  }
+                >
+                  Categories
+                </CDBSidebarMenuItem>
+              </NavLink>
+              <NavLink exact as={Link} to="/seller/profile">
+                <CDBSidebarMenuItem
+                  icon="id-card"
+                  className={
+                    location === "/seller/profile"
+                      ? "text-light fw-bold fa-beat-fade"
+                      : "fa-beat-fade"
+                  }
+                >
+                  Profile
                 </CDBSidebarMenuItem>
               </NavLink>
 
