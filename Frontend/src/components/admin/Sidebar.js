@@ -18,7 +18,6 @@ const Sidebar = () => {
   const [location, setLocation] = useState();
 
   useEffect(() => {
-    // console.log(localStorage.getItem("token"))
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
@@ -27,13 +26,9 @@ const Sidebar = () => {
       if (!user) {
         setUser(decoded.user);
       }
-      // if (!["admin", "seller"].includes(decoded.user.role)) {
-      //   navigate("/404");
-      // }
     }
     setLocation(window.location.pathname);
-    console.log(location);
-    console.log(window.location.href);
+
     // eslint-disable-next-line
   }, [user]);
 
@@ -52,17 +47,8 @@ const Sidebar = () => {
         textColor="#1ab5e9"
         backgroundColor="linear-gradient( 160.1deg,  rgba(151, 17, 172, 1) 45.8%, rgb(26, 93, 194,1) 70.2% )"
       >
-        <CDBSidebarHeader
-          prefix={<i class="fa-solid fa-bars fa-flip"></i>}
-          // {<i class="fa-solid fa-greater-than fa-flip"></i>}
-        >
-          {/* <Link
-            to="/admin"
-            className="text-decoration-none fs-3 fa-beat-fade"
-            style={{ color: "inherit" }}
-          > */}
+        <CDBSidebarHeader prefix={<i className="fa-solid fa-bars fa-flip"></i>}>
           <h4 className="fa-beat-fade mt-2 fw-bold">Hello {user.username}!</h4>
-          {/* </Link> */}
           <div className="text-center" opacity="1">
             <Image
               className="shadow-lg mt-1"
@@ -78,12 +64,7 @@ const Sidebar = () => {
         <CDBSidebarContent className="sidebar-content">
           {user.role === "admin" ? (
             <CDBSidebarMenu>
-              <NavLink
-                exact
-                as={Link}
-                to="/admin"
-                // activeClassName="activeClicked"
-              >
+              <NavLink exact={"true"} as={Link} to="/admin">
                 <CDBSidebarMenuItem
                   className={
                     location === "/admin"
@@ -91,17 +72,11 @@ const Sidebar = () => {
                       : "fa-beat-fade"
                   }
                   icon="house-user"
-                  // className="fa-beat"
                 >
                   Admin Home
                 </CDBSidebarMenuItem>
               </NavLink>
-              <NavLink
-                exact
-                as={Link}
-                to="/admin/ads"
-                // activeClassName="activeClicked"
-              >
+              <NavLink exact={"true"} as={Link} to="/admin/ads">
                 <CDBSidebarMenuItem
                   className={
                     location === "/admin/ads"
@@ -109,18 +84,11 @@ const Sidebar = () => {
                       : "fa-beat-fade"
                   }
                   icon="rectangle-ad"
-                  // className="fa-beat"
                 >
                   Ads
                 </CDBSidebarMenuItem>
               </NavLink>
-              <NavLink
-                exact
-                as={Link}
-                to="/admin/category"
-                // target="_blank"
-                // activeClassName="activeClicked"
-              >
+              <NavLink exact={"true"} as={Link} to="/admin/category">
                 <CDBSidebarMenuItem
                   icon="icons"
                   className={
@@ -132,12 +100,7 @@ const Sidebar = () => {
                   Categories
                 </CDBSidebarMenuItem>
               </NavLink>
-              <NavLink
-                exact
-                as={Link}
-                to="/admin/sellers"
-                // activeClassName="activeClicked"
-              >
+              <NavLink exact={"true"} as={Link} to="/admin/sellers">
                 <CDBSidebarMenuItem
                   icon="shop"
                   className={
@@ -149,12 +112,7 @@ const Sidebar = () => {
                   Sellers
                 </CDBSidebarMenuItem>
               </NavLink>
-              <NavLink
-                exact
-                as={Link}
-                to="/admin/customers"
-                // activeClassName="activeClicked"
-              >
+              <NavLink exact={"true"} as={Link} to="/admin/customers">
                 <CDBSidebarMenuItem
                   icon="users-gear"
                   className={
@@ -166,70 +124,10 @@ const Sidebar = () => {
                   Customers
                 </CDBSidebarMenuItem>
               </NavLink>
-
-              {/* <NavLink
-              exact
-              as={Link}
-              to="/admin/analytics"
-              activeClassName="activeClicked"
-            >
-              <CDBSidebarMenuItem
-                icon="chart-line"
-                className={
-                  location === "http://localhost:3000/admin/analytics"
-                    ? "text-light fw-bold fa-beat-fade"
-                    : "fa-beat-fade"
-                }
-              >
-                Analytics
-              </CDBSidebarMenuItem>
-            </NavLink> */}
             </CDBSidebarMenu>
           ) : (
             <CDBSidebarMenu>
-              {/* <NavLink
-                exact
-                as={Link}
-                to="/seller/categories"
-                // activeClassName="activeClicked"
-              >
-                <CDBSidebarMenuItem
-                  className={
-                    location === "/seller/categories"
-                      ? "text-light fw-bold fa-beat-fade"
-                      : "fa-beat-fade"
-                  }
-                  icon="house-user"
-                  // className="fa-beat"
-                >
-                  Seller Home
-                </CDBSidebarMenuItem>
-              </NavLink> */}
-              {/* <NavLink
-                exact
-                as={Link}
-                to="/admin/ads"
-                // activeClassName="activeClicked"
-              >
-                <CDBSidebarMenuItem
-                  className={
-                    location === "/admin/ads"
-                      ? "text-light fw-bold fa-beat-fade"
-                      : "fa-beat-fade"
-                  }
-                  icon="rectangle-ad"
-                  // className="fa-beat"
-                >
-                  Ads
-                </CDBSidebarMenuItem>
-              </NavLink> */}
-
-              <NavLink
-                exact
-                as={Link}
-                to="/seller/products"
-                // activeClassName="activeClicked"
-              >
+              <NavLink exact={"true"} as={Link} to="/seller/products">
                 <CDBSidebarMenuItem
                   icon="shop"
                   className={
@@ -241,13 +139,7 @@ const Sidebar = () => {
                   Products
                 </CDBSidebarMenuItem>
               </NavLink>
-              <NavLink
-                exact
-                as={Link}
-                to="/seller/categories"
-                // target="_blank"
-                // activeClassName="activeClicked"
-              >
+              <NavLink exact={"true"} as={Link} to="/seller/categories">
                 <CDBSidebarMenuItem
                   icon="icons"
                   className={
@@ -259,7 +151,7 @@ const Sidebar = () => {
                   Categories
                 </CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact as={Link} to="/seller/profile">
+              <NavLink exact={"true"} as={Link} to="/seller/profile">
                 <CDBSidebarMenuItem
                   icon="id-card"
                   className={
@@ -271,42 +163,6 @@ const Sidebar = () => {
                   Profile
                 </CDBSidebarMenuItem>
               </NavLink>
-
-              {/* <NavLink
-                exact
-                as={Link}
-                to="/admin/customers"
-                // activeClassName="activeClicked"
-              >
-                <CDBSidebarMenuItem
-                  icon="users-gear"
-                  className={
-                    location?.toString().includes("/admin/customers")
-                      ? "text-light fw-bold fa-beat-fade"
-                      : "fa-beat-fade"
-                  }
-                >
-                  Customers
-                </CDBSidebarMenuItem>
-              </NavLink> */}
-
-              {/* <NavLink
-              exact
-              as={Link}
-              to="/admin/analytics"
-              activeClassName="activeClicked"
-            >
-              <CDBSidebarMenuItem
-                icon="chart-line"
-                className={
-                  location === "http://localhost:3000/admin/analytics"
-                    ? "text-light fw-bold fa-beat-fade"
-                    : "fa-beat-fade"
-                }
-              >
-                Analytics
-              </CDBSidebarMenuItem>
-            </NavLink> */}
             </CDBSidebarMenu>
           )}
         </CDBSidebarContent>

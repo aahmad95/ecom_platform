@@ -1,5 +1,3 @@
-// const multer = require("multer");
-// const path = require("path");
 const { Ads } = require("../models");
 
 //Get All Ads:
@@ -9,27 +7,27 @@ const getAllAds = async (req, res) => {
     if (ads.length) {
       return res.status(200).json(ads);
     }
-    return res.status(200).json({ message: "There isn't any Ads yet." });
+    return res.status(204).json({ message: "There isn't any Ads yet." });
   } catch (err) {
     console.log(err);
 
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not retrieve Ads",
     });
   }
 };
 
-// Create a New Ads
+// Create a New Ad
 const createAds = async (req, res) => {
   try {
     const { name, image, userId } = req.body;
 
-    // const Name = await Ads.findOne({
-    //   where: { name },
-    // });
-    // if (Name) {
-    //   return res.json({ message: "This Category already exist." });
-    // }
+    const Name = await Ads.findOne({
+      where: { name },
+    });
+    if (Name) {
+      return res.status(204).json({ message: "This Category already exist." });
+    }
     const ads = await Ads.create({
       name,
       image,
@@ -37,14 +35,13 @@ const createAds = async (req, res) => {
     });
     return res.status(201).json(ads);
   } catch (err) {
-    console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not create a new Ad.",
     });
   }
 };
 
-// Get a Category By Id:
+// Get an Ad By Id:
 const getAdsById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -52,19 +49,21 @@ const getAdsById = async (req, res) => {
       where: { id },
     });
     if (ads) {
-      return res.json(ads);
+      return res.status(200).json(ads);
     }
-    return res.json({ message: "There isn't any Ad of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any Ad of this id exist." });
   } catch (err) {
     console.log(err);
 
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not find the Ad",
     });
   }
 };
 
-// Update a Ad:
+// Update an Ad:
 const updateAds = async (req, res) => {
   try {
     const { id } = req.params;
@@ -82,16 +81,18 @@ const updateAds = async (req, res) => {
         }),
       });
     }
-    return res.json({ message: "There isn't any Ad of this id exist." });
+    return res
+      .status(201)
+      .json({ message: "There isn't any Ad of this id exist." });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not update the Ad",
     });
   }
 };
 
-// Delete a Ads:
+// Delete an Ads:
 const deleteAds = async (req, res) => {
   try {
     const { id } = req.params;
@@ -100,17 +101,19 @@ const deleteAds = async (req, res) => {
       where: { id },
     });
     if (ads) {
-      // await ads.destroy();
+      await ads.destroy();
       return res.status(204).json({
         message: "Ad deleted successfully.",
       });
     }
 
-    return res.json({ message: "There isn't any Ad of this id exist." });
+    return res
+      .status(201)
+      .json({ message: "There isn't any Ad of this id exist." });
   } catch (err) {
     console.log(err);
 
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not delete the Ad",
     });
   }

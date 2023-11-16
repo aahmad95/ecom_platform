@@ -42,9 +42,6 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
-    // db.sync()
-    //   .then(() => console.log("Users table in database updated"))
-    //   .catch((err) => console.log("Error in updating table Users in database"));
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("Users");

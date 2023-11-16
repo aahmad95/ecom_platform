@@ -14,7 +14,7 @@ const NotFound = ({ user }) => {
       </h3>
       <h3>
         <Link
-          class="button"
+          className="button"
           to={
             user === "customer"
               ? "/home"

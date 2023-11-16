@@ -9,12 +9,10 @@ import jwt_decode from "jwt-decode";
 
 import Col from "react-bootstrap/Col";
 
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-// import Sidebar from "cdbreact/dist/components/Sidebar";
 
 const Customer = () => {
-  // let navigate = useNavigate();
   const [customers, setCustomers] = useState([]);
   const [searchValue, setSearchValue] = useState("Search Filter");
   const [filteredCustomers, setFilteredCustomers] = useState([]);
@@ -23,14 +21,6 @@ const Customer = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // if (!localStorage.getItem("token")) {
-    //   navigate("/login");
-    // } else {
-    //   const authToken = localStorage.getItem("token");
-    //   var decoded = jwt_decode(authToken);
-    //   decoded.user.role === "admin" ? getCustomers() : navigate("/404");
-    // }
-
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
@@ -58,13 +48,11 @@ const Customer = () => {
       else return false;
     });
     setCustomers(customers);
-    // // console.log(json);
-    // console.log(customers);
   };
   const handleSearch = (event) => {
     setIsSearch(true);
     const value = `${document.getElementById("validationCustom03").value}`;
-    // const value = event.target.value;
+
     console.log(value);
 
     const searchCustomer = customers.filter((user) => {
@@ -79,7 +67,6 @@ const Customer = () => {
       } else return false;
     });
     setFilteredCustomers(searchCustomer);
-    // console.log(filteredCustomers);
   };
 
   return (
@@ -89,10 +76,7 @@ const Customer = () => {
           <Sidebar />
         </div>
         <Stack>
-          <div
-            className="container vh-100 p-0"
-            // style={{height:"100vh"}}
-          >
+          <div className="container vh-100 p-0">
             <div className="mx-5 my-5">
               <h1 className="text-center " style={{ color: "#9b32e0" }}>
                 <b>Customers</b>
@@ -108,7 +92,7 @@ const Customer = () => {
               >
                 <Form.Label column sm="2" className="mx-3">
                   <Stack direction="horizontal" className="text-info mb-1 fs-4">
-                    <i class="fa-solid fa-magnifying-glass fa-fade mx-1"></i>
+                    <i className="fa-solid fa-magnifying-glass fa-fade mx-1"></i>
                     <b>Search:</b>
                   </Stack>
                 </Form.Label>
@@ -121,7 +105,6 @@ const Customer = () => {
                     placeholder="Type to search customers."
                     className="text-center shadow-lg"
                     aria-label="Search"
-                    // onClick={handleSearch}
                     onChange={handleSearch}
                   />
                 </Col>
@@ -185,7 +168,6 @@ const Customer = () => {
             <div className="mx-2">
               {(!isSearch && customers.length) ||
               (isSearch && filteredCustomers.length) ? (
-                // responsive
                 <Table striped bordered hover className="shadow-lg">
                   <thead>
                     <tr>
@@ -225,7 +207,6 @@ const Customer = () => {
                                   onClick={() => {
                                     navigate(`/admin/customers/${user.id}`);
                                   }}
-                                  // type="submit"
                                 >
                                   Orders
                                 </Button>
@@ -264,7 +245,6 @@ const Customer = () => {
                                 onClick={() => {
                                   navigate(`/admin/customers/${user.id}`);
                                 }}
-                                // type="submit"
                               >
                                 Orders
                               </Button>
@@ -286,9 +266,6 @@ const Customer = () => {
               )}
             </div>
           </div>
-
-          {/* </div> */}
-          {/* </Row> */}
         </Stack>
       </Stack>
     </>

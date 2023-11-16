@@ -1,5 +1,3 @@
-const multer = require("multer");
-const path = require("path");
 const { Category } = require("../models");
 
 //Get All Categories:
@@ -12,8 +10,8 @@ const getAllCategory = async (req, res) => {
     return res.status(204).json([]);
   } catch (err) {
     console.log(err);
-    // return res.status(500).json({ error: "something went wrong" });
-    res.status(501).send({
+
+    res.status(500).send({
       error: "Server Error: Could not retrieve category",
     });
   }
@@ -30,7 +28,7 @@ const createCategory = async (req, res) => {
     });
     console.log("Name", name);
     if (Name) {
-      return res.json({ message: "This Category already exist." });
+      return res.status(204).json({ message: "This Category already exist." });
     }
     const category = await Category.create({
       name,
@@ -40,7 +38,6 @@ const createCategory = async (req, res) => {
     return res.status(201).json(category);
   } catch (err) {
     console.log(err);
-    // return res.status(500).json({ error: "something went wrong" });
     res.status(500).send({
       error: "Server Error: Could not create a new category",
     });
@@ -55,14 +52,15 @@ const getCategoryById = async (req, res) => {
       where: { id },
     });
     if (category) {
-      return res.json(category);
+      return res.status(200).json(category);
     }
-    return res.json({ message: "There isn't any category of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any category of this id exist." });
   } catch (err) {
     console.log(err);
-    // return res.status(500).json({ error: "something went wrong" });
-    res.status(501).send({
-      error: "Server Error: Could not find the category",
+    res.status(500).send({
+      error: "Internal Server Error: Could not find the category",
     });
   }
 };
@@ -84,11 +82,12 @@ const updateCategory = async (req, res) => {
         }),
       });
     }
-    return res.json({ message: "There isn't any category of this id exist." });
+    return res
+      .status(201)
+      .json({ message: "There isn't any category of this id exist." });
   } catch (err) {
     console.log(err);
-    // return res.status(500).json({ error: "something went wrong" });
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not update the category",
     });
   }
@@ -109,12 +108,13 @@ const deleteCategory = async (req, res) => {
       });
     }
 
-    return res.json({ message: "There isn't any category of this id exist." });
+    return res
+      .status(201)
+      .json({ message: "There isn't any category of this id exist." });
   } catch (err) {
     console.log(err);
-    // return res.status(500).json({ error: "something went wrong" });
-    res.status(501).send({
-      error: "Server Error: Could not delete the category",
+    res.status(500).send({
+      error: "Internal Server Error: Could not delete the category",
     });
   }
 };

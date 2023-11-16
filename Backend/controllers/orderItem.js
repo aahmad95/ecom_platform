@@ -5,9 +5,9 @@ const getAllOrderItems = async (req, res) => {
   try {
     const orderItem = await OrderItem.findAll();
     if (orderItem.length) {
-      return res.json(orderItem);
+      return res.status(200).json(orderItem);
     }
-    return res.json({ message: "There isn't any OrderItem yet." });
+    return res.status(204).json({ message: "There isn't any OrderItem yet." });
   } catch (err) {
     console.log(err);
 
@@ -21,28 +21,22 @@ const getAllOrderItems = async (req, res) => {
 const createOrderItem = async (req, res) => {
   try {
     const { price, quantity, productDetailId, orderId } = req.body;
-    // const order = await Order.findOne({
-    //   where: { userId },
-    // });
-    // if (user) {
-    //   return res.json({ message: "The Wallet for this user already exist." });
-    // }
     const orderItem = await OrderItem.create({
       price,
       quantity,
       productDetailId,
       orderId,
     });
-    return res.json(orderItem);
+    return res.status(200).json(orderItem);
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not create a new OrderItem.",
     });
   }
 };
 
-// Get a OrderItem By Id:
+// Get an OrderItem By Id:
 const getOrderItemById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -50,18 +44,20 @@ const getOrderItemById = async (req, res) => {
       where: { id },
     });
     if (orderItem) {
-      return res.json(orderItem);
+      return res.status(200).json(orderItem);
     }
-    return res.json({ message: "There isn't any OrderItem of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any OrderItem of this id exist." });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not find the OrderItem.",
     });
   }
 };
 
-// Update a OrderItem:
+// Update an OrderItem:
 const updateOrderItem = async (req, res) => {
   try {
     const { id } = req.params;
@@ -71,23 +67,25 @@ const updateOrderItem = async (req, res) => {
     });
 
     if (orderItem) {
-      return res.json({
+      return res.status(200).json({
         message: "OrderItem updated successfully.",
         OrderItem: await OrderItem.findOne({
           where: { id },
         }),
       });
     }
-    return res.json({ message: "There isn't any OrderItem of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any OrderItem of this id exist." });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not update the OrderItem.",
     });
   }
 };
 
-// Delete a OrderItem:
+// Delete an OrderItem:
 const deleteOrderItem = async (req, res) => {
   try {
     const { id } = req.params;
@@ -96,20 +94,23 @@ const deleteOrderItem = async (req, res) => {
       where: { id },
     });
     if (orderItem) {
-      //   await orderItem.destroy();
-      return res.json({
+      await orderItem.destroy();
+      return res.status(200).json({
         message: "OrderItem deleted successfully.",
       });
     }
 
-    return res.json({ message: "There isn't any OrderItem of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any OrderItem of this id exist." });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not delete the OrderItem.",
     });
   }
 };
+
 // Get all OrderItems By OrderId:
 const getOrderItemsByOrderId = async (req, res) => {
   try {
@@ -207,9 +208,6 @@ const getOrderItemsByProductId = async (req, res) => {
         message: "There isn't any OrderItem of these ProductDetails exist.",
       });
     }
-
-    // await Promise.all(orderItemsPromises);
-    // return res.status(200).json(orderItems);
   } catch (err) {
     console.log(err);
     res.status(500).send({
@@ -234,10 +232,11 @@ const getOrderItemOfProductDetail = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).send({
-      error: "Server Error: Could not find the OrderItem.",
+      error: "Internal Server Error: Could not find the OrderItem.",
     });
   }
 };
+
 module.exports = {
   getAllOrderItems,
   createOrderItem,

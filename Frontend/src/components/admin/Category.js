@@ -1,25 +1,16 @@
 import React, { useEffect, useState } from "react";
-import ModalHeader from "react-bootstrap/ModalHeader";
-import categoryContext from "../../context/cart/cartContext";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import jwt_decode from "jwt-decode";
-import axios from "axios";
-import { Buffer } from "buffer";
 import Sidebar from "./Sidebar";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Stack from "react-bootstrap/Stack";
-import { Link, useNavigate } from "react-router-dom";
-import Table from "react-bootstrap/Table";
+import { useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import Image from "react-bootstrap/Image";
-
-// import closeButton from "react-bootstrap/ModalHeader";
 
 const Category = () => {
   const [load, setLoad] = useState(false);
@@ -54,17 +45,6 @@ const Category = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // if (!localStorage.getItem("token")) {
-    //   navigate("/login");
-    // } else {
-    //   const authToken = localStorage.getItem("token");
-    //   const decoded = jwt_decode(authToken);
-    //   if (decoded.user.role === "admin") {
-    //     setUserId(decoded.user.id);
-    //     getCategories();
-    //   } else navigate("/404");
-    // }
-
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
@@ -79,9 +59,6 @@ const Category = () => {
 
     // eslint-disable-next-line
   }, [load, userId]);
-  // useEffect(()=>{
-  //   console.log('Ads', ads);
-  // }, [ads])
 
   const getCategories = async () => {
     var requestOptions = {
@@ -96,11 +73,6 @@ const Category = () => {
 
     const json = await response.json();
 
-    // json.map(async (j) => {
-    //   // let username
-    //   // let name = await getUserName(j.userId);
-    //   return (j["user"] = await getUserName(j.userId));
-    // });
     const userNamePromises = json.map(async (j) => {
       j["user"] = await getUserName(j.userId);
       return j;
@@ -108,17 +80,12 @@ const Category = () => {
     await Promise.all(userNamePromises);
 
     setCategories(json);
-
-    console.log(json);
-    // setAds(json);
-    console.log(categories);
   };
 
   const handleSearch = (event) => {
     setIsSearch(true);
 
     const value = event.target.value;
-    // console.log(value);
     const searchCategory = categories.filter((category) => {
       if (searchValue === "Name") {
         return category.name.toLowerCase().includes(value.toLowerCase());
@@ -128,14 +95,7 @@ const Category = () => {
       } else return false;
     });
     setFilteredCategories(searchCategory);
-    console.log(filteredCategories);
   };
-
-  // const context = useContext(categoryContext);
-  // const { categories, getCategories } = context;
-
-  // const handleClose = () => setShow(false);
-  // const handleShow = () => setShow(true);
 
   const handleAdd = async (e) => {
     e.preventDefault();
@@ -178,7 +138,6 @@ const Category = () => {
       requestOptions
     );
     const json = await response.json();
-    // console.log('Usename ---->>>', json)
     return json.username;
   };
 
@@ -229,8 +188,6 @@ const Category = () => {
 
   return (
     <>
-      {/* <Stack direction="horizontal"> */}
-
       <Stack style={{ paddingLeft: "80px" }}>
         <div className="mx-3">
           <div className="mx-3 my-5">
@@ -259,7 +216,7 @@ const Category = () => {
             >
               <Form.Label column sm="2" className="mx-3">
                 <Stack direction="horizontal" className="text-info mb-1 fs-4">
-                  <i class="fa-solid fa-magnifying-glass fa-beat-fade mx-1"></i>
+                  <i className="fa-solid fa-magnifying-glass fa-beat-fade mx-1"></i>
                   <b>Search:</b>
                 </Stack>
               </Form.Label>
@@ -272,7 +229,6 @@ const Category = () => {
                   placeholder="Type to search category."
                   className="text-center shadow-lg"
                   aria-label="Search"
-                  // onClick={handleSearch}
                   onChange={handleSearch}
                 />
               </Col>
@@ -303,16 +259,6 @@ const Category = () => {
                     >
                       User
                     </Dropdown.Item>
-                    {/* <Dropdown.Item
-                      onClick={() => {
-                        document.getElementById("validationCustom03").value =
-                          null;
-                        setIsSearch(false);
-                        setSearchValue("Priority");
-                      }}
-                    >
-                      Priority
-                    </Dropdown.Item> */}
 
                     <Dropdown.Item
                       onClick={() => {
@@ -354,24 +300,11 @@ const Category = () => {
                           />
 
                           <Card.Body>
-                            {/* <Card.Title className="fs-3">
-                              {ad.name}
-                            </Card.Title> */}
-
                             <Card.Text className="fs-5">
-                              {/* <Stack direction="horizontal" className="mx-3"> */}
                               <div className="text-center">
-                                {/* {console.log(category.user)} */}
                                 Username: <b>{category.user}</b>
                               </div>
-
-                              {/* <div className="ms-auto">
-                                Priority: <b>{`${ad.priority}`}</b>
-                              </div> */}
-                              {/* </Stack> */}
                             </Card.Text>
-
-                            {/* <Stack direction="horizontal" className=" px-5 text-primary"> */}
 
                             <div className="text-center">
                               <Button
@@ -385,13 +318,10 @@ const Category = () => {
                               >
                                 Edit Category
                               </Button>
-                              {/* </div>
-                            
-                                <div className="ms-auto"> */}
+
                               <Button
                                 variant="danger shadow-lg mb-3 mx-2"
                                 onClick={() => {
-                                  //   navigate(`/Category/${category.id}`);
                                   setCategoryId(category.id);
                                   setCancel(true);
                                 }}
@@ -399,10 +329,8 @@ const Category = () => {
                                 Delete Category
                               </Button>
                             </div>
-                            {/* </Stack> */}
                           </Card.Body>
                         </Card>
-                        {/* </Link> */}
                       </div>
                     );
                   })
@@ -432,24 +360,11 @@ const Category = () => {
                         />
 
                         <Card.Body>
-                          {/* <Card.Title className="fs-3">
-                              {ad.name}
-                            </Card.Title> */}
-
                           <Card.Text className="fs-5">
-                            {/* <Stack direction="horizontal" className="mx-3"> */}
                             <div className="text-center">
-                              {/* {console.log(category.user)} */}
                               Username: <b>{category.user}</b>
                             </div>
-
-                            {/* <div className="ms-auto">
-                                Priority: <b>{`${ad.priority}`}</b>
-                              </div> */}
-                            {/* </Stack> */}
                           </Card.Text>
-
-                          {/* <Stack direction="horizontal" className=" px-5 text-primary"> */}
 
                           <div className="text-center">
                             <Button
@@ -463,13 +378,10 @@ const Category = () => {
                             >
                               Edit Category
                             </Button>
-                            {/* </div>
-                            
-                                <div className="ms-auto"> */}
+
                             <Button
                               variant="danger shadow-lg mb-3 mx-2"
                               onClick={() => {
-                                //   navigate(`/Category/${category.id}`);
                                 setCategoryId(category.id);
                                 setCancel(true);
                               }}
@@ -477,10 +389,8 @@ const Category = () => {
                               Delete Category
                             </Button>
                           </div>
-                          {/* </Stack> */}
                         </Card.Body>
                       </Card>
-                      {/* </Link> */}
                     </div>
                   );
                 })
@@ -514,7 +424,6 @@ const Category = () => {
                   <Form.Label className="fs-3">Category Name:</Form.Label>
                   <Form.Control
                     className="shadow-lg"
-                    // value={name}
                     onChange={(e) => setName(e.target.value)}
                     type="text"
                     required
@@ -530,18 +439,13 @@ const Category = () => {
                     size="md"
                     required
                     onChange={(event) => {
-                      //   setImage(e.target.files[0]);
-
                       const file = event.target.files[0];
                       if (file) {
                         const reader = new FileReader();
 
                         reader.onload = (e) => {
                           const imageDataURL = e.target.result;
-
-                          // console.log("Base 64 -> ", base64);
                           // You can use imageDataURL as a base64-encoded image string.
-                          // console.log(imageDataURL);
                           setImage(imageDataURL);
                         };
                         reader.readAsDataURL(file);
@@ -559,11 +463,7 @@ const Category = () => {
                 >
                   Cancel
                 </Button>
-                <Button
-                  variant="success shadow-lg fw-bold p-2"
-                  // onClick={handleAdd}
-                  type="submit"
-                >
+                <Button variant="success shadow-lg fw-bold p-2" type="submit">
                   Add new Category
                 </Button>
               </Modal.Footer>
@@ -577,7 +477,6 @@ const Category = () => {
             setModal(false);
             setShow(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -612,7 +511,6 @@ const Category = () => {
           onHide={() => {
             setCancel(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -630,7 +528,6 @@ const Category = () => {
             <Button
               variant="info shadow-lg fw-bold px-4"
               onClick={() => {
-                // if(orderId)
                 handleDelete(categoryId);
                 setCancel(false);
               }}
@@ -654,7 +551,6 @@ const Category = () => {
           onHide={() => {
             setDel(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -727,18 +623,13 @@ const Category = () => {
                   type="file"
                   size="md"
                   onChange={(event) => {
-                    //   setImage(e.target.files[0]);
-
                     const file = event.target.files[0];
                     if (file) {
                       const reader = new FileReader();
 
                       reader.onload = (e) => {
                         const imageDataURL = e.target.result;
-
-                        // console.log("Base 64 -> ", base64);
                         // You can use imageDataURL as a base64-encoded image string.
-                        // console.log(imageDataURL);
                         setImageEdit(imageDataURL);
                       };
                       reader.readAsDataURL(file);
@@ -769,7 +660,6 @@ const Category = () => {
           onHide={() => {
             setDoneEdit(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -798,12 +688,9 @@ const Category = () => {
           </Modal.Body>
         </Modal>
       </Stack>
-      <div
-      //  style={{width: "55px"}}
-      >
+      <div>
         <Sidebar />
       </div>
-      {/* </Stack> */}
     </>
   );
 };

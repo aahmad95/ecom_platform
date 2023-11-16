@@ -1,54 +1,4 @@
-// const hbs = require("nodemailer-express-handlebars");
-// const nodemailer = require("nodemailer");
-// const path = require("path");
-// const users = ["seharsaleem08@gmail"];
-// const emailConfirmation = async () => {
-//   // initialize nodemailer
-//   var transporter = nodemailer.createTransport({
-//     service: "gmail",
-//     auth: {
-//       user: "sehar.algolix@gmail.com",
-//       pass: "hahm mwya eqez ctrq",
-//     },
-//   });
-
-//   // point to the template folder
-//   const handlebarOptions = {
-//     viewEngine: {
-//       partialsDir: path.resolve("./views/"),
-//       defaultLayout: false,
-//     },
-//     viewPath: path.resolve("./views/"),
-//   };
-
-//   // use a template file with nodemailer
-//   transporter.use("compile", hbs(handlebarOptions));
-
-//   for (const user of users) {
-//     if (user.email) {
-//       const mailOptions = {
-//         from: '"E-Commerce Website" <sehar.algolix@gmail.com>', // sender address
-//         template: email.handlebars, // the name of the template file, i.e., email.handlebars
-//         to: user.email,
-//         subject: `Welcome to My Company, ${user.name}`,
-//         context: {
-//           name: user.name,
-//           company: "E-Commerce Website",
-//         },
-//       };
-//       try {
-//         await transporter.sendMail(mailOptions);
-//       } catch (error) {
-//         console.log(`Nodemailer error sending email to ${user.email}`, error);
-//       }
-//     }
-//   }
-// };
-
-// const path = require("path");
-
 const express = require("express");
-// var bodyParser = require("body-parser");
 var cors = require("cors");
 
 const { sequelize } = require("./models");
@@ -61,24 +11,9 @@ app.use(cors());
 
 //if you want to use the body of request use a middle-ware:
 app.use(express.json({ limit: "50mb" }));
-// app.use(express.json());
 //and set the  header content-type as json
 
-//static Images Folder
-app.use("/Images", express.static("./Images"));
-// app.use(express.urlencoded({ extended: true }));
-
-// app.use("/", express.static(path.join(__dirname, "public")));
-// app.use("/api", require("./routes/api").route);
-
 // Available Routes:
-// app.get("/", (req, res) => {
-//   res.send("Hello Sehar!");
-// });
-
-// app.use("/api/auth", require("./routes/auth"));
-// app.use("/api/notes", require("./routes/notes"));
-// /api/v1
 const user = require("./routes/user");
 app.use("/api/v1/users", user);
 
@@ -109,5 +44,4 @@ app.listen(port, async () => {
   );
   await sequelize.authenticate();
   console.log("Database connected!");
-  // emailConfirmation();
 });

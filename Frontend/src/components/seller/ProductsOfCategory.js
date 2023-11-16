@@ -1,48 +1,29 @@
 import React, { useEffect, useState } from "react";
-import ModalHeader from "react-bootstrap/ModalHeader";
-import categoryContext from "../../context/cart/cartContext";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import jwt_decode from "jwt-decode";
-import axios from "axios";
-import { Buffer } from "buffer";
 import Sidebar from "../admin/Sidebar";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Stack from "react-bootstrap/Stack";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import Table from "react-bootstrap/Table";
+import { useNavigate, useParams } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import Image from "react-bootstrap/Image";
 import Badge from "react-bootstrap/Badge";
-
-// import closeButton from "react-bootstrap/ModalHeader";
 
 const ProductsOfCategory = () => {
   const params = useParams();
 
   const [load, setLoad] = useState(false);
   const [category, setCategory] = useState(false);
-  // const [priority, setPriority] = useState(false);
   const [sellerName, setSellerName] = useState();
   const [seller, setSeller] = useState();
-
-  // const [edit, setEdit] = useState(false);
-  // const [idEdit, setIdEdit] = useState("");
-  // const [nameEdit, setNameEdit] = useState("");
-  // const [imageEdit, setImageEdit] = useState("");
-  // const [priorityEdit, setPriorityEdit] = useState();
-
-  // const [doneEdit, setDoneEdit] = useState(false);
 
   const [products, setProducts] = useState([]);
 
   // Add Product
-
   const [show, setShow] = useState(false);
   const [categories, setCategories] = useState([]);
 
@@ -64,7 +45,6 @@ const ProductsOfCategory = () => {
 
   // Edit Product:
   const [edit, setEdit] = useState(false);
-  // const [categories, setCategories] = useState([]);
   const [editId, setEditId] = useState("");
   const [editName, setEditName] = useState("");
   const [editBrand, setEditBrand] = useState("");
@@ -93,67 +73,54 @@ const ProductsOfCategory = () => {
 
       setSeller(decoded.user);
       setSellerName(decoded.user.username);
-      // getSeller();
 
       if (decoded.user.role === "seller") {
-        // setUserId(decoded.user.id);
-
         getProducts(decoded.user.id);
         getCategories();
-        // getSeller(seller.id);
       }
     }
     setLoad(false);
 
     // eslint-disable-next-line
   }, [load]);
-  // useEffect(()=>{
-  //   console.log('Ads', ads);
-  // }, [ads])
 
   const getProducts = async (sellerId) => {
     setCategory(await getCategoryName(params.categoryId));
-    // console.log("get Products");
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      userId: sellerId,
+      categoryId: params.categoryId,
+    });
+
     var requestOptions = {
-      method: "GET",
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
       redirect: "follow",
     };
 
     const response = await fetch(
-      `http://localhost:5000/api/v1/product/getProductsOfUser/${sellerId}`,
+      "http://localhost:5000/api/v1/product/getProductsOfUserByCategory",
       requestOptions
     );
-    // console.log(response);
-    if (response.status === 401) {
+
+    if (response.status === 204) {
       setProducts([]);
     } else if (response.status === 200) {
       const json = await response.json();
       const categoryNamePromises = await json.map(async (j) => {
-        console.log(j);
-        console.log(params.categoryId);
-        if (j.categoryId == params.categoryId) {
-          j["category"] = await getCategoryName(j.categoryId);
-          j["soldProductCount"] = await getSoldProductCount(j.id);
-
-          console.log("match");
-          return j;
-        }
-        return null;
+        j["category"] = await getCategoryName(j.categoryId);
+        j["soldProductCount"] = await getSoldProductCount(j.id);
+        return j;
       });
-      const matchedProducts = await Promise.all(categoryNamePromises);
-      const filteredProducts = matchedProducts.filter(
-        (product) => product !== null
-      );
-      // console.log(json);
-      // console.log(filteredProducts);
-      setProducts(filteredProducts);
-      // console.log("json response", json);
-      // setAds(json);
-      // console.log("products:    ", products);
+      await Promise.all(categoryNamePromises);
+      setProducts(json);
     }
   };
+
   const getCategoryName = async (id) => {
-    // console.log(id);
     var requestOptions = {
       method: "GET",
       redirect: "follow",
@@ -213,18 +180,14 @@ const ProductsOfCategory = () => {
       "http://localhost:5000/api/v1/product/createProduct",
       requestOptions
     );
-    // console.log("response-------", response);
     if (response.status === 200) {
       setModal(true);
       setLoad(true);
     }
-    const json = await response.json();
-    // console.log("json------", json);
   };
 
   const handleSearch = (event) => {
     setIsSearch(true);
-    //  const value = `${document.getElementById("validationCustom03").value}`;
     const value = event.target.value;
     console.log(value);
     const searchProduct = products.filter((product) => {
@@ -246,20 +209,14 @@ const ProductsOfCategory = () => {
       method: "GET",
       redirect: "follow",
     };
-    // const category = [];
     const response = await fetch(
       "http://localhost:5000/api/v1/category/getAllCategory",
       requestOptions
     );
-    // console.log(response);
     if (response.status === 200) {
       const json = await response.json();
-      // json.map((category) => {
-      //   const cat = { category.id: `${category.name}` }
-      //   category.push(cat);
-      // })
+
       setCategories(json);
-      // console.log("categories", json);
     }
   };
 
@@ -270,7 +227,6 @@ const ProductsOfCategory = () => {
 
     var raw = JSON.stringify({
       name: editName,
-      // userId: seller.id,
       categoryId: editCategoryId,
       brand: editBrand,
       description: editDescription,
@@ -321,8 +277,6 @@ const ProductsOfCategory = () => {
   };
   return (
     <>
-      {/* <Stack direction="horizontal"> */}
-
       <Stack style={{ paddingLeft: "80px" }}>
         <div className="mx-3">
           <div className="mx-3 my-5">
@@ -366,7 +320,6 @@ const ProductsOfCategory = () => {
                   placeholder="Type to search Products."
                   className="text-center shadow-lg"
                   aria-label="Search"
-                  // onClick={handleSearch}
                   onChange={handleSearch}
                 />
               </Col>
@@ -397,16 +350,6 @@ const ProductsOfCategory = () => {
                     >
                       Description
                     </Dropdown.Item>
-                    {/* <Dropdown.Item
-                      onClick={() => {
-                        document.getElementById("validationCustom03").value =
-                          null;
-                        setIsSearch(false);
-                        setSearchValue("category");
-                      }}
-                    >
-                      Category
-                    </Dropdown.Item> */}
 
                     <Dropdown.Item
                       onClick={() => {
@@ -475,10 +418,6 @@ const ProductsOfCategory = () => {
                   filteredProducts.map((product) => {
                     return (
                       <div className="my-4 col-md-6" key={product.id}>
-                        {/* <Link
-                        className="text-decoration-none"
-                        to={`/Product/${product.id}`}
-                      > */}
                         <Card
                           border="info"
                           style={{ width: "22rem" }}
@@ -550,28 +489,17 @@ const ProductsOfCategory = () => {
                             </Card.Text>
                             <hr />
                             <Card.Text className="fs-5">
-                              {/* <Stack direction="horizontal"> */}
-                              {/* <div>
-                                  Brand:{" "}
-                                  <b className="text-dark">{product.brand}</b>
-                                </div> */}
-
                               <div className="mx-auto">
                                 No of Products Sold:{" "}
                                 <b className="text-dark">{`${product.soldProductCount}`}</b>
                               </div>
-                              {/* </Stack> */}
                             </Card.Text>
                             <hr />
-                            {/* <Stack direction="horizontal" className=" px-5 text-primary"> */}
 
                             <div className="text-center">
-                              {/* Edit */}
-
                               <Button
                                 variant="success fw-bold shadow-lg mb-2 mx-2"
                                 onClick={() => {
-                                  // navigate(`/seller/product/${product.id}`);
                                   setEditId(product.id);
                                   setEditName(product.name);
                                   setEditBrand(product.brand);
@@ -592,13 +520,10 @@ const ProductsOfCategory = () => {
                                   navigate(
                                     `/seller/category/product/${product.id}`
                                   );
-                                  // setAdId(ad.id);
-                                  // setCancel(true);
                                 }}
                               >
                                 Product Details
                               </Button>
-                              {/* Delete */}
                               <Button
                                 variant="danger fw-bold shadow-lg mb-2 mx-2"
                                 onClick={() => {
@@ -609,10 +534,8 @@ const ProductsOfCategory = () => {
                                 <i class="fa-solid fa-trash-can fa-beat-fade"></i>
                               </Button>
                             </div>
-                            {/* </Stack> */}
                           </Card.Body>
                         </Card>
-                        {/* </Link> */}
                       </div>
                     );
                   })
@@ -625,10 +548,6 @@ const ProductsOfCategory = () => {
                 products.map((product) => {
                   return (
                     <div className="my-4 col-md-6" key={product.id}>
-                      {/* <Link
-                        className="text-decoration-none"
-                        to={`/Product/${product.id}`}
-                      > */}
                       <Card
                         border="info"
                         style={{ width: "22rem" }}
@@ -695,24 +614,15 @@ const ProductsOfCategory = () => {
                           </Card.Text>
                           <hr />
                           <Card.Text className="fs-5">
-                            {/* <Stack direction="horizontal"> */}
-                            {/* <div>
-                                  Brand:{" "}
-                                  <b className="text-dark">{product.brand}</b>
-                                </div> */}
-
                             <div className="mx-auto">
                               No of Products Sold:{" "}
                               <b className="text-dark">{`${product.soldProductCount}`}</b>
                             </div>
-                            {/* </Stack> */}
                           </Card.Text>
                           <hr />
-                          {/* <Stack direction="horizontal" className=" px-5 text-primary"> */}
 
                           <div className="text-center">
                             {/* Edit */}
-
                             <Button
                               variant="success fw-bold shadow-lg mb-2 mx-2"
                               onClick={() => {
@@ -737,8 +647,6 @@ const ProductsOfCategory = () => {
                                 navigate(
                                   `/seller/category/product/${product.id}`
                                 );
-                                // setAdId(ad.id);
-                                // setCancel(true);
                               }}
                             >
                               Product Details
@@ -754,10 +662,8 @@ const ProductsOfCategory = () => {
                               <i class="fa-solid fa-trash-can fa-beat-fade"></i>
                             </Button>
                           </div>
-                          {/* </Stack> */}
                         </Card.Body>
                       </Card>
-                      {/* </Link> */}
                     </div>
                   );
                 })
@@ -770,12 +676,9 @@ const ProductsOfCategory = () => {
           </div>
         </div>
       </Stack>
-      <div
-      //  style={{width: "55px"}}
-      >
+      <div>
         <Sidebar />
       </div>
-      {/* </Stack> */}
 
       <div>
         {/* Add new Product */}
@@ -798,7 +701,6 @@ const ProductsOfCategory = () => {
                 <Form.Label className="fs-4">Product Name:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setName(e.target.value)}
                   type="text"
                   required
@@ -821,9 +723,7 @@ const ProductsOfCategory = () => {
                         onClick={(e) => {
                           console.log(e);
                           if (e.target.checked) {
-                            // console.log(e.target.id);
                             setCategoryId(e.target.id);
-                            // console.log("category", categoryId);
                           }
                         }}
                       />
@@ -835,7 +735,6 @@ const ProductsOfCategory = () => {
                 <Form.Label className="fs-4">Product Description:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setDescription(e.target.value)}
                   type="text"
                   required
@@ -850,18 +749,13 @@ const ProductsOfCategory = () => {
                   size="md"
                   required
                   onChange={(event) => {
-                    //   setImage(e.target.files[0]);
-
                     const file = event.target.files[0];
                     if (file) {
                       const reader = new FileReader();
 
                       reader.onload = (e) => {
                         const imageDataURL = e.target.result;
-
-                        // console.log("Base 64 -> ", base64);
                         // You can use imageDataURL as a base64-encoded image string.
-                        // console.log(imageDataURL);
                         setImage(imageDataURL);
                       };
                       reader.readAsDataURL(file);
@@ -873,7 +767,6 @@ const ProductsOfCategory = () => {
                 <Form.Label className="fs-4">Product Brand:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setBrand(e.target.value)}
                   type="text"
                   required
@@ -883,7 +776,6 @@ const ProductsOfCategory = () => {
                 <Form.Label className="fs-4">Product Warranty:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setWarranty(e.target.value)}
                   type="text"
                   required
@@ -893,9 +785,8 @@ const ProductsOfCategory = () => {
                 <Form.Label className="fs-4">Product Price:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) =>
-                    e.target.value > 0
+                    e.target.value >= 0
                       ? setPrice(e.target.value)
                       : (e.target.value = "")
                   }
@@ -906,11 +797,10 @@ const ProductsOfCategory = () => {
               </Form.Group>
               <Form.Group className="mb-3" controlId="priority">
                 <Form.Label className="fs-4">Product Status:</Form.Label>
-                <Form.Check // prettier-ignore
+                <Form.Check
                   className="mx-3 fs-5"
                   type="switch"
                   id="custom-switch"
-                  // defaultChecked={priority}
                   label="Active"
                   onChange={(e) => {
                     if (e.target.checked) {
@@ -931,11 +821,7 @@ const ProductsOfCategory = () => {
               >
                 Cancel
               </Button>
-              <Button
-                variant="success shadow-lg fw-bold p-2"
-                // onClick={handleAdd}
-                type="submit"
-              >
+              <Button variant="success shadow-lg fw-bold p-2" type="submit">
                 Add new Product
               </Button>
             </Modal.Footer>
@@ -948,7 +834,6 @@ const ProductsOfCategory = () => {
             setModal(false);
             setShow(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -984,7 +869,6 @@ const ProductsOfCategory = () => {
           onHide={() => {
             setCancel(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -1005,7 +889,6 @@ const ProductsOfCategory = () => {
             <Button
               variant="danger shadow-lg fw-bold px-4"
               onClick={() => {
-                // if(orderId)
                 handleDelete(productId);
                 setCancel(false);
               }}
@@ -1029,7 +912,6 @@ const ProductsOfCategory = () => {
           onHide={() => {
             setDel(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -1100,11 +982,8 @@ const ProductsOfCategory = () => {
                         id={category.id}
                         defaultChecked={category.id === editCategoryId}
                         onClick={(e) => {
-                          console.log(e);
                           if (e.target.checked) {
-                            // console.log(e.target.id);
                             setEditCategoryId(e.target.id);
-                            // console.log("category", categoryId);
                           }
                         }}
                       />
@@ -1140,18 +1019,13 @@ const ProductsOfCategory = () => {
                   type="file"
                   size="md"
                   onChange={(event) => {
-                    //   setImage(e.target.files[0]);
-
                     const file = event.target.files[0];
                     if (file) {
                       const reader = new FileReader();
 
                       reader.onload = (e) => {
                         const imageDataURL = e.target.result;
-
-                        // console.log("Base 64 -> ", base64);
                         // You can use imageDataURL as a base64-encoded image string.
-                        // console.log(imageDataURL);
                         setEditImage(imageDataURL);
                       };
                       reader.readAsDataURL(file);
@@ -1185,7 +1059,7 @@ const ProductsOfCategory = () => {
                   className="shadow-lg"
                   value={editPrice}
                   onChange={(e) =>
-                    e.target.value > 0
+                    e.target.value >= 0
                       ? setEditPrice(e.target.value)
                       : (e.target.value = "")
                   }
@@ -1196,12 +1070,11 @@ const ProductsOfCategory = () => {
               </Form.Group>
               <Form.Group className="mb-3" controlId="priority">
                 <Form.Label className="fs-4">Product Status:</Form.Label>
-                <Form.Check // prettier-ignore
+                <Form.Check
                   checked={editStatus === "Active"}
                   className="mx-3 fs-5"
                   type="switch"
                   id="custom-switch"
-                  // defaultChecked={priority}
                   label="Active"
                   onChange={(e) => {
                     if (e.target.checked) {
@@ -1222,11 +1095,7 @@ const ProductsOfCategory = () => {
               >
                 Cancel
               </Button>
-              <Button
-                variant="success shadow-lg fw-bold p-2"
-                // onClick={handleAdd}
-                type="submit"
-              >
+              <Button variant="success shadow-lg fw-bold p-2" type="submit">
                 Update Product
               </Button>
             </Modal.Footer>
@@ -1239,7 +1108,6 @@ const ProductsOfCategory = () => {
           onHide={() => {
             setDoneEdit(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"

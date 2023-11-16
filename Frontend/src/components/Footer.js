@@ -1,13 +1,6 @@
 import React from "react";
-import icon from "../logo.svg";
-import {
-  MDBFooter,
-  MDBContainer,
-  MDBCol,
-  MDBRow,
-  MDBIcon,
-  MDBBtn,
-} from "mdb-react-ui-kit";
+// import icon from "../logo.svg";
+import { MDBFooter, MDBContainer, MDBIcon, MDBBtn } from "mdb-react-ui-kit";
 
 function Footer() {
   return (
@@ -34,15 +27,6 @@ function Footer() {
             <MDBIcon fab icon="twitter" />
           </MDBBtn>
 
-          {/* <MDBBtn
-            floating
-            className="m-1 border-info"
-            style={{ backgroundColor: "#dd4b39" }}
-            href="#!"
-            role="button"
-          >
-            <MDBIcon fab icon="google" />
-          </MDBBtn> */}
           <MDBBtn
             floating
             className="m-1 border-info"
@@ -62,16 +46,6 @@ function Footer() {
           >
             <MDBIcon fab icon="linkedin-in" />
           </MDBBtn>
-
-          {/* <MDBBtn
-            floating
-            className="m-1 border-info"
-            style={{ backgroundColor: "#333333" }}
-            href="#!"
-            role="button"
-          >
-            <MDBIcon fab icon="github" />
-          </MDBBtn> */}
         </section>
       </MDBContainer>
 
@@ -80,22 +54,19 @@ function Footer() {
         style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
       >
         <div>
-          <img
+          {/* <img
             src={icon}
             width="60"
             height="55"
-            className="d-inline-block align-top"
+            // className="d-inline-block align-top"
             alt="E-commerce website logo"
-          />
+          /> */}
           <span className="text-info fs-2 mb-2 fw-bold mx-2">
             E-Commerce Website
           </span>
         </div>
         <div className="text-success">
           &copy; E-Commerce Website, 2023. All rights reserved.
-          {/* <a className="text-white" href="https://mdbootstrap.com/">
-          MDBootstrap.com
-        </a> */}
         </div>
       </div>
     </MDBFooter>

@@ -1,21 +1,14 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import ModalHeader from "react-bootstrap/ModalHeader";
-import categoryContext from "../../context/cart/cartContext";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
-import { Buffer } from "buffer";
 import Sidebar from "./Sidebar";
 import Stack from "react-bootstrap/Stack";
 import { useNavigate } from "react-router-dom";
-// import closeButton from "react-bootstrap/ModalHeader";
 const Category = () => {
-  // const context = useContext(categoryContext);
-  // const { categories, getCategories } = context;
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [show, setShow] = useState(false);
@@ -26,13 +19,6 @@ const Category = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
-    // if (!localStorage.getItem("token")) {
-    //   navigate("/login");
-    // } else {
-    //   const authToken = localStorage.getItem("token");
-    //   var decoded = jwt_decode(authToken);
-    //   decoded.user.role === "admin" ? getCategories() : navigate("/404");
-    // }
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
@@ -50,17 +36,8 @@ const Category = () => {
     // eslint-disable-next-line
   }, []);
   const handleAdd = async () => {
-    // console.log(e);
-    // console.log(name);
-    // console.log("image:", image);
-    // {
     const authToken = localStorage.getItem("token");
     var decoded = jwt_decode(authToken);
-
-    // const formData = new FormData();
-    // // formData.append("name", name);
-    // // formData.append("image", image);
-    // // formData.append("userId", decoded.user.id);
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -85,7 +62,6 @@ const Category = () => {
     const json = await response.json();
     console.log(json);
     handleClose();
-    // const response= await axios.post('http://localhost:5000/category/createCategory', formData);
   };
   return (
     <>
@@ -108,28 +84,13 @@ const Category = () => {
               </Button>
               {categories.length === 0 && "No Categories to display."}
             </div>
-            {/* {notes.map((note) => {
-          return (
-            <NoteItem
-              key={note._id}
-              note={note}
-              updateNote={updateNote}
-              showAlert={props.showAlert}
-            />
-          );
-        })} */}
-            <div class="container text-center mt-2">
-              <div class="row row-cols-3">
+
+            <div className="container text-center mt-2">
+              <div className="row row-cols-3">
                 {categories &&
                   categories.map((category) => {
-                    // const base64String = btoa(
-                    //   String.fromCharCode(...new Uint8Array(category.image.data))
-                    // );
-                    // console.log(base64String);
-                    // console.log(category.image.data);
                     return (
                       <div>
-                        {/* console.log(categories); */}
                         <Card className="shadow-lg">
                           <Card.Img
                             variant="top"
@@ -140,10 +101,7 @@ const Category = () => {
                             <Card.Title className="fw-bold fs-1">
                               {category.name}
                             </Card.Title>
-                            {/* <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Card.Text>  */}
+
                             <Button variant="info fw-bold shadow-lg">
                               Products
                             </Button>
@@ -159,7 +117,6 @@ const Category = () => {
             <Modal
               show={show}
               onHide={handleClose}
-              // size="lg"
               aria-labelledby="contained-modal-title-vcenter"
               centered
             >
@@ -170,14 +127,6 @@ const Category = () => {
                 >
                   Add Category
                 </Modal.Title>
-
-                {/* <button
-              type="button"
-              className="btn-close justify-content-end"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-              onClick={handleClose}
-            ></button> */}
               </Modal.Header>
               <Modal.Body>
                 <Form>
@@ -200,7 +149,6 @@ const Category = () => {
                       name="image"
                       size="lg"
                       onChange={(event) => {
-                        //   setImage(e.target.files[0]);
                         console.clear();
                         console.log();
                         const file = event.target.files[0];
@@ -209,10 +157,7 @@ const Category = () => {
 
                           reader.onload = (e) => {
                             const imageDataURL = e.target.result;
-
-                            // console.log("Base 64 -> ", base64);
                             // You can use imageDataURL as a base64-encoded image string.
-                            // console.log(imageDataURL);
                             setImage(imageDataURL);
                           };
                           reader.readAsDataURL(file);

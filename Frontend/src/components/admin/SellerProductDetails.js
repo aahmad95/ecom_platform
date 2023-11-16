@@ -14,7 +14,6 @@ import jwt_decode from "jwt-decode";
 
 const SellerProductDetails = (props) => {
   const param = useParams();
-  // console.log([param]);
 
   const [product, setProduct] = useState("");
   const [productDetails, setProductDetails] = useState(null);
@@ -23,29 +22,14 @@ const SellerProductDetails = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // if (!localStorage.getItem("token")) {
-    //   navigate("/login");
-    // } else {
-    //   const authToken = localStorage.getItem("token");
-    //   const decoded = jwt_decode(authToken);
-    //   if (decoded.user.role === "admin") {
-    //     // setUserId(decoded.user.id);
-    //     getProduct();
-    //     getProductDetails();
-    //     // getSeller(params.sellerId);
-    //   } else navigate("/404");
-    // }
-
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
       const authToken = localStorage.getItem("token");
       const decoded = jwt_decode(authToken);
       if (decoded.user.role === "admin") {
-        // setUserId(decoded.user.id);
         getProduct();
         getProductDetails();
-        // getSeller(params.sellerId);
       }
     }
 
@@ -66,7 +50,6 @@ const SellerProductDetails = (props) => {
         setProduct(result);
       })
       .catch((error) => console.log("error", error));
-    // console.log(product);
   };
 
   const getProductDetails = async () => {
@@ -81,12 +64,10 @@ const SellerProductDetails = (props) => {
     );
 
     const json = await response.json();
-    // console.log(json);
     setProductDetails(json);
 
     const imageArr = [];
     json.forEach(async (productDetail) => {
-      // console.log(productDetail);
       productDetail.image.forEach(async (i) => {
         if (!imageArr.includes(i)) {
           imageArr.push(i);
@@ -99,8 +80,6 @@ const SellerProductDetails = (props) => {
 
   return (
     <>
-      {/* <Stack direction="horizontal"> */}
-
       <Stack style={{ paddingLeft: "80px" }}>
         <div className="mx-3">
           <div className="mx-3 my-5">
@@ -122,8 +101,7 @@ const SellerProductDetails = (props) => {
                             className="shadow-lg"
                             width="50%"
                             height="70%"
-                            // className="d-inline-block align-top mx-4"
-                            alt="Product Image"
+                            alt="Product"
                             src={image}
                           />
                         </div>
@@ -165,15 +143,10 @@ const SellerProductDetails = (props) => {
                           className="my-3 text-wrap"
                           gap={2}
                         >
-                          <Button
-                            variant="info"
-                            size="sm"
-                            // className="shadow-lg"
-                            disabled
-                          >
+                          <Button variant="info" size="sm" disabled>
                             {index + 1}
                           </Button>
-                          {Object.keys(product).map((key) => {
+                          {Object.keys(product).map((key, index) => {
                             if (
                               ![
                                 "createdAt",
@@ -182,25 +155,25 @@ const SellerProductDetails = (props) => {
                                 "productId",
                               ].includes(key)
                             ) {
-                              // console.log(`/////////${key}: ${product[key]}`);
-                              if (product[key]) {
-                                // console.log(`${key}: ${product[key]}`);
+                              if (key === "stock" || product[key]) {
                                 if (key === "image") {
                                   return (
                                     <img
                                       className="border border-dark shadow-lg mx-2"
                                       width="50px"
                                       height="50px"
-                                      // className="d-inline-block align-top mx-4"
                                       alt="Ad"
                                       src={product[key]}
                                     />
                                   );
                                 } else {
                                   return (
-                                    // <img src={product[key]}></img>
                                     <>
-                                      <Stack direction="horizontal" gap={1}>
+                                      <Stack
+                                        key={index}
+                                        direction="horizontal"
+                                        gap={1}
+                                      >
                                         <div className="p-2 fs-5">{key}: </div>
                                         <div className="p-2 fs-5 text-success">
                                           {product[key]}
@@ -211,6 +184,7 @@ const SellerProductDetails = (props) => {
                                 }
                               }
                             }
+                            return false;
                           })}
                         </Stack>
                       );
@@ -221,12 +195,9 @@ const SellerProductDetails = (props) => {
           </Container>
         </div>
       </Stack>
-      <div
-      //  style={{width: "55px"}}
-      >
+      <div>
         <Sidebar />
       </div>
-      {/* </Stack> */}
     </>
   );
 };

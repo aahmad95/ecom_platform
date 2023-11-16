@@ -5,12 +5,12 @@ const getAllProducts = async (req, res) => {
   try {
     const product = await Product.findAll();
     if (product.length) {
-      return res.json(product);
+      return res.status(200).json(product);
     }
-    return res.json({ message: "There isn't any Product yet." });
+    return res.status(204).json({ message: "There isn't any Product yet." });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not retrieve Products.",
     });
   }
@@ -59,12 +59,14 @@ const getProductById = async (req, res) => {
       where: { id },
     });
     if (product) {
-      return res.json(product);
+      return res.status(200).json(product);
     }
-    return res.json({ message: "There isn't any Product of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any Product of this id exist." });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not find the Product.",
     });
   }
@@ -132,14 +134,14 @@ const getProductsByCategory = async (req, res) => {
       where: { categoryId },
     });
     if (products.length) {
-      return res.json(products);
+      return res.status(200).json(products);
     }
-    return res.json({
+    return res.status(204).json({
       message: "There isn't any Product of this category exist.",
     });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not find the Product of Category.",
     });
   }
@@ -161,7 +163,7 @@ const getProductsOfUser = async (req, res) => {
       .json({ message: "There isn't any Product of this user exist." });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not find the Products.",
     });
   }
@@ -170,12 +172,10 @@ const getProductsOfUser = async (req, res) => {
 // Get all Products By userId of Category:
 const getProductsOfUserByCategory = async (req, res) => {
   try {
-    const { sellerId } = await req.params;
-    console.log(sellerId);
-    const { categoryId } = req.body;
+    const { categoryId, userId } = req.body;
     const product = await Product.findAll({
       where: {
-        userId: sellerId,
+        userId,
         categoryId,
       },
     });

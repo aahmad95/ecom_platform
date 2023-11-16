@@ -7,12 +7,11 @@ const {
   deleteAds,
   updateAds,
 } = require("../controllers/ads");
-const { upload } = require("../controllers/image");
 
-router.post("/createAds", upload, createAds);
+router.post("/createAds", createAds);
 router.get("/getAll", getAllAds);
 router.get("/getAds/:id", getAdsById);
 router.delete("/deleteAds/:id", deleteAds);
-router.put("/updateAds/:id", upload, updateAds);
+router.put("/updateAds/:id", updateAds);
 
 module.exports = router;

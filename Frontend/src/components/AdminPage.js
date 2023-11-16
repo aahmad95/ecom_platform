@@ -1,31 +1,19 @@
-// import "./AdminPage.css";
 import React, { useEffect, useState } from "react";
 import Stack from "react-bootstrap/Stack";
-import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-bootstrap/Form";
-import jwt_decode from "jwt-decode";
 import Col from "react-bootstrap/Col";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "./admin/Sidebar";
-// import Sidebar from "cdbreact/dist/components/Sidebar";
 const AdminPage = () => {
-  // let navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [searchValue, setSearchValue] = useState("Search Filter");
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
-    // if (!localStorage.getItem("token")) {
-    //   navigate("/login");
-    // } else {
-    //   const authToken = localStorage.getItem("token");
-    //   var decoded = jwt_decode(authToken);
-    //   decoded.user.role === "admin" ? getUsers() : navigate("/404");
-    // }
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
@@ -51,7 +39,6 @@ const AdminPage = () => {
   const handleSearch = (event) => {
     setIsSearch(true);
     const value = `${document.getElementById("validationCustom03").value}`;
-    // const value = event.target.value;
     console.log(value);
     const searchUser = users.filter((user) => {
       if (searchValue === "Name") {
@@ -65,7 +52,7 @@ const AdminPage = () => {
       }
       if (searchValue === "Address") {
         return user.address.toLowerCase().includes(value.toLowerCase());
-      } else return;
+      } else return "";
     });
     setFilteredUsers(searchUser);
     console.log(filteredUsers);
@@ -77,10 +64,7 @@ const AdminPage = () => {
           <Sidebar />
         </div>
         <Stack>
-          <div
-            className="container vh-100 p-0"
-            // style={{height:"100vh"}}
-          >
+          <div className="container vh-100 p-0">
             <div className="mx-5 my-5">
               <h1 className="text-center " style={{ color: "#9b32e0" }}>
                 <b>Admin Page</b>
@@ -98,7 +82,7 @@ const AdminPage = () => {
               >
                 <Form.Label column sm="2" className="mx-3">
                   <Stack direction="horizontal" className="text-info mb-1 fs-4">
-                    <i class="fa-solid fa-magnifying-glass fa-fade mx-1"></i>
+                    <i className="fa-solid fa-magnifying-glass fa-fade mx-1"></i>
                     <b>Search:</b>
                   </Stack>
                 </Form.Label>
@@ -110,7 +94,6 @@ const AdminPage = () => {
                     placeholder="Type to search user."
                     className="text-center shadow-lg"
                     aria-label="Search"
-                    // onClick={handleSearch}
                     onChange={handleSearch}
                   />
                 </Col>
@@ -261,8 +244,6 @@ const AdminPage = () => {
               )}
             </div>
           </div>
-          {/* </div> */}
-          {/* </Row> */}
         </Stack>
       </Stack>
     </>

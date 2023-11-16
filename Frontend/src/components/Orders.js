@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Stack from "react-bootstrap/esm/Stack";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -6,43 +6,24 @@ import { Link } from "react-router-dom";
 import Table from "react-bootstrap/esm/Table";
 import Badge from "react-bootstrap/esm/Badge";
 const Orders = () => {
-  const [user, setUser] = useState();
   const [orders, setOrders] = useState("");
   // [{order: order}]
   const [orderDetails, setOrdersDetails] = useState();
   // [{order: order, orderItems: {orderItem:orderItem, productDetail:productDetail, product: product}}]
   const navigate = useNavigate();
   useEffect(() => {
-    // if (!localStorage.getItem("token")) {
-    //   navigate("/login");
-    // } else {
-    //   const authToken = localStorage.getItem("token");
-    //   const decoded = jwt_decode(authToken);
-
-    //   if (decoded.user.role === "cutomer") {
-    //     setUser(decoded.user);
-    //     getOrders(decoded.user.id);
-    //   } else navigate("/404");
-    // }
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
       const authToken = localStorage.getItem("token");
       const decoded = jwt_decode(authToken);
 
-      if (decoded.user.role === "cutomer") {
-        setUser(decoded.user);
+      if (decoded.user.role === "customer") {
         getOrders(decoded.user.id);
       }
     }
 
-    // console.log("props:    ",props.orderItems)
-    // console.log("orderDetails: ",orderDetails);
-
-    // setOrderItems(ordersDetails);
-    // console.log("orderItems:  ",orderItems)
-    // fetchOrderItems();
-    // console.log("OrderItems------->", orderItems);
+    // eslint-disable-next-line
   }, []);
 
   const getOrders = async (userId) => {
@@ -58,6 +39,7 @@ const Orders = () => {
     const json = await response.json();
 
     if (json.length) {
+      console.log(json);
       setOrders(json);
       const items = [];
       const orderPromises = json.map(async (order) => {
@@ -100,7 +82,7 @@ const Orders = () => {
             return (
               <div
                 key={index}
-                class="d-flex justify-content-center align-items-center bg-white shadow-lg mt-2 mx-auto px-2"
+                className="d-flex justify-content-center align-items-center bg-white shadow-lg mt-2 mx-auto px-2"
               >
                 <Stack className="mb-3">
                   <div className="mt-5 mb-2 mx-3">
@@ -108,7 +90,7 @@ const Orders = () => {
                       className="text-center fs-2"
                       style={{ color: "#9b32e0" }}
                     >
-                      <b>Order No: {orderDetail.order.id}</b>
+                      <b>Order No: {orderDetails.length - index}</b>
                     </h1>
                     <hr
                       style={{ width: "180px", border: "3px solid purple" }}
@@ -129,7 +111,7 @@ const Orders = () => {
                   </div>
                   <Stack className="mx-3" gap={2}>
                     <h4 className="text-info fw-bold">Order Items:</h4>
-                    {/* resposive */}
+
                     <Table striped bordered hover className="shadow-lg">
                       <thead>
                         <tr>
@@ -158,7 +140,7 @@ const Orders = () => {
                                   width="45px"
                                   height="45px"
                                   src={orderItem.productDetail.image}
-                                  alt={"Image"}
+                                  alt={orderItem.product.name}
                                 />
                               </td>
                               <td>{orderItem.product.description}</td>
@@ -176,12 +158,8 @@ const Orders = () => {
                                           "image",
                                         ].includes(key)
                                       ) {
-                                        // console.log(`/////////${key}: ${product[key]}`);
                                         if (orderItem.productDetail[key]) {
-                                          // console.log(`${key}: ${product[key]}`);
-
                                           return (
-                                            // <img src={product[key]}></img>
                                             <div key={index}>
                                               <Stack
                                                 direction="horizontal"
@@ -198,6 +176,7 @@ const Orders = () => {
                                           );
                                         }
                                       }
+                                      return false;
                                     }
                                   )}
                                   <div></div>
@@ -224,7 +203,6 @@ const Orders = () => {
                       striped
                       bordered
                       hover
-                      //   responsive
                       className="mx-auto w-50 shadow-lg"
                     >
                       <tbody className="px-3">
@@ -270,42 +248,6 @@ const Orders = () => {
                       </tbody>
                     </Table>
                   </Stack>
-                  {/* <div class="row g-3 align-items-center">   */}
-                  {/* <div>
-              <Form.Group
-                as={Row}
-                className="mb-3"
-                controlId="validationCustom03"
-              >
-                {/* <div class="col-auto"> */}
-                  {/* <Form.Label column sm="3">
-                  <Stack direction="horizontal" className="mx-4 mb-1 fs-4">
-                    <i class="fa-solid fa-location-dot fa-beat-fade mx-1"></i>
-                    <b>Address:</b>
-                  </Stack>
-                </Form.Label> */}
-                  {/* </div> */}
-                  {/* <div class="col-auto"> */}
-                  {/* <Col sm="8" className="p-2">
-                  <Form.Control
-                    // name="email"
-                    className="text-center"
-                    variant="outlined"
-                    type="text"
-                    placeholder="Enter your address here."
-                    required
-                    value={address}
-                    // value={values.email}
-                    // isInvalid={!!errors.city}
-                    onChange={(e) => setAddress(e.target.value)}
-                  />
-                </Col> */}
-                  {/* </div>  */}
-                  {/* <Form.Control.Feedback type="invalid">
-                   Please provide a valid address.
-                 </Form.Control.Feedback> */}
-                  {/* </Form.Group>
-            </div> */}
                 </Stack>
               </div>
             );
@@ -316,7 +258,7 @@ const Orders = () => {
               You haven't ordered anything yet.
             </div>
             <h4 className="text-center">
-              <Link class="button" to="/">
+              <Link className="button" to="/home">
                 Back to Homepage
               </Link>
             </h4>

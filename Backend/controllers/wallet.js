@@ -5,14 +5,13 @@ const getAllWallets = async (req, res) => {
   try {
     const wallet = await Wallet.findAll();
     if (wallet.length) {
-      return res.json(wallet);
+      return res.status(200).json(wallet);
     }
-    return res.json({ message: "There isn't any Wallet yet." });
+    return res.status(204).json({ message: "There isn't any Wallet yet." });
   } catch (err) {
     console.log(err);
-    // return res.status(500).json({ error: "something went wrong" });
     res.status(501).send({
-      error: "Server Error: Could not retrieve Wallets.",
+      error: "Internal Server Error: Could not retrieve Wallets.",
     });
   }
 };
@@ -31,12 +30,11 @@ const createWallet = async (req, res) => {
       Amount,
       userId,
     });
-    return res.json(wallet);
+    return res.status(200).json(wallet);
   } catch (err) {
     console.log(err);
-    // return res.status(500).json({ error: "something went wrong" });
     res.status(501).send({
-      error: "Server Error: Could not create a new wallet.",
+      error: "Internal Server Error: Could not create a new wallet.",
     });
   }
 };
@@ -49,19 +47,20 @@ const getWalletById = async (req, res) => {
       where: { id },
     });
     if (wallet) {
-      return res.json(wallet);
+      return res.status(200).json(wallet);
     }
-    return res.json({ message: "There isn't any wallet of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any wallet of this id exist." });
   } catch (err) {
     console.log(err);
-    // return res.status(500).json({ error: "something went wrong" });
     res.status(501).send({
-      error: "Server Error: Could not find the wallet.",
+      error: "Internal Server Error: Could not find the wallet.",
     });
   }
 };
 
-// Update a Category:
+// Update a Wallet:
 const updateWallet = async (req, res) => {
   try {
     const { id } = req.params;
@@ -71,24 +70,25 @@ const updateWallet = async (req, res) => {
     });
 
     if (wallet) {
-      return res.json({
+      return res.status(200).json({
         message: "Wallet updated successfully.",
         Wallet: await Wallet.findOne({
           where: { id },
         }),
       });
     }
-    return res.json({ message: "There isn't any Wallet of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any Wallet of this id exist." });
   } catch (err) {
     console.log(err);
-    // return res.status(500).json({ error: "something went wrong" });
     res.status(501).send({
-      error: "Server Error: Could not update the Wallet.",
+      error: "Internal Server Error: Could not update the Wallet.",
     });
   }
 };
 
-// Delete a Category:
+// Delete a Wallet:
 const deleteWallet = async (req, res) => {
   try {
     const { id } = req.params;
@@ -98,16 +98,18 @@ const deleteWallet = async (req, res) => {
     });
     if (wallet) {
       await wallet.destroy();
-      return res.json({
+      return res.status(200).json({
         message: "Wallet deleted successfully.",
       });
     }
 
-    return res.json({ message: "There isn't any Wallet of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any Wallet of this id exist." });
   } catch (err) {
     console.log(err);
     res.status(501).send({
-      error: "Server Error: Could not delete the Wallet",
+      error: "Internal Server Error: Could not delete the Wallet",
     });
   }
 };

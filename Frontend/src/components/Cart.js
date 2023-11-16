@@ -7,56 +7,34 @@ import Button from "react-bootstrap/Button";
 import icon from "../logo.svg";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
-import Checkout from "./Checkout";
-import jwt_decode from "jwt-decode";
 const Cart = () => {
   const context = useContext(cartContext);
-  // orderDetails
 
   const { orders, setOrders, orderDetails, setOrderDetails } = context;
   // orders=[{productDetailId,quantity}]
   const [orderItems, setOrderItems] = useState([]);
-  const [orderId, setOrderId] = useState("");
   // { product: {}, productDetails: {}, quantity:0 }
+  const [orderId, setOrderId] = useState("");
   const [show, setShow] = useState(false);
   const [cancel, setCancel] = useState(false);
-  // const [reload, setReload] = useState(false);
   const navigate = useNavigate();
   const handleClose = () => setShow(false);
+  const [load, setLoad] = useState(false);
   useEffect(() => {
-    // if (!localStorage.getItem("token")) {
-    //   navigate("/login");
-    // } else {
-    //   const authToken = localStorage.getItem("token");
-    //   const decoded = jwt_decode(authToken);
-
-    //   if (decoded.user.role === "cutomer") {
-    //     fetchOrderItems();
-    //   } else navigate("/404");
-    // }
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
       fetchOrderItems();
     }
+    setLoad(false);
+    console.log("hello");
+    console.log(orders);
+    // eslint-disable-next-line
+  }, [load]);
 
-    // setReload(false)
-    // console.log("OrderItems------->", orderItems);
-  }, []);
   const fetchOrderItems = async () => {
     const items = [];
     const orderPromises = orders.map(async (order) => {
-      // orders.forEach(async (order) => {
-      // console.log(order);
-      // const orderItem = {
-      //   product: {},
-      //   productDetails: {},
-      //   quantity: order.quantity,
-      // };
-
-      // orderItem.productDetails = await getProductDetails(order.productDetailId);
-      // console.log(orderItem);
-      // console.log(orderItem.productDetails);
       const requestOptions = {
         method: "GET",
         redirect: "follow",
@@ -69,15 +47,12 @@ const Cart = () => {
       const json = await response.json();
       const productDetails = json;
 
-      // orderItem.product = await getProduct(orderItem.productDetails.productId);
       const response1 = await fetch(
         `http://localhost:5000/api/v1/product/getProduct/${productDetails.productId}`,
         requestOptions
       );
       const json1 = await response1.json();
       const product = json1;
-      // console.log(orderItem);
-      // console.log(orderItems);
       const orderItem = {
         product,
         productDetails,
@@ -85,106 +60,48 @@ const Cart = () => {
       };
 
       items.push(orderItem);
-      console.log("items", items);
     });
 
     await Promise.all(orderPromises);
-    console.log("items......", items);
     setOrderItems(items);
-    // array=items;
   };
+
   const handleCancel = async (productId) => {
-    // showConfirm(true);
+    console.log(productId);
+    setCancel(false);
     let newOrder = orders.filter((order) => {
-      return order.productDetailId != productId;
+      return parseInt(order.productDetailId) !== productId;
     });
-    // console.log("newOrder-------------", newOrder);
     await Promise.all(newOrder);
+    console.log(newOrder);
     await setOrders(newOrder);
-
-    // console.log("orders-------------", orders);
-    // fetchOrderItems();
+    setLoad(true);
   };
+
   const updateQuantity = async (orderItem) => {
-    console.log("orderItem>>>>>>>", orderItem);
-
     const array = orders.map((order) => {
-      console.log("order>>>>>>>", order);
-      console.log("order.productDetailId>>>>>>>", order.productDetailId);
-      console.log(
-        "orderItem.productDetails.id>>>>>>>",
-        orderItem.productDetails.id
-      );
-
-      if (order.productDetailId == orderItem.productDetails.id) {
-        console.log("hello");
+      if (order.productDetailId === orderItem.productDetails.id) {
         order.quantity = orderItem.quantity;
       }
       return order;
     });
-    // await Promise.all(promise);
     setOrders(array);
-    console.log(array);
-    console.log(orders);
-    // reload ? setReload(false) : setReload(true)
   };
+
   const handleCheckout = async () => {
-    console.log("orderItems: ", orderItems);
     await setOrderDetails(orderItems);
-    console.log("orderDetails: ", orderDetails);
     if (!localStorage.getItem("token")) {
       setShow(true);
     } else if (localStorage.getItem("token")) {
-      // checkout(orderItems);
-      // <Checkout orderItems={orderItems}/>
       navigate("/checkout");
     }
-    //  let newOrder = orders.filter((order) => {
-    //    return order.productDetailId != productId;
-    //  });
-    //  console.log("newOrder-------------", newOrder);
-    //  setOrders(newOrder);
-    //  fetchOrderItems();
+    console.log(orderDetails);
   };
-
-  // useEffect(() => {
-  //   console.log("Order items updated");
-  // }, [orderItems]);
-
-  // const getProductDetails = async (id) => {
-  //   const requestOptions = {
-  //     method: "GET",
-  //     redirect: "follow",
-  //   };
-
-  //   const response = await fetch(
-  //     `http://localhost:5000/api/v1/productDetail/getProductDetail/${id}`,
-  //     requestOptions
-  //   );
-  //   const json = await response.json();
-  //   return json;
-  // };
-
-  // const getProduct = async (id) => {
-  //   const requestOptions = {
-  //     method: "GET",
-  //     redirect: "follow",
-  //   };
-  //   const response1 = await fetch(
-  //     `http://localhost:5000/api/v1/product/getProduct/${id}`,
-  //     requestOptions
-  //   );
-  //   const json = await response1.json();
-  //   return json;
-  // };
-
-  // const getOrderItems = async () => {};
 
   return (
     <div className="d-flex justify-content-center align-items-center bg-white">
       <div className="shadow-lg pg-3 bg-white w-50 m-5 ">
         <div className="mt-5 mx-3 my-5">
-          {console.log(orderItems)}
           <h1
             className="text-center"
             style={{ fontSize: "50px", color: "#9b32e0" }}
@@ -192,26 +109,22 @@ const Cart = () => {
             <b>Cart</b>
             <img
               src={icon}
-              width="60"
+              width="70"
               height="60"
-              className="d-inline-block align-top"
+              // className="d-inline-block align-top"
               alt="E-commerce website logo"
             />
           </h1>
           <hr
-            style={{ width: "150px", border: "3px solid purple" }}
+            style={{ width: "155px", border: "3px solid purple" }}
             className="mx-auto mt-1"
           />
           <Stack className="mx-auto my-5" gap={3}>
-            {console.log("Array: ", orderItems)}
             {orderItems.length > 0 ? (
               orderItems.map((orderItem, index) => {
-                console.log("------> Hi", orderItem);
-                console.log(index);
                 return (
-                  // <div>Hello</div>
                   <Card
-                    key={orderItem.product.id}
+                    key={index}
                     style={{ width: "20rem" }}
                     className="text-center shadow-lg mx-auto border-info my-4"
                   >
@@ -233,7 +146,6 @@ const Cart = () => {
                         {`Price: ${orderItem.product.price} Rs`}
                       </ListGroup.Item>
                       <ListGroup.Item>
-                        {/* <div className="m-5 text-center fs-3"> */}
                         Quantity:
                         <Button
                           disabled={orderItem.quantity < 2}
@@ -248,6 +160,10 @@ const Cart = () => {
                         </Button>
                         <b>{orderItem.quantity}</b>
                         <Button
+                          disabled={
+                            orderItem.quantity ===
+                            orderItem.productDetails.stock
+                          }
                           variant="secondary shadow-lg fw-bold p-1  px-2 mx-3"
                           onClick={() => {
                             orderItem.quantity = orderItem.quantity + 1;
@@ -256,8 +172,6 @@ const Cart = () => {
                         >
                           &#43;
                         </Button>
-                        {/* </div> */}
-                        {/* {`Quantity: ${orderItem.quantity}`} */}
                       </ListGroup.Item>
                       {Object.keys(orderItem.productDetails).map((key) => {
                         if (
@@ -271,22 +185,22 @@ const Cart = () => {
                           ].includes(key)
                         ) {
                           if (orderItem.productDetails[key]) {
-                            // console.log(`${key}: ${product[key]}`);
                             return (
-                              <ListGroup.Item>
+                              <ListGroup.Item
+                                key={orderItem.productDetails[key]}
+                              >
                                 {`${key}: ${orderItem.productDetails[key]}`}
                               </ListGroup.Item>
                             );
                           }
                         }
+                        return false;
                       })}
                     </ListGroup>
                     <Card.Body className="my-2">
                       <Button
-                        // disabled={!(quantity && productDetailId)}
                         variant="dark shadow-lg fs-5 "
                         onClick={() => {
-                          // handleCancel(orderItem.productDetails.id);
                           setOrderId(orderItem.productDetails.id);
                           setCancel(true);
                         }}
@@ -294,7 +208,6 @@ const Cart = () => {
                         Cancel Order
                       </Button>
                     </Card.Body>
-                    {/* </Card.Title> */}
                   </Card>
                 );
               })
@@ -319,7 +232,6 @@ const Cart = () => {
       <Modal
         show={show}
         onHide={handleClose}
-        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         className="text-center"
@@ -360,7 +272,6 @@ const Cart = () => {
         onHide={() => {
           setCancel(false);
         }}
-        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         className="text-center"
@@ -376,7 +287,7 @@ const Cart = () => {
         <Modal.Body className="fs-2">Are you sure?</Modal.Body>
         <Modal.Footer>
           <Button
-            variant="danger shadow-lg fw-bold px-4"
+            variant="info shadow-lg fw-bold px-4"
             onClick={() => {
               setCancel(false);
             }}
@@ -384,11 +295,9 @@ const Cart = () => {
             No
           </Button>
           <Button
-            variant="info shadow-lg fw-bold px-4"
+            variant="danger shadow-lg fw-bold px-4"
             onClick={() => {
-              // if(orderId)
               handleCancel(orderId);
-              setCancel(false);
             }}
           >
             Yes

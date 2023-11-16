@@ -1,55 +1,24 @@
 import React, { useEffect, useState } from "react";
-import ModalHeader from "react-bootstrap/ModalHeader";
-import categoryContext from "../../context/cart/cartContext";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import jwt_decode from "jwt-decode";
-import axios from "axios";
-import { Buffer } from "buffer";
 import Sidebar from "./Sidebar";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Stack from "react-bootstrap/Stack";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import Table from "react-bootstrap/Table";
+import { useNavigate, useParams } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
-import Image from "react-bootstrap/Image";
 import Badge from "react-bootstrap/Badge";
-
-// import closeButton from "react-bootstrap/ModalHeader";
 
 const SellerProducts = () => {
   const params = useParams();
 
   const [load, setLoad] = useState(false);
 
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
-  const [priority, setPriority] = useState(false);
   const [sellerName, setSellerName] = useState();
 
-  const [edit, setEdit] = useState(false);
-  const [idEdit, setIdEdit] = useState("");
-  const [nameEdit, setNameEdit] = useState("");
-  const [imageEdit, setImageEdit] = useState("");
-  const [priorityEdit, setPriorityEdit] = useState();
-
-  const [doneEdit, setDoneEdit] = useState(false);
-
   const [products, setProducts] = useState([]);
-
-  const [show, setShow] = useState(false);
-
-  const [modal, setModal] = useState(false);
-
-  const [cancel, setCancel] = useState(false);
-  const [del, setDel] = useState(false);
-
-  const [adId, setAdId] = useState();
 
   const [searchValue, setSearchValue] = useState("Search Filter");
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -58,25 +27,12 @@ const SellerProducts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // if (!localStorage.getItem("token")) {
-    //   navigate("/login");
-    // } else {
-    //   const authToken = localStorage.getItem("token");
-    //   const decoded = jwt_decode(authToken);
-    //   if (decoded.user.role === "admin") {
-    //     // setUserId(decoded.user.id);
-    //     getProducts();
-    //     getSeller(params.sellerId);
-    //   } else navigate("/404");
-    // }
-
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
       const authToken = localStorage.getItem("token");
       const decoded = jwt_decode(authToken);
       if (decoded.user.role === "admin") {
-        // setUserId(decoded.user.id);
         getProducts();
         getSeller(params.sellerId);
       }
@@ -85,12 +41,8 @@ const SellerProducts = () => {
 
     // eslint-disable-next-line
   }, [load]);
-  // useEffect(()=>{
-  //   console.log('Ads', ads);
-  // }, [ads])
 
   const getProducts = async () => {
-    // console.log("get Products");
     var requestOptions = {
       method: "GET",
       redirect: "follow",
@@ -100,7 +52,6 @@ const SellerProducts = () => {
       `http://localhost:5000/api/v1/product/getProductsOfUser/${params.sellerId}`,
       requestOptions
     );
-    // console.log(response);
     if (response.status === 401) {
       setProducts([]);
     } else if (response.status === 200) {
@@ -111,9 +62,6 @@ const SellerProducts = () => {
       });
       await Promise.all(categoryNamePromises);
       setProducts(json);
-      console.log("json response", json);
-      // setAds(json);
-      console.log("products:    ", products);
     }
   };
   const getCategoryName = async (id) => {
@@ -133,9 +81,7 @@ const SellerProducts = () => {
 
   const handleSearch = (event) => {
     setIsSearch(true);
-    //  const value = `${document.getElementById("validationCustom03").value}`;
     const value = event.target.value;
-    console.log(value);
     const searchProduct = products.filter((product) => {
       for (const key in product) {
         if (searchValue === "price" && key === searchValue) {
@@ -147,47 +93,9 @@ const SellerProducts = () => {
       return false;
     });
     setFilteredProducts(searchProduct);
-    console.log(filteredProducts);
-  };
-
-  // const context = useContext(categoryContext);
-  // const { categories, getCategories } = context;
-
-  // const handleClose = () => setShow(false);
-  // const handleShow = () => setShow(true);
-
-  const handleAdd = async (e) => {
-    e.preventDefault();
-
-    // var myHeaders = new Headers();
-    // myHeaders.append("Content-Type", "application/json");
-
-    // var raw = JSON.stringify({
-    //   name: name,
-    //   image: image,
-    //   priority: priority,
-    //   userId: userId,
-    // });
-
-    // var requestOptions = {
-    //   method: "POST",
-    //   headers: myHeaders,
-    //   body: raw,
-    //   redirect: "follow",
-    // };
-
-    // const response = await fetch(
-    //   "http://localhost:5000/api/v1/get/createAds",
-    //   requestOptions
-    // );
-    // if (response.status === 201) {
-    //   setModal(true);
-    //   setLoad(true);
-    // }
   };
 
   const getSeller = async (id) => {
-    // console.log(id);
     var requestOptions = {
       method: "GET",
       redirect: "follow",
@@ -198,65 +106,11 @@ const SellerProducts = () => {
       requestOptions
     );
     const json = await response.json();
-    // console.log("jsonnnnnnnn", json);
     setSellerName(json.username);
-    // console.log(sellerName);
-  };
-
-  const handleDelete = async (adId) => {
-    // e.preventDefault();
-
-    var requestOptions = {
-      method: "DELETE",
-      redirect: "follow",
-    };
-
-    const response = await fetch(
-      `http://localhost:5000/api/v1/get/deleteAds/${adId}`,
-      requestOptions
-    );
-    console.log(response);
-    if (response.status === 204) {
-      setDel(true);
-      setLoad(true);
-    }
-  };
-
-  const handleEdit = async (e) => {
-    e.preventDefault();
-
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    var raw = JSON.stringify({
-      name: nameEdit,
-      image: imageEdit,
-      priority: priorityEdit,
-    });
-
-    var requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    const response = await fetch(
-      `http://localhost:5000/api/v1/get/updateAds/${idEdit}`,
-      requestOptions
-    );
-
-    if (response.status === 204) {
-      console.log("hello");
-      setDoneEdit(true);
-      setLoad(true);
-    }
   };
 
   return (
     <>
-      {/* <Stack direction="horizontal"> */}
-
       <Stack style={{ paddingLeft: "80px" }}>
         <div className="mx-3">
           <div className="mx-3 my-5">
@@ -266,17 +120,6 @@ const SellerProducts = () => {
             <hr style={{ border: "3px solid purple" }} className="mx-auto" />
           </div>
 
-          {/* <div className="container text-center">
-            <Button
-              variant="outline-dark py-2 px-3 my-5 fw-bold shadow-lg fs-5"
-              onClick={() => {
-                setShow(true);
-              }}
-            >
-              Add New Ad
-            </Button>
-          </div> */}
-
           <div className="d-flex justify-content-center align-items-center my-4">
             <Form.Group
               as={Row}
@@ -285,7 +128,7 @@ const SellerProducts = () => {
             >
               <Form.Label column sm="2" className="mx-3">
                 <Stack direction="horizontal" className="text-info mb-1 fs-4">
-                  <i class="fa-solid fa-magnifying-glass fa-beat-fade mx-1"></i>
+                  <i className="fa-solid fa-magnifying-glass fa-beat-fade mx-1"></i>
                   <b>Search:</b>
                 </Stack>
               </Form.Label>
@@ -298,7 +141,6 @@ const SellerProducts = () => {
                   placeholder="Type to search Products."
                   className="text-center shadow-lg"
                   aria-label="Search"
-                  // onClick={handleSearch}
                   onChange={handleSearch}
                 />
               </Col>
@@ -407,10 +249,6 @@ const SellerProducts = () => {
                   filteredProducts.map((product) => {
                     return (
                       <div className="my-4 col-md-6" key={product.id}>
-                        {/* <Link
-                        className="text-decoration-none"
-                        to={`/Product/${product.id}`}
-                      > */}
                         <Card
                           border="info"
                           style={{ width: "22rem" }}
@@ -482,8 +320,6 @@ const SellerProducts = () => {
                             </Card.Text>
                             <hr />
 
-                            {/* <Stack direction="horizontal" className=" px-5 text-primary"> */}
-
                             <div className="text-center">
                               <Button
                                 variant="info fw-bold shadow-lg mb-2 mx-2"
@@ -496,10 +332,8 @@ const SellerProducts = () => {
                                 Product Details
                               </Button>
                             </div>
-                            {/* </Stack> */}
                           </Card.Body>
                         </Card>
-                        {/* </Link> */}
                       </div>
                     );
                   })
@@ -512,10 +346,6 @@ const SellerProducts = () => {
                 products.map((product) => {
                   return (
                     <div className="my-4 col-md-6" key={product.id}>
-                      {/* <Link
-                        className="text-decoration-none"
-                        to={`/Product/${product.id}`}
-                      > */}
                       <Card
                         border="info"
                         style={{ width: "22rem" }}
@@ -582,8 +412,6 @@ const SellerProducts = () => {
                           </Card.Text>
                           <hr />
 
-                          {/* <Stack direction="horizontal" className=" px-5 text-primary"> */}
-
                           <div className="text-center">
                             <Button
                               variant="info fw-bold shadow-lg mb-2 mx-2"
@@ -591,17 +419,13 @@ const SellerProducts = () => {
                                 navigate(
                                   `/admin/sellers/product/${product.id}`
                                 );
-                                // setAdId(ad.id);
-                                // setCancel(true);
                               }}
                             >
                               Product Details
                             </Button>
                           </div>
-                          {/* </Stack> */}
                         </Card.Body>
                       </Card>
-                      {/* </Link> */}
                     </div>
                   );
                 })
@@ -614,12 +438,9 @@ const SellerProducts = () => {
           </div>
         </div>
       </Stack>
-      <div
-      //  style={{width: "55px"}}
-      >
+      <div>
         <Sidebar />
       </div>
-      {/* </Stack> */}
     </>
   );
 };

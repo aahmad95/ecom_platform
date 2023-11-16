@@ -8,7 +8,6 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // console.log(models, "===========");
       // define association here
       Category.belongsTo(models.User, {
         foreignKey: "userId",

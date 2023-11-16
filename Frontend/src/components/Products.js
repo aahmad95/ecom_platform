@@ -1,37 +1,22 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import categoryContext from "../context/cart/cartContext";
-import Button from "react-bootstrap/Button";
+import React, { useEffect, useState } from "react";
 import Badge from "react-bootstrap/Badge";
 import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import jwt_decode from "jwt-decode";
 const Products = () => {
   const param = useParams();
   const [category, setCategory] = useState("");
-  const navigate = useNavigate();
-  // const context = useContext(categoryContext);
-  // const { categories, getCategories } = context;
 
   const [isSearch, setIsSearch] = useState(false);
-
-  // const context = useContext(categoryContext);
-  // const { categories, getCategories } = context;
 
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // if (localStorage.getItem("token")) {
-    //   const authToken = localStorage.getItem("token");
-    //   var decoded = jwt_decode(authToken);
-    //   decoded.user.role !== "customer" && navigate("/404");
-    // }
-
     var requestOptions = {
       method: "GET",
       redirect: "follow",
@@ -59,23 +44,12 @@ const Products = () => {
     setFilteredProducts(searchProduct);
   };
 
-  //  const ref = useRef(null);
-  //  const refClose = useRef(null);
-  // const [category, setCategory] = useState({
-  //   id: "",
-  //   name: "",
-  //   image: "",
-  //   userId: "",
-  // });
   const getProducts = async () => {
     var requestOptions = {
       method: "GET",
       redirect: "follow",
     };
-    // console.log(categoryId);
-    // console.log(category);
-    // await setCategory(categoryId);
-    // console.log(category.categoryId);
+
     const response = await fetch(
       `http://localhost:5000/api/v1/product/getProductsByCategory/${param.categoryId}`,
       requestOptions
@@ -85,7 +59,6 @@ const Products = () => {
     setProducts(json);
   };
 
-  //   console.log(categoryId);
   return (
     <>
       <div className="mt-5 mx-3 my-5">
@@ -104,7 +77,7 @@ const Products = () => {
           <Form.Group as={Row} className="mb-3" controlId="validationCustom03">
             <Form.Label column sm="3">
               <Stack direction="horizontal" className="text-info mb-1 fs-4 ">
-                <i class="fa-solid fa-magnifying-glass fa-beat-fade mx-1"></i>
+                <i className="fa-solid fa-magnifying-glass fa-beat-fade mx-1"></i>
                 <b>Search:</b>
               </Stack>
             </Form.Label>
@@ -149,19 +122,11 @@ const Products = () => {
                           </Card.Title>
                           <Card.Text
                             className="text-wrap text-primary text-truncate"
-                            style={{ "max-width": "550px" }}
+                            style={{ maxWidth: "550px" }}
                           >
                             ${product.description}
                           </Card.Text>
 
-                          {/* <Button
-                            variant="success shadow-lg mb-3"
-                            onClick={() => {
-                              //   navigate(`/Category/${category.id}`);
-                            }}
-                          >
-                            Product Details
-                          </Button> */}
                           <div className="mx-3 text-start">
                             <small className="text-muted ">
                               {product.brand}
@@ -207,19 +172,11 @@ const Products = () => {
                           </Card.Title>
                           <Card.Text
                             className="text-wrap text-primary text-truncate"
-                            style={{ "max-width": "550px" }}
+                            style={{ maxWidth: "550px" }}
                           >
                             ${product.description}
                           </Card.Text>
 
-                          {/* <Button
-                            variant="success shadow-lg mb-3"
-                            onClick={() => {
-                              //   navigate(`/Category/${category.id}`);
-                            }}
-                          >
-                            Product Details
-                          </Button> */}
                           <div className="mx-3 text-start">
                             <small className="text-muted ">
                               {product.brand}

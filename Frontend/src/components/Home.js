@@ -1,51 +1,33 @@
 import ShowCarousel from "./ShowCarousel";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import categoryContext from "../context/cart/cartContext";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
-import Ads from "./admin/Ads";
 import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import jwt_decode from "jwt-decode";
 const Home = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
 
-  // const context = useContext(categoryContext);
-  // const { categories, getCategories } = context;
-
   const [filteredCategories, setFilteredCategories] = useState([]);
   useEffect(() => {
-    // if (localStorage.getItem("token")) {
-    //   const authToken = localStorage.getItem("token");
-    //   var decoded = jwt_decode(authToken);
-    //   decoded.user.role !== "customer" && navigate("/404");
-    // }
     getCategories();
     // eslint-disable-next-line
   }, []);
   const handleSearch = (event) => {
     setIsSearch(true);
     const value = event.target.value;
-    console.log(value);
+    // console.log(value);
     const searchCategory = categories.filter((category) => {
       return category.name.toLowerCase().includes(value.toLowerCase());
     });
     setFilteredCategories(searchCategory);
   };
-  //  const ref = useRef(null);
-  //  const refClose = useRef(null);
-  // const [category, setCategory] = useState({
-  //   id: "",
-  //   name: "",
-  //   image: "",
-  //   userId: "",
-  // });
+
   const getCategories = async () => {
     var requestOptions = {
       method: "GET",
@@ -81,7 +63,7 @@ const Home = () => {
           <Form.Group as={Row} className="mb-3" controlId="validationCustom03">
             <Form.Label column sm="3">
               <Stack direction="horizontal" className="text-info mb-1 fs-4 ">
-                <i class="fa-solid fa-magnifying-glass fa-beat-fade mx-1"></i>
+                <i className="fa-solid fa-magnifying-glass fa-beat-fade mx-1"></i>
                 <b>Search:</b>
               </Stack>
             </Form.Label>
@@ -108,7 +90,7 @@ const Home = () => {
                       className="text-decoration-none"
                       to={`/Category/${category.id}`}
                     >
-                      <Card.Img
+                      <Card
                         style={{ width: "19rem" }}
                         className="text-center shadow-lg mx-auto"
                       >
@@ -123,10 +105,7 @@ const Home = () => {
                           <Card.Title className=" fs-3 mb-3">
                             {category.name}
                           </Card.Title>
-                          {/* <Card.Text>
-              Some quick example text to build on the card title and make up
-              the bulk of the card's content.
-            </Card.Text> */}
+
                           <Button
                             variant="info shadow-lg mb-3"
                             onClick={() => {
@@ -136,7 +115,7 @@ const Home = () => {
                             Products
                           </Button>
                         </Card.Body>
-                      </Card.Img>
+                      </Card>
                     </Link>
                   </div>
                 ))
@@ -167,10 +146,7 @@ const Home = () => {
                         <Card.Title className=" fs-3 mb-3">
                           {category.name}
                         </Card.Title>
-                        {/* <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Card.Text> */}
+
                         <Button
                           variant="info shadow-lg mb-3"
                           onClick={() => {

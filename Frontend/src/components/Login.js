@@ -1,35 +1,21 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
-import Stack from "react-bootstrap/Stack";
 import Button from "react-bootstrap/Button";
 import { Link, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import icon from "../logo.svg";
-import * as formik from "formik";
-import * as yup from "yup";
-// import jwt_decode from "jsonwebtoken";
-// import { jwt_decode } from "jsonwebtoken";
+
 const Login = ({ reload }) => {
-  //   const jwt = require("jsonwebtoken");
-  //   var jwt = require("jsonwebtoken");
+  const [hide, setHide] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState("");
   const [validated, setValidated] = useState(false);
-  let navigate = useNavigate();
-  // const handleSignUp = () => {
-  //   navigate("/signup");
-  // };
-
-  //   const { Formik } = formik;
-
-  //   const schema = yup.object().shape({
-  //     eamil: yup.string().required(),
-  //     password: yup.string().required(),
-  //   });
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setHide(true);
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.stopPropagation();
@@ -54,83 +40,61 @@ const Login = ({ reload }) => {
       "http://localhost:5000/api/v1/users/loginUser",
       requestOptions
     );
-    const json = await response.json();
-    console.log(json);
+    if (response.status === 200) {
+      const json = await response.json();
+      console.log(json);
 
-    if (json.authToken) {
-      var decoded = await jwt_decode(json.authToken);
-      console.log(decoded);
-      setUser(decoded.user);
-      console.log(user);
+      if (json.authToken) {
+        var decoded = await jwt_decode(json.authToken);
+        setUser(decoded.user);
+        localStorage.setItem("token", json.authToken);
+        await reload();
 
-      //saving the auth-token in local-Storage and redirect
-      localStorage.setItem("token", json.authToken);
-
-      //   props.showAlert("Logged in Successfully.", "success");
-      reload();
-      if (decoded.user.role === "admin") {
-        setValidated(true);
-        navigate("/admin");
-      } else if (decoded.user.role === "seller") {
-        setValidated(true);
-        navigate("/seller/products");
-      } else if (decoded.user.role === "customer") {
-        setValidated(true);
-        navigate("/home");
+        if (decoded.user.role === "admin") {
+          setValidated(true);
+          navigate("/admin");
+        } else if (decoded.user.role === "seller") {
+          setValidated(true);
+          navigate("/seller/products");
+        } else if (decoded.user.role === "customer") {
+          setValidated(true);
+          navigate("/home");
+        }
       }
     }
-    // }
+    if (response.status === 204) {
+      setHide(false);
+    }
   };
   return (
-    // <Formik
-    //   validationSchema={schema}
-    //   onSubmit={console.log}
-    //   initialValues={{
-    //     email: "",
-    //     password: "",
-    //   }}
-    // >
-    //   {({ handleSubmit, handleChange, values, touched, errors }) => (
     <Form validated={validated} onSubmit={handleSubmit}>
-      {/* validated={validated} onSubmit={handleSubmit} */}
       <div className="d-flex justify-content-center align-items-center bg-white">
         <div className="shadow-lg pg-3 bg-white w-45 m-5 ">
-          {/* <Stack
-          gap={4}
-          className="pg-3 bg-white w-50 mt-5 mb-5 mt-5 col-md-5 mx-4"
-        > */}
-
           <div className="justify-content-center align-items-center  m-5 w-40 ">
             <div className="text-center">
               <img
                 src={icon}
-                width="65"
-                height="45"
-                className="img-fluid"
+                width="70"
+                height="65"
+                // className="img-fluid"
                 alt="E-commerce website logo"
               />
             </div>
 
-            <h1
-              className="text-center mb-5 "
-              // style={{ fontSize: "50px", color: "#9b32e0" }}
-            >
+            <h1 className="text-center mb-5 ">
               <b>Login</b>
             </h1>
 
             <Form.Group className="mb-3" controlId="validationCustom03">
               <Form.Label>
-                <i class="fa-solid fa-at fa-beat-fade mx-1"></i>
+                <i className="fa-solid fa-at fa-beat-fade mx-1"></i>
                 <b>Email address:</b>
               </Form.Label>
               <Form.Control
-                // name="email"
                 variant="outlined"
                 type="email"
                 placeholder="name@example.com"
                 required
-                // value={values.email}
-                // isInvalid={!!errors.city}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <Form.Text className="text-muted">
@@ -139,51 +103,36 @@ const Login = ({ reload }) => {
               <Form.Control.Feedback type="invalid">
                 Please provide a valid email.
               </Form.Control.Feedback>
-              {/* <Form.Control.Feedback type="invalid">
-                    {errors.email}
-                  </Form.Control.Feedback> */}
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="validationCustom04">
               <Form.Label>
-                <i class="fa-sharp fa-solid fa-key fa-beat-fade mx-1"></i>
+                <i className="fa-sharp fa-solid fa-key fa-beat-fade mx-1"></i>
                 <b>Password:</b>
               </Form.Label>
               <Form.Control
                 variant="outlined "
                 type="password"
-                // name="password"
                 placeholder="Enter your password here."
                 required
-                // value={values.password}
                 onChange={(e) => setPassword(e.target.value)}
-                // isInvalid={!!errors.state}
               />
 
               <Form.Control.Feedback type="invalid">
                 Please provide a valid password.
               </Form.Control.Feedback>
-              {/* <Form.Control.Feedback type="invalid">
-                    {errors.state}
-                  </Form.Control.Feedback> */}
             </Form.Group>
+            <div hidden={hide} className="text-danger text-center fa-bounce">
+              Invalid Credentials!
+            </div>
           </div>
-          {/* </Stack> */}
           <div className="mt-4 mb-2 grid text-center">
             <Button
               variant="outline-success mx-2 py-2 px-4 shadow-lg"
               type="submit"
-              // onClick={handleSubmit}
             >
               Login
             </Button>
-            {/* <Button
-              variant="outline-info mx-2 py-2 px-3 shadow-lg"
-              onClick={handleSignUp}
-            >
-              SignUp
-            </Button> */}
-            {/* <br /> */}
           </div>
           <div className=" mb-5 grid text-center">
             <Form.Text>
@@ -193,8 +142,6 @@ const Login = ({ reload }) => {
         </div>
       </div>
     </Form>
-    //   )}
-    // </Formik>
   );
 };
 

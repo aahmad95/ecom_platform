@@ -5,13 +5,12 @@ const getAllOrders = async (req, res) => {
   try {
     const order = await Order.findAll();
     if (order.length) {
-      return res.json(order);
+      return res.status(200).json(order);
     }
-    return res.json({ message: "There isn't any Order yet." });
+    return res.status(204).json({ message: "There isn't any Order yet." });
   } catch (err) {
     console.log(err);
-    // return res.status(500).json({ error: "something went wrong" });
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not retrieve Orders.",
     });
   }
@@ -32,16 +31,16 @@ const createOrder = async (req, res) => {
       status,
     });
 
-    return res.json(order);
+    return res.status(200).json(order);
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not create a new Order.",
     });
   }
 };
 
-// Get a Order By Id:
+// Get an Order By Id:
 const getOrderById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -49,18 +48,20 @@ const getOrderById = async (req, res) => {
       where: { id },
     });
     if (order) {
-      return res.json(order);
+      return res.status(200).json(order);
     }
-    return res.json({ message: "There isn't any Order of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any Order of this id exist." });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not find the Order.",
     });
   }
 };
 
-// Update a Order:
+// Update an Order:
 const updateOrder = async (req, res) => {
   try {
     const { id } = req.params;
@@ -70,23 +71,25 @@ const updateOrder = async (req, res) => {
     });
 
     if (order) {
-      return res.json({
+      return res.status(200).json({
         message: "Order updated successfully.",
         Order: await Order.findOne({
           where: { id },
         }),
       });
     }
-    return res.json({ message: "There isn't any Order of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any Order of this id exist." });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not update the Order.",
     });
   }
 };
 
-// Delete a Order:
+// Delete an Order:
 const deleteOrder = async (req, res) => {
   try {
     const { id } = req.params;
@@ -95,22 +98,24 @@ const deleteOrder = async (req, res) => {
       where: { id },
     });
     if (order) {
-      //   await order.destroy();
-      return res.json({
+      await order.destroy();
+      return res.status(200).json({
         message: "Order deleted successfully.",
       });
     }
 
-    return res.json({ message: "There isn't any Order of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any Order of this id exist." });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not delete the Order",
     });
   }
 };
 
-// Get a Order By UserId:
+// Get Orders By UserId:
 const getOrdersByUserId = async (req, res) => {
   try {
     const { userId } = req.params;

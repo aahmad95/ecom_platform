@@ -9,12 +9,10 @@ import jwt_decode from "jwt-decode";
 
 import Col from "react-bootstrap/Col";
 
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-// import Sidebar from "cdbreact/dist/components/Sidebar";
 
 const Seller = () => {
-  // let navigate = useNavigate();
   const [sellers, setSellers] = useState([]);
   const [searchValue, setSearchValue] = useState("Search Filter");
   const [filteredSellers, setFilteredSellers] = useState([]);
@@ -23,14 +21,6 @@ const Seller = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // if (!localStorage.getItem("token")) {
-    //   navigate("/login");
-    // } else {
-    //   const authToken = localStorage.getItem("token");
-    //   var decoded = jwt_decode(authToken);
-    //   decoded.user.role === "admin" ? getSellers() : navigate("/404");
-    // }
-
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
@@ -64,7 +54,6 @@ const Seller = () => {
   const handleSearch = (event) => {
     setIsSearch(true);
     const value = `${document.getElementById("validationCustom03").value}`;
-    // const value = event.target.value;
     console.log(value);
 
     const searchSeller = sellers.filter((user) => {
@@ -79,7 +68,6 @@ const Seller = () => {
       } else return false;
     });
     setFilteredSellers(searchSeller);
-    // console.log(filteredSellers);
   };
 
   return (
@@ -89,10 +77,7 @@ const Seller = () => {
           <Sidebar />
         </div>
         <Stack>
-          <div
-            className="container vh-100 p-0"
-            // style={{height:"100vh"}}
-          >
+          <div className="container vh-100 p-0">
             <div className="mx-5 my-5">
               <h1 className="text-center " style={{ color: "#9b32e0" }}>
                 <b>Sellers</b>
@@ -108,7 +93,7 @@ const Seller = () => {
               >
                 <Form.Label column sm="2" className="mx-3">
                   <Stack direction="horizontal" className="text-info mb-1 fs-4">
-                    <i class="fa-solid fa-magnifying-glass fa-fade mx-1"></i>
+                    <i className="fa-solid fa-magnifying-glass fa-fade mx-1"></i>
                     <b>Search:</b>
                   </Stack>
                 </Form.Label>
@@ -121,7 +106,6 @@ const Seller = () => {
                     placeholder="Type to search sellers."
                     className="text-center shadow-lg"
                     aria-label="Search"
-                    // onClick={handleSearch}
                     onChange={handleSearch}
                   />
                 </Col>
@@ -185,7 +169,6 @@ const Seller = () => {
             <div className="mx-2">
               {(!isSearch && sellers.length) ||
               (isSearch && filteredSellers.length) ? (
-                // responsive
                 <Table striped bordered hover className="shadow-lg">
                   <thead>
                     <tr>
@@ -225,7 +208,6 @@ const Seller = () => {
                                   onClick={() => {
                                     navigate(`/admin/sellers${user.id}`);
                                   }}
-                                  // type="submit"
                                 >
                                   Products
                                 </Button>
@@ -264,7 +246,6 @@ const Seller = () => {
                                 onClick={() => {
                                   navigate(`/admin/sellers/${user.id}`);
                                 }}
-                                // type="submit"
                               >
                                 Products
                               </Button>
@@ -286,9 +267,6 @@ const Seller = () => {
               )}
             </div>
           </div>
-
-          {/* </div> */}
-          {/* </Row> */}
         </Stack>
       </Stack>
     </>

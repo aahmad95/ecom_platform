@@ -6,11 +6,8 @@ import jwt_decode from "jwt-decode";
 const CartState = (props) => {
   const [orders, setOrders] = useState([]);
   const [orderDetails, setOrderDetails] = useState([]);
-  // let orderId;
-  // [{ productDetailId: "", quantity: 0 }]
-  const [orderItem, setOrderItem] = useState([]);
-  // const [orders, setOrders] = useState([]);
-  const host = "http://localhost:5000";
+  // [{ productId: "" , productDetailId: "" , quantity: 0 }]
+
   const [user, setUser] = useState("");
 
   useEffect(() => {
@@ -19,8 +16,7 @@ const CartState = (props) => {
       var decoded = jwt_decode(authToken);
       setUser(decoded.user);
     }
-    // console.log(decoded);
-    console.log("user: ", user);
+    // eslint-disable-next-line
   }, []);
 
   const checkout = async (subtotal, deliveryFee, address) => {
@@ -29,19 +25,10 @@ const CartState = (props) => {
     console.log("deliveryFee", deliveryFee);
     console.log("address", address);
 
-    // let price = 100;
-    // console.log(decoded);
-    // console.log(user);
-    // const orderId =
     const orderId = await createOrder(payment, deliveryFee, address);
-    // console.log("data:  ", data);
-    console.log("orderDetails:  ", orderDetails);
-    console.log("orderId", orderId);
+
     const items = [];
     const orderPromises = orderDetails.map(async (order) => {
-      console.log(">>>>>>>>>", order);
-      // console.log(order.product.price, order.quantity, order.productDetails.id);
-      // price = price + order.product.price * order.quantity;
       const item1 = {
         name: order.product.name,
         description: order.product.description,
@@ -61,13 +48,8 @@ const CartState = (props) => {
     });
     await Promise.all(orderPromises);
 
-    console.log("done");
     setOrders([]);
 
-    // console.log("username",user.username);
-    console.log("items", items);
-    // console.log("payment",payment);
-    // console.log("deliveryFee",deliveryFee);
     // send email for order placed confirmation:
     sendEmail(user.username, items, subtotal, deliveryFee, user.email);
   };
@@ -124,12 +106,8 @@ const CartState = (props) => {
       "http://localhost:5000/api/v1/order/createOrder",
       requestOptions
     );
-    const data = await response.json();
-    // orderId = await data.id;
-
-    console.log("Order:  ", data);
-    // console.log("orderId: ", orderId);
-    return data.id;
+    const order = await response.json();
+    return order.id;
   };
 
   const createOrderItem = async (price, quantity, productDetailId, orderId) => {
@@ -199,28 +177,6 @@ const CartState = (props) => {
     }
     return false;
   };
-  // const updateOrder = async (price) => {
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Content-Type", "application/json");
-
-  //   var raw = JSON.stringify({
-  //     payment: price,
-  //   });
-
-  //   var requestOptions = {
-  //     method: "PUT",
-  //     headers: myHeaders,
-  //     body: raw,
-  //     redirect: "follow",
-  //   };
-
-  // const response = await fetch(
-  //   `http://localhost:5000/api/v1/order/updateOrder/${orderId}`,
-  //   requestOptions
-  // );
-  // const data = await response.json();
-  // console.log("Updated Order: ", data);
-  // };
 
   return (
     <CartContext.Provider

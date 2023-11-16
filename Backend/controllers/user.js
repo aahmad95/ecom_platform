@@ -1,7 +1,6 @@
 const { User } = require("../models");
 const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
-// var email_template = require('../views/email.handlebars')
 
 const nodemailer = require("nodemailer");
 
@@ -9,19 +8,17 @@ const hbs = require("nodemailer-express-handlebars");
 const path = require("path");
 
 const Mailgen = require("mailgen");
-// require("dotenv").config();
-// const JWT_SECRET = process.env.JWT_SECRET;
+
 const JWT_SECRET = "HelloWorld";
+
 // Get All Users:
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll({
-      //   include: "student",
-    });
+    const users = await User.findAll({});
     if (users.length) {
-      return res.json(users);
+      return res.status(200).json(users);
     }
-    return res.json({ message: "There isn't any users yet." });
+    return res.status(204).json({ message: "There isn't any users yet." });
   } catch (err) {
     console.log(err);
     res.status(501).send({
@@ -38,7 +35,9 @@ const createUser = async (req, res) => {
       where: { email },
     });
     if (Email) {
-      return res.json({ message: "This email is already have an account." });
+      return res
+        .status(201)
+        .json({ message: "This email is already have an account." });
     }
     const salt = await bcrypt.genSalt(10);
     const secPass = await bcrypt.hash(password, salt);
@@ -60,12 +59,12 @@ const createUser = async (req, res) => {
         image: user.image,
       },
     };
+    console.log("user", user);
     const authToken = jwt.sign(data, JWT_SECRET);
 
-    return res.staus(200).json({ authToken });
+    return res.status(200).json({ authToken });
   } catch (err) {
     console.log(err);
-    // res.status(500).json(err);
     res.status(501).send({
       error: "Server Error: Could not create new user.",
     });
@@ -80,12 +79,13 @@ const getUserById = async (req, res) => {
       where: { id },
     });
     if (user) {
-      return res.json(user);
+      return res.status(200).json(user);
     }
-    return res.json({ message: "There isn't any User of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any User of this id exist." });
   } catch (err) {
     console.log(err);
-    // res.status(500).json(err);
     res.status(501).send({
       error: "Server Error: Could not find user.",
     });
@@ -102,12 +102,13 @@ const deleteUser = async (req, res) => {
     });
     if (user) {
       await user.destroy();
-      return res.json({ message: "User deleted successfully" });
+      return res.status(200).json({ message: "User deleted successfully" });
     }
-    return res.json({ message: "There isn't any User of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any User of this id exist." });
   } catch (err) {
     console.log(err);
-    // res.status(500).json(err);
     res.status(501).send({
       error: "Server Error: Could not able to delete the user.",
     });
@@ -137,16 +138,16 @@ const updateUser = async (req, res) => {
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-      // return res.json({ authToken });
       return res.status(200).json({
         message: "User updated successfully.",
         authToken,
       });
     }
-    return res.json({ message: "There isn't any User of this id exist." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any User of this id exist." });
   } catch (err) {
     console.log(err);
-    // res.status(500).json(err);
     res.status(501).send({
       error: "Server Error: Could not update the user.",
     });
@@ -161,20 +162,14 @@ const loginUser = async (req, res) => {
       where: { email },
     });
     if (!user) {
-      return res.json({
+      return res.status(204).json({
         message: "Please try to login with correct credentials.",
       });
     }
-    // if(password===user,password)
-    // console.log("user----->", user);
-    // console.log("user.password----->", user.password);
-    // console.log("password----->", password);
 
-    // returns true/false
     const passwordCompare = await bcrypt.compare(password, user.password);
-    // console.log("passwordCompare----->", passwordCompare);
     if (!passwordCompare) {
-      return res.json({
+      return res.status(204).json({
         message: "Please try to login with correct credentials.",
       });
     }
@@ -189,15 +184,15 @@ const loginUser = async (req, res) => {
       },
     };
     const authToken = jwt.sign(data, JWT_SECRET);
-    return res.json({ authToken });
+    return res.status(200).json({ authToken });
   } catch (err) {
     console.log(err);
-    // res.status(500).json(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not login user.",
     });
   }
 };
+
 const emailConfirmation = async (req, res) => {
   const { name, items, subtotal, deliveryFee, email } = req.body;
   console.log("Email:  ", email);
@@ -253,7 +248,6 @@ const emailConfirmation = async (req, res) => {
 
   // use a template file with nodemailer
   transporter.use("compile", hbs(handlebarOptions));
-  // /Users/algolix/Documents/Final Project/ecom_platform/Backend/views/email
 
   // {
   //   let MailGenerator = new Mailgen({
@@ -291,10 +285,10 @@ const emailConfirmation = async (req, res) => {
   var mailOptions = {
     from: '"E-Commerce Website" <sehar.algolix@gmail.com>',
 
-    to: "seharsaleem08@gmail.com", //email
+    to: "seharsaleem08@gmail.com", //user email from body
     subject: "Order Placed Successfully",
     template: "email",
-    // html: mail,// template: email.handlebars,
+    // html: mail,// template: email,
 
     context: {
       name: name,

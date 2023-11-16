@@ -1,8 +1,5 @@
 "use strict";
 
-const category = require("../models/category");
-const user = require("../models/user");
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {

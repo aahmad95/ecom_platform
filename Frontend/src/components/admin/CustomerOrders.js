@@ -1,23 +1,9 @@
 import React, { useEffect, useState } from "react";
-import ModalHeader from "react-bootstrap/ModalHeader";
-import categoryContext from "../../context/cart/cartContext";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import Modal from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import jwt_decode from "jwt-decode";
-import axios from "axios";
-import { Buffer } from "buffer";
 import Sidebar from "./Sidebar";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Stack from "react-bootstrap/Stack";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Table from "react-bootstrap/Table";
-import Dropdown from "react-bootstrap/Dropdown";
-import Image from "react-bootstrap/Image";
 import Badge from "react-bootstrap/Badge";
 
 // import closeButton from "react-bootstrap/ModalHeader";
@@ -25,6 +11,7 @@ import Badge from "react-bootstrap/Badge";
 const CustomerOrders = () => {
   const params = useParams();
   const [load, setLoad] = useState(false);
+
   const [customerName, setCustomerName] = useState();
 
   const [orders, setOrders] = useState("");
@@ -32,44 +19,24 @@ const CustomerOrders = () => {
   const [orderDetails, setOrdersDetails] = useState();
   // [{order: order, orderItems: {orderItem:orderItem, productDetail:productDetail, product: product}}]
 
-  // const [searchValue, setSearchValue] = useState("Search Filter");
-  // const [filteredProducts, setFilteredProducts] = useState([]);
-  // const [isSearch, setIsSearch] = useState(false);
-
   const navigate = useNavigate();
 
   useEffect(() => {
-    // if (!localStorage.getItem("token")) {
-    //   navigate("/login");
-    // } else {
-    //   const authToken = localStorage.getItem("token");
-    //   const decoded = jwt_decode(authToken);
-    //   if (decoded.user.role === "admin") {
-    //     // setUserId(decoded.user.id);
-
-    //     getCustomer(params.customerId);
-    //     getOrders(params.customerId);
-    //   } else navigate("/404");
-    // }
-
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
       const authToken = localStorage.getItem("token");
       const decoded = jwt_decode(authToken);
       if (decoded.user.role === "admin") {
-        // setUserId(decoded.user.id);
-
         getCustomer(params.customerId);
         getOrders(params.customerId);
       }
     }
-
+    setLoad(false);
     // eslint-disable-next-line
   }, [load]);
 
   const getCustomer = async (id) => {
-    // console.log(id);
     var requestOptions = {
       method: "GET",
       redirect: "follow",
@@ -80,9 +47,7 @@ const CustomerOrders = () => {
       requestOptions
     );
     const json = await response.json();
-    // console.log("jsonnnnnnnn", json);
     setCustomerName(json.username);
-    // console.log(sellerName);
   };
 
   const getOrders = async (userId) => {
@@ -125,17 +90,13 @@ const CustomerOrders = () => {
 
   return (
     <>
-      {/* <Stack direction="horizontal"> */}
-
       <Stack style={{ paddingLeft: "80px" }} gap={1}>
-        {/* <div className="mx-3"> */}
         <div className="mx-3 my-5">
           <h1 className="text-center " style={{ color: "#9b32e0" }}>
             <b>{customerName}'s Orders</b>
           </h1>
           <hr style={{ border: "3px solid purple" }} className="mx-auto" />
         </div>
-        {/* </div> */}
         <Stack gap={5} className="mx-5 px-5 mb-5">
           {orders && orders.length ? (
             orderDetails?.map((orderDetail, index) => {
@@ -143,7 +104,7 @@ const CustomerOrders = () => {
               return (
                 <div
                   key={index}
-                  class="d-flex justify-content-center align-items-center bg-white shadow-lg mt-2 mx-auto px-2"
+                  className="d-flex justify-content-center align-items-center bg-white shadow-lg mt-2 mx-auto px-2"
                 >
                   <Stack className="mb-3">
                     <div className="mt-5 mb-2 mx-3">
@@ -151,7 +112,7 @@ const CustomerOrders = () => {
                         className="text-center fs-2"
                         style={{ color: "#9b32e0" }}
                       >
-                        <b>Order No: {orderDetail.order.id}</b>
+                        <b>Order No: {orderDetails.length - index}</b>
                       </h1>
                       <hr
                         style={{ width: "180px", border: "3px solid purple" }}
@@ -172,7 +133,6 @@ const CustomerOrders = () => {
                     </div>
                     <Stack className="mx-3" gap={2}>
                       <h4 className="text-info fw-bold">Order Items:</h4>
-                      {/* responsive */}
                       <Table striped bordered hover className="shadow-lg ">
                         <thead>
                           <tr>
@@ -202,7 +162,7 @@ const CustomerOrders = () => {
                                     width="45px"
                                     height="45px"
                                     src={orderItem.productDetail.image}
-                                    alt={`${orderItem.product.name} Image`}
+                                    alt={`${orderItem.product.name}`}
                                   />
                                 </td>
                                 <td>{orderItem.product.description}</td>
@@ -221,12 +181,8 @@ const CustomerOrders = () => {
                                             "image",
                                           ].includes(key)
                                         ) {
-                                          // console.log(`/////////${key}: ${product[key]}`);
                                           if (orderItem.productDetail[key]) {
-                                            // console.log(`${key}: ${product[key]}`);
-
                                             return (
-                                              // <img src={product[key]}></img>
                                               <div key={index}>
                                                 <Stack
                                                   direction="horizontal"
@@ -274,7 +230,6 @@ const CustomerOrders = () => {
                         striped
                         bordered
                         hover
-                        // responsive
                         className="mx-auto  w-50 shadow-lg"
                       >
                         <tbody className="px-3">
@@ -333,12 +288,9 @@ const CustomerOrders = () => {
           )}
         </Stack>
       </Stack>
-      <div
-      //  style={{width: "55px"}}
-      >
+      <div>
         <Sidebar />
       </div>
-      {/* </Stack> */}
     </>
   );
 };

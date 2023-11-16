@@ -1,25 +1,16 @@
 import React, { useEffect, useState } from "react";
-import ModalHeader from "react-bootstrap/ModalHeader";
-import categoryContext from "../../context/cart/cartContext";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import jwt_decode from "jwt-decode";
-import axios from "axios";
-import { Buffer } from "buffer";
 import Sidebar from "./Sidebar";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Stack from "react-bootstrap/Stack";
-import { Link, useNavigate } from "react-router-dom";
-import Table from "react-bootstrap/Table";
+import { useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import Image from "react-bootstrap/Image";
-
-// import closeButton from "react-bootstrap/ModalHeader";
 
 const Ads = () => {
   const [load, setLoad] = useState(false);
@@ -55,17 +46,6 @@ const Ads = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // if (!localStorage.getItem("token")) {
-    //   navigate("/login");
-    // } else {
-    //   const authToken = localStorage.getItem("token");
-    //   const decoded = jwt_decode(authToken);
-    //   if (decoded.user.role === "admin") {
-    //     setUserId(decoded.user.id);
-    //     getAds();
-    //   } else navigate("/404");
-    // }
-
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
@@ -80,9 +60,6 @@ const Ads = () => {
 
     // eslint-disable-next-line
   }, [load, userId]);
-  // useEffect(()=>{
-  //   console.log('Ads', ads);
-  // }, [ads])
 
   const getAds = async () => {
     var requestOptions = {
@@ -116,7 +93,6 @@ const Ads = () => {
 
   const handleSearch = (event) => {
     setIsSearch(true);
-    //  const value = `${document.getElementById("validationCustom03").value}`;
     const value = event.target.value;
     console.log(value);
 
@@ -129,19 +105,12 @@ const Ads = () => {
       }
       if (searchValue === "Priority") {
         const str = ad.priority.toString();
-        // console.log(str);
         return str.toLowerCase().includes(value.toLowerCase());
       } else return false;
     });
     setFilteredAds(searchAd);
     console.log(filteredAds);
   };
-
-  // const context = useContext(categoryContext);
-  // const { categories, getCategories } = context;
-
-  // const handleClose = () => setShow(false);
-  // const handleShow = () => setShow(true);
 
   const handleAdd = async (e) => {
     e.preventDefault();
@@ -185,13 +154,10 @@ const Ads = () => {
       requestOptions
     );
     const json = await response.json();
-    // console.log('Usename ---->>>', json)
     return json.username;
   };
 
   const handleDelete = async (adId) => {
-    // e.preventDefault();
-
     var requestOptions = {
       method: "DELETE",
       redirect: "follow",
@@ -241,8 +207,6 @@ const Ads = () => {
 
   return (
     <>
-      {/* <Stack direction="horizontal"> */}
-
       <Stack style={{ paddingLeft: "80px" }}>
         <div className="mx-3">
           <div className="mx-3 my-5">
@@ -271,7 +235,7 @@ const Ads = () => {
             >
               <Form.Label column sm="2" className="mx-3">
                 <Stack direction="horizontal" className="text-info mb-1 fs-4">
-                  <i class="fa-solid fa-magnifying-glass fa-beat-fade mx-1"></i>
+                  <i className="fa-solid fa-magnifying-glass fa-beat-fade mx-1"></i>
                   <b>Search:</b>
                 </Stack>
               </Form.Label>
@@ -284,7 +248,6 @@ const Ads = () => {
                   placeholder="Type to search Ad."
                   className="text-center shadow-lg"
                   aria-label="Search"
-                  // onClick={handleSearch}
                   onChange={handleSearch}
                 />
               </Col>
@@ -350,15 +313,8 @@ const Ads = () => {
               {isSearch && filteredAds ? (
                 filteredAds.length ? (
                   filteredAds.map((ad) => {
-                    //  userName=getUserName(ad.userId)
-                    console.log("ads", ads);
-                    console.log("Username", ad, ad.user);
                     return (
                       <div className="my-4 col-md-6 " key={ad.id}>
-                        {/* <Link
-                        className="text-decoration-none"
-                        to={`/Product/${product.id}`}
-                      > */}
                         <Card
                           border="info"
                           style={{ width: "32rem" }}
@@ -376,10 +332,6 @@ const Ads = () => {
                           />
 
                           <Card.Body>
-                            {/* <Card.Title className="fs-3">
-                              {ad.name}
-                            </Card.Title> */}
-
                             <Card.Text className="fs-4">
                               <Stack direction="horizontal" className="mx-3">
                                 <div>
@@ -393,24 +345,22 @@ const Ads = () => {
                               </Stack>
                             </Card.Text>
 
-                            {/* <Stack direction="horizontal" className=" px-5 text-primary"> */}
-
                             <div className="text-center">
                               <Button
                                 variant="info shadow-lg mb-3 mx-2 px-4"
                                 onClick={() => {
-                                  //   navigate(`/Category/${category.id}`);
+                                  setIdEdit(ad.id);
+                                  setImageEdit(ad.image);
+                                  setPriorityEdit(ad.priority);
+                                  setNameEdit(ad.name);
+                                  setEdit(true);
                                 }}
                               >
                                 Edit Ad
                               </Button>
-                              {/* </div>
-                            
-                                <div className="ms-auto"> */}
                               <Button
                                 variant="danger shadow-lg mb-3 mx-2"
                                 onClick={() => {
-                                  //   navigate(`/Category/${category.id}`);
                                   setAdId(ad.id);
                                   setCancel(true);
                                 }}
@@ -418,10 +368,8 @@ const Ads = () => {
                                 Delete Ad
                               </Button>
                             </div>
-                            {/* </Stack> */}
                           </Card.Body>
                         </Card>
-                        {/* </Link> */}
                       </div>
                     );
                   })
@@ -432,15 +380,8 @@ const Ads = () => {
                 )
               ) : ads.length ? (
                 ads.map((ad) => {
-                  //  userName=getUserName(ad.userId)
-                  // console.log("ads", ads);
-                  // console.log("Username", ad, ad.user);
                   return (
                     <div className="my-4 col-md-6 " key={ad.id}>
-                      {/* <Link
-                        className="text-decoration-none"
-                        to={`/Product/${product.id}`}
-                      > */}
                       <Card
                         border="info"
                         style={{ width: "32rem" }}
@@ -458,10 +399,6 @@ const Ads = () => {
                         />
 
                         <Card.Body>
-                          {/* <Card.Title className="fs-3">
-                              {ad.name}
-                            </Card.Title> */}
-
                           <Card.Text className="fs-4">
                             <Stack direction="horizontal" className="mx-3">
                               <div>
@@ -474,8 +411,6 @@ const Ads = () => {
                               </div>
                             </Stack>
                           </Card.Text>
-
-                          {/* <Stack direction="horizontal" className=" px-5 text-primary"> */}
 
                           <div className="text-center">
                             <Button
@@ -490,13 +425,10 @@ const Ads = () => {
                             >
                               Edit Ad
                             </Button>
-                            {/* </div>
-                            
-                                <div className="ms-auto"> */}
+
                             <Button
                               variant="danger shadow-lg mb-3 mx-2"
                               onClick={() => {
-                                //   navigate(`/Category/${category.id}`);
                                 setAdId(ad.id);
                                 setCancel(true);
                               }}
@@ -504,10 +436,8 @@ const Ads = () => {
                               Delete Ad
                             </Button>
                           </div>
-                          {/* </Stack> */}
                         </Card.Body>
                       </Card>
-                      {/* </Link> */}
                     </div>
                   );
                 })
@@ -540,7 +470,6 @@ const Ads = () => {
                 <Form.Group className="mb-3" controlId="title">
                   <Form.Label className="fs-3">Ad Name:</Form.Label>
                   <Form.Control
-                    // value={name}
                     onChange={(e) => setName(e.target.value)}
                     type="text"
                     required
@@ -549,12 +478,10 @@ const Ads = () => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="priority">
                   <Form.Label className="fs-3">Set Priority:</Form.Label>
-                  <Form.Check // prettier-ignore
+                  <Form.Check
                     className="mx-3 fs-3"
                     type="switch"
                     id="custom-switch"
-                    // defaultChecked={priority}
-
                     onChange={(e) => {
                       setPriority(e.target.checked);
                     }}
@@ -568,18 +495,13 @@ const Ads = () => {
                     size="md"
                     required
                     onChange={(event) => {
-                      //   setImage(e.target.files[0]);
-
                       const file = event.target.files[0];
                       if (file) {
                         const reader = new FileReader();
 
                         reader.onload = (e) => {
                           const imageDataURL = e.target.result;
-
-                          // console.log("Base 64 -> ", base64);
                           // You can use imageDataURL as a base64-encoded image string.
-                          // console.log(imageDataURL);
                           setImage(imageDataURL);
                         };
                         reader.readAsDataURL(file);
@@ -597,11 +519,7 @@ const Ads = () => {
                 >
                   Cancel
                 </Button>
-                <Button
-                  variant="success shadow-lg fw-bold p-2"
-                  // onClick={handleAdd}
-                  type="submit"
-                >
+                <Button variant="success shadow-lg fw-bold p-2" type="submit">
                   Add new Ad
                 </Button>
               </Modal.Footer>
@@ -615,7 +533,6 @@ const Ads = () => {
             setModal(false);
             setShow(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -650,7 +567,6 @@ const Ads = () => {
           onHide={() => {
             setCancel(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -668,7 +584,6 @@ const Ads = () => {
             <Button
               variant="info shadow-lg fw-bold px-4"
               onClick={() => {
-                // if(orderId)
                 handleDelete(adId);
                 setCancel(false);
               }}
@@ -692,7 +607,6 @@ const Ads = () => {
           onHide={() => {
             setDel(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -749,11 +663,10 @@ const Ads = () => {
               </Form.Group>
               <Form.Group className="mb-3" controlId="priority">
                 <Form.Label className="fs-3">Set Priority:</Form.Label>
-                <Form.Check // prettier-ignore
+                <Form.Check
                   className="mx-3 fs-3"
                   type="switch"
                   id="custom-switch"
-                  // defaultChecked={priority}
                   checked={priorityEdit}
                   onChange={(e) => {
                     setPriorityEdit(e.target.checked);
@@ -778,18 +691,13 @@ const Ads = () => {
                   type="file"
                   size="md"
                   onChange={(event) => {
-                    //   setImage(e.target.files[0]);
-
                     const file = event.target.files[0];
                     if (file) {
                       const reader = new FileReader();
 
                       reader.onload = (e) => {
                         const imageDataURL = e.target.result;
-
-                        // console.log("Base 64 -> ", base64);
                         // You can use imageDataURL as a base64-encoded image string.
-                        // console.log(imageDataURL);
                         setImageEdit(imageDataURL);
                       };
                       reader.readAsDataURL(file);
@@ -809,7 +717,6 @@ const Ads = () => {
               </Button>
               <Button
                 variant="success shadow-lg fw-bold p-2 px-4"
-                // onClick={handleAdd}
                 type="submit"
               >
                 Edit Ad
@@ -824,7 +731,6 @@ const Ads = () => {
           onHide={() => {
             setDoneEdit(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -853,12 +759,9 @@ const Ads = () => {
           </Modal.Body>
         </Modal>
       </Stack>
-      <div
-      //  style={{width: "55px"}}
-      >
+      <div>
         <Sidebar />
       </div>
-      {/* </Stack> */}
     </>
   );
 };

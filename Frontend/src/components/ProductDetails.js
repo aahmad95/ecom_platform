@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-// import Image1 from "./CarouselImages/Image1.jpg";
+import React, { useContext, useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -8,13 +7,11 @@ import Stack from "react-bootstrap/Stack";
 import Button from "react-bootstrap/Button";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useNavigate, useParams } from "react-router-dom";
-import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
 import cartContext from "../context/cart/cartContext";
 import Login from "./Login";
-import jwt_decode from "jwt-decode";
-// import { renderItem } from CarouselProps;
-const ProductDetails = (props) => {
+
+const ProductDetails = ({ reload }) => {
   const param = useParams();
   const context = useContext(cartContext);
   const { orders, setOrders } = context;
@@ -24,10 +21,8 @@ const ProductDetails = (props) => {
   const [quantity, setQuantity] = useState(0);
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState(false);
-  // let q = 0;
 
   const [productDetailId, setProductDetailId] = useState(0);
-  //   console.log(param);
   const navigate = useNavigate();
   const handleClose = () => {
     setShow(false);
@@ -35,11 +30,6 @@ const ProductDetails = (props) => {
   };
 
   useEffect(() => {
-    // if (localStorage.getItem("token")) {
-    //   const authToken = localStorage.getItem("token");
-    //   var decoded = jwt_decode(authToken);
-    //   decoded.user.role !== "customer" && navigate("/404");
-    // }
     var requestOptions = {
       method: "GET",
       redirect: "follow",
@@ -54,7 +44,6 @@ const ProductDetails = (props) => {
         setProduct(result);
       })
       .catch((error) => console.log("error", error));
-    // console.log(product);
     getProductDetails();
 
     // eslint-disable-next-line
@@ -70,39 +59,23 @@ const ProductDetails = (props) => {
       `http://localhost:5000/api/v1/productDetail/getProductDetailsByProduct/${param.productId}`,
       requestOptions
     );
-    // console.group();
-    // console.log("Products Details Response => ", response);
     const json = await response.json();
-    // console.log(json);
     const available = json.filter((productDetail) => {
       return productDetail.stock > 0;
     });
     setProductDetails(available);
 
-    // console.log("product details====>", productDetails);
-    // console.groupEnd();
     const imageArr = [];
     available.forEach(async (productDetail) => {
-      // console.log(productDetail);
       productDetail.image.forEach(async (i) => {
         if (!imageArr.includes(i)) {
           imageArr.push(i);
         }
       });
     });
-    // console.log(imageArr);
     setImages(imageArr);
-    // console.log(images);
-    // console.log(productDetails);
   };
   const handleButton = (event) => {
-    // setProductDetailId(event.target.id);
-
-    // console.log(event);
-    // console.log(event.target.id);
-    // console.log(event.target.checked);
-    // console.log(productDetails);
-    // console.log(productDetails[0].id);
     if (event.target.checked) {
       setProductDetailId(event.target.id);
       setQuantity(0);
@@ -115,11 +88,8 @@ const ProductDetails = (props) => {
     } else if (productDetailId === event.target.id) {
       setProductDetailId(0);
     }
-    // console.log(productDetailId);
-    // event.target.checked = "true";
   };
   const handleAddToCart = () => {
-    // q = quantity;
     if (!localStorage.getItem("token")) {
       setShow(true);
     } else if (localStorage.getItem("token")) {
@@ -135,8 +105,6 @@ const ProductDetails = (props) => {
         product.push({ productDetailId, quantity });
       }
 
-      // console.log(q);
-
       setOrders(product);
 
       for (let i = 0; i < productDetails.length; i++) {
@@ -146,16 +114,7 @@ const ProductDetails = (props) => {
       }
       setQuantity(0);
       setModal(true);
-
-      // setTimeout(() => {
-
-      // }, 1000);
     }
-
-    // var decoded = await jwt_decode(json.authToken);
-    // console.log(decoded);
-    // await setUser(decoded.user);
-    // console.log(user);
   };
 
   return (
@@ -177,43 +136,16 @@ const ProductDetails = (props) => {
           <Col className="gx-5 col-5">
             <Carousel className="border border-info shadow-lg mb-5">
               {images.length ? (
-                images.map((image) => {
+                images.map((image, index) => {
                   return (
-                    <div key={image}>
-                      <img
-                        width="50%"
-                        height="70%"
-                        // className="d-inline-block align-top mx-4"
-                        alt="Product Image"
-                        src={image}
-                      />
+                    <div key={index}>
+                      <img width="50%" height="70%" alt="Product" src={image} />
                     </div>
                   );
                 })
               ) : (
                 <div>No Images to show.</div>
               )}
-
-              {/* <div>
-                <img
-                  width="50%"
-                  height="70%"
-                  // className="d-inline-block align-top mx-4"
-                  alt="Ad"
-                  src="https://st2.depositphotos.com/1105977/5461/i/950/depositphotos_54615585-stock-photo-old-books-on-wooden-table.jpg"
-                />
-                <p className="legend">Books 2</p>
-              </div>
-              <div>
-                <img
-                  width="50%"
-                  height="70%"
-                  // className="d-inline-block align-top mx-4"
-                  alt="Ad"
-                  src="https://thumbs.dreamstime.com/z/old-book-flying-letters-magic-light-background-bookshelf-library-ancient-books-as-symbol-knowledge-history-218640948.jpg?w=992"
-                />
-                <p className="legend">Books 3</p>
-              </div> */}
             </Carousel>
           </Col>
 
@@ -226,29 +158,26 @@ const ProductDetails = (props) => {
             <hr />
             <h2 className="text-danger">Rs. {product.price}</h2>
             <hr />
-            {/* <Stack direction="horizontal" gap={1}>
-              <div className="p-2 fs-4 text-muted">Color:</div>
-              <div className="p-2 text-dark"> */}
-            {/* <Stack> */}
-            {/* {console.group()} */}
+
             <div className="p-2 fs-5 text-dark">Please Select the Options:</div>
 
             <div className="mx-4 my-3">
               {productDetails &&
                 productDetails.map((product) => {
-                  // console.log("product=========", product);
                   return (
-                    <Stack direction="horizontal" className="my-3" gap={1}>
+                    <Stack
+                      direction="horizontal"
+                      className="my-3"
+                      gap={1}
+                      key={product.id}
+                    >
                       <input
-                        // checked={productDetailId === product.id}
                         type="checkbox"
-                        class="form-check-input mx-3"
+                        className="form-check-input mx-3"
                         id={product.id}
                         onClick={handleButton}
-                        // console.log("id------", productDetailId);}
-                        // onClick={}
                       />
-                      {Object.keys(product).map((key) => {
+                      {Object.keys(product).map((key, index) => {
                         if (
                           ![
                             "createdAt",
@@ -258,25 +187,25 @@ const ProductDetails = (props) => {
                             "stock",
                           ].includes(key)
                         ) {
-                          // console.log(`/////////${key}: ${product[key]}`);
                           if (product[key]) {
-                            // console.log(`${key}: ${product[key]}`);
                             if (key === "image") {
                               return (
                                 <img
                                   className="border border-dark shadow-lg"
                                   width="50px"
                                   height="50px"
-                                  // className="d-inline-block align-top mx-4"
                                   alt="Ad"
                                   src={product[key]}
                                 />
                               );
                             } else {
                               return (
-                                // <img src={product[key]}></img>
                                 <>
-                                  <Stack direction="horizontal" gap={1}>
+                                  <Stack
+                                    key={index}
+                                    direction="horizontal"
+                                    gap={1}
+                                  >
                                     <div className="p-2 fs-5 text-muted">
                                       {key}:{" "}
                                     </div>
@@ -289,6 +218,7 @@ const ProductDetails = (props) => {
                             }
                           }
                         }
+                        return false;
                       })}
                     </Stack>
                   );
@@ -323,10 +253,7 @@ const ProductDetails = (props) => {
                 &#43;
               </Button>
             </div>
-            {/* {console.groupEnd()} */}
-            {/* </Stack> */}
-            {/* </div> */}
-            {/* </Stack> */}
+
             <div className="text-center mb-4">
               <Button
                 disabled={!(quantity && productDetailId)}
@@ -361,7 +288,7 @@ const ProductDetails = (props) => {
             Please login first for adding this product to cart.
           </div>
 
-          <Login />
+          <Login reload={reload} />
           <Button
             variant="danger shadow-lg fs-4 fw-bold px-4"
             onClick={() => {
@@ -372,22 +299,12 @@ const ProductDetails = (props) => {
           </Button>
         </Modal.Body>
 
-        <Modal.Footer>
-          {/* <Button
-            variant="info shadow-lg fw-bold"
-            onClick={() => {
-              navigate("/login");
-            }}
-          >
-            Login
-          </Button> */}
-        </Modal.Footer>
+        <Modal.Footer></Modal.Footer>
       </Modal>
 
       <Modal
         show={modal}
         onHide={handleClose}
-        // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         className="text-center"

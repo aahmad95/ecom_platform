@@ -1,7 +1,5 @@
 "use strict";
 
-const user = require("../models/user");
-
 /** @type {import('sequelize-cli').Migration} */
 
 module.exports = {
@@ -25,19 +23,12 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        // references: {
-        //   model: user,
-        //   key: "id",
-        // },
+
         references: {
           model: "Users", //table name
           key: "id",
         },
       },
-      //       Users.hasMany(Categories, {
-      //   foreignKey: 'userId',
-      //   sourceKey: "id"
-      // }),
 
       createdAt: {
         allowNull: false,

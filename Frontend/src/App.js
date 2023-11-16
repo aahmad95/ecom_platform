@@ -1,19 +1,14 @@
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useNavigate,
-} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import CartState from "./context/cart/CartState";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
-import CartState from "./context/cart/CartState";
 import Category from "./components/admin/Category";
 import AdminPage from "./components/AdminPage";
-import User from "./components/admin/User";
 import Seller from "./components/admin/Seller";
 import Login from "./components/Login";
-import Dashboard from "./components/admin/Dashboard";
 import Ads from "./components/admin/Ads";
 import SignUp from "./components/SignUp";
 import Products from "./components/Products";
@@ -29,10 +24,6 @@ import SellerProductDetails from "./components/admin/SellerProductDetails";
 import CustomerOrders from "./components/admin/CustomerOrders";
 import Orders from "./components/Orders";
 import SellerSignUp from "./components/SellerSignUp";
-import SellerHome from "./components/SellerHome";
-import { useEffect, useState } from "react";
-import Sidebar from "./components/admin/Sidebar";
-import jwt_decode from "jwt-decode";
 import ProductsOfSeller from "./components/seller/ProductsOfSeller";
 import SellerCategories from "./components/seller/SellerCategories";
 import ProductDetailsOfSeller from "./components/seller/ProductDetailsOfSeller";
@@ -43,14 +34,14 @@ function App() {
   const [reload, setReload] = useState(false);
   const [user, setUser] = useState("");
   useEffect(() => {
+    if (reload === true) {
+      setReload(false);
+    }
     if (localStorage.getItem("token")) {
       const authToken = localStorage.getItem("token");
       const decoded = jwt_decode(authToken);
 
       setUser(decoded.user.role);
-    }
-    if (reload === true) {
-      setReload(false);
     }
   }, [reload]);
 
@@ -62,10 +53,8 @@ function App() {
     <div className=".app">
       <CartState>
         <Router>
-          <Navbar reload={reload} />
-          {/* {user.role  === "seller" ? <Sidebar /> : ""} */}
+          <Navbar reload={reload} setReload={setReload} />
 
-          {/* <Route exact path="/navbar" element={<Navbar />} /> */}
           {!localStorage.getItem("token") && (
             <Routes>
               <Route
@@ -86,7 +75,7 @@ function App() {
               <Route
                 exact
                 path="/product/:productId"
-                element={<ProductDetails />}
+                element={<ProductDetails reload={refreshHandler} />}
               />
               <Route path="*" element={<NotFound user={user} />} />
             </Routes>
@@ -186,25 +175,9 @@ function App() {
               <Route path="*" element={<NotFound user={user} />} />
             </Routes>
           )}
-          {/* <Routes> */}
-          {/* Seller */}
-
-          {/* Admin */}
-
-          {/* The catch-all route for undefined URLs */}
-
-          {/* <Route exact path="404" element={<NotFound />} /> */}
-          {/* <Route exact path="/admin/dashboard" element={<Dashboard />} /> */}
-          {/* <Route exact path="/seller" element={<SellerHome />} /> */}
-          {/* </Routes> */}
         </Router>
       </CartState>
       <Footer />
-      {/* <Router>
-        <Routes>
-      
-      </Routes>
-        </Router> */}
     </div>
   );
 }

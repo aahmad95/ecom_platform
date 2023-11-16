@@ -1,5 +1,3 @@
-const multer = require("multer");
-const path = require("path");
 const { ProductDetail } = require("../models");
 
 //Get All ProductDetails:
@@ -7,12 +5,14 @@ const getAllProductDetails = async (req, res) => {
   try {
     const productDetail = await ProductDetail.findAll();
     if (productDetail.length) {
-      return res.json(productDetail);
+      return res.status(200).json(productDetail);
     }
-    return res.json({ message: "There isn't any Product Details yet." });
+    return res
+      .status(204)
+      .json({ message: "There isn't any Product Details yet." });
   } catch (err) {
     console.log(err);
-    res.status(501).send({
+    res.status(500).send({
       error: "Server Error: Could not retrieve ProductDetails.",
     });
   }
@@ -44,15 +44,6 @@ const createProductDetail = async (req, res) => {
       volume,
       shelfLife,
     } = req.body;
-
-    // const product = await ProductDetail.findOne({
-    //   where: { productId },
-    // });
-    // if (product) {
-    //   return res.json({
-    //     message: "The ProductDetails for this product already exist.",
-    //   });
-    // }
 
     const productDetail = await ProductDetail.create({
       productId,
@@ -161,11 +152,12 @@ const deleteProductDetail = async (req, res) => {
     });
   }
 };
+
 // Get all ProductDetails of a Product:
 const getProductDetailsByProduct = async (req, res) => {
   try {
     const { productId } = await req.params;
-    // console.log("categoryId----->", categoryId);
+
     const productDetails = await ProductDetail.findAll({
       where: { productId },
     });
@@ -182,6 +174,7 @@ const getProductDetailsByProduct = async (req, res) => {
     });
   }
 };
+
 // Delete all ProductDetails of a Product:
 const deleteProductDetailsOfProduct = async (req, res) => {
   try {

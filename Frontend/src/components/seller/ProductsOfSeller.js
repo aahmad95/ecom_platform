@@ -1,43 +1,23 @@
 import React, { useEffect, useState } from "react";
-import ModalHeader from "react-bootstrap/ModalHeader";
-import categoryContext from "../../context/cart/cartContext";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import jwt_decode from "jwt-decode";
-import axios from "axios";
-import { Buffer } from "buffer";
 import Sidebar from "../admin/Sidebar";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Stack from "react-bootstrap/Stack";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import Table from "react-bootstrap/Table";
+import { useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import Image from "react-bootstrap/Image";
 import Badge from "react-bootstrap/Badge";
 
-// import closeButton from "react-bootstrap/ModalHeader";
-
 const ProductsOfSeller = () => {
-  // const params = useParams();
-
   const [load, setLoad] = useState(false);
 
-  // const [priority, setPriority] = useState(false);
   const [sellerName, setSellerName] = useState();
   const [seller, setSeller] = useState();
-
-  // const [edit, setEdit] = useState(false);
-  // const [idEdit, setIdEdit] = useState("");
-  // const [nameEdit, setNameEdit] = useState("");
-  // const [imageEdit, setImageEdit] = useState("");
-  // const [priorityEdit, setPriorityEdit] = useState();
-
-  // const [doneEdit, setDoneEdit] = useState(false);
 
   const [products, setProducts] = useState([]);
 
@@ -64,7 +44,6 @@ const ProductsOfSeller = () => {
 
   // Edit Product:
   const [edit, setEdit] = useState(false);
-  // const [categories, setCategories] = useState([]);
   const [editId, setEditId] = useState("");
   const [editName, setEditName] = useState("");
   const [editBrand, setEditBrand] = useState("");
@@ -93,25 +72,18 @@ const ProductsOfSeller = () => {
 
       setSeller(decoded.user);
       setSellerName(decoded.user.username);
-      // getSeller();
 
       if (decoded.user.role === "seller") {
-        // setUserId(decoded.user.id);
         getProducts(decoded.user.id);
         getCategories();
-        // getSeller(seller.id);
       }
     }
     setLoad(false);
 
     // eslint-disable-next-line
   }, [load]);
-  // useEffect(()=>{
-  //   console.log('Ads', ads);
-  // }, [ads])
 
   const getProducts = async (sellerId) => {
-    // console.log("get Products");
     var requestOptions = {
       method: "GET",
       redirect: "follow",
@@ -121,7 +93,6 @@ const ProductsOfSeller = () => {
       `http://localhost:5000/api/v1/product/getProductsOfUser/${sellerId}`,
       requestOptions
     );
-    // console.log(response);
     if (response.status === 401) {
       setProducts([]);
     } else if (response.status === 200) {
@@ -133,9 +104,6 @@ const ProductsOfSeller = () => {
       });
       await Promise.all(categoryNamePromises);
       setProducts(json);
-      console.log("json response", json);
-      // setAds(json);
-      console.log("products:    ", products);
     }
   };
   const getCategoryName = async (id) => {
@@ -199,18 +167,14 @@ const ProductsOfSeller = () => {
       "http://localhost:5000/api/v1/product/createProduct",
       requestOptions
     );
-    // console.log("response-------", response);
     if (response.status === 200) {
       setModal(true);
       setLoad(true);
     }
-    const json = await response.json();
-    // console.log("json------", json);
   };
 
   const handleSearch = (event) => {
     setIsSearch(true);
-    //  const value = `${document.getElementById("validationCustom03").value}`;
     const value = event.target.value;
     console.log(value);
     const searchProduct = products.filter((product) => {
@@ -232,20 +196,13 @@ const ProductsOfSeller = () => {
       method: "GET",
       redirect: "follow",
     };
-    // const category = [];
     const response = await fetch(
       "http://localhost:5000/api/v1/category/getAllCategory",
       requestOptions
     );
-    // console.log(response);
     if (response.status === 200) {
       const json = await response.json();
-      // json.map((category) => {
-      //   const cat = { category.id: `${category.name}` }
-      //   category.push(cat);
-      // })
       setCategories(json);
-      // console.log("categories", json);
     }
   };
 
@@ -256,7 +213,6 @@ const ProductsOfSeller = () => {
 
     var raw = JSON.stringify({
       name: editName,
-      // userId: seller.id,
       categoryId: editCategoryId,
       brand: editBrand,
       description: editDescription,
@@ -307,8 +263,6 @@ const ProductsOfSeller = () => {
   };
   return (
     <>
-      {/* <Stack direction="horizontal"> */}
-
       <Stack style={{ paddingLeft: "80px" }}>
         <div className="mx-3">
           <div className="mx-3 my-5">
@@ -350,7 +304,6 @@ const ProductsOfSeller = () => {
                   placeholder="Type to search Products."
                   className="text-center shadow-lg"
                   aria-label="Search"
-                  // onClick={handleSearch}
                   onChange={handleSearch}
                 />
               </Col>
@@ -459,10 +412,6 @@ const ProductsOfSeller = () => {
                   filteredProducts.map((product) => {
                     return (
                       <div className="my-4 col-md-6" key={product.id}>
-                        {/* <Link
-                        className="text-decoration-none"
-                        to={`/Product/${product.id}`}
-                      > */}
                         <Card
                           border="info"
                           style={{ width: "22rem" }}
@@ -534,28 +483,17 @@ const ProductsOfSeller = () => {
                             </Card.Text>
                             <hr />
                             <Card.Text className="fs-5">
-                              {/* <Stack direction="horizontal"> */}
-                              {/* <div>
-                                  Brand:{" "}
-                                  <b className="text-dark">{product.brand}</b>
-                                </div> */}
-
                               <div className="mx-auto">
                                 No of Products Sold:{" "}
                                 <b className="text-dark">{`${product.soldProductCount}`}</b>
                               </div>
-                              {/* </Stack> */}
                             </Card.Text>
                             <hr />
-                            {/* <Stack direction="horizontal" className=" px-5 text-primary"> */}
 
                             <div className="text-center">
-                              {/* Edit */}
-
                               <Button
                                 variant="success fw-bold shadow-lg mb-2 mx-2"
                                 onClick={() => {
-                                  // navigate(`/seller/product/${product.id}`);
                                   setEditId(product.id);
                                   setEditName(product.name);
                                   setEditBrand(product.brand);
@@ -574,13 +512,10 @@ const ProductsOfSeller = () => {
                                 variant="info fw-bold shadow-lg mb-2 mx-2"
                                 onClick={() => {
                                   navigate(`/seller/product/${product.id}`);
-                                  // setAdId(ad.id);
-                                  // setCancel(true);
                                 }}
                               >
                                 Product Details
                               </Button>
-                              {/* Delete */}
                               <Button
                                 variant="danger fw-bold shadow-lg mb-2 mx-2"
                                 onClick={() => {
@@ -591,10 +526,8 @@ const ProductsOfSeller = () => {
                                 <i class="fa-solid fa-trash-can fa-beat-fade"></i>
                               </Button>
                             </div>
-                            {/* </Stack> */}
                           </Card.Body>
                         </Card>
-                        {/* </Link> */}
                       </div>
                     );
                   })
@@ -607,10 +540,6 @@ const ProductsOfSeller = () => {
                 products.map((product) => {
                   return (
                     <div className="my-4 col-md-6" key={product.id}>
-                      {/* <Link
-                        className="text-decoration-none"
-                        to={`/Product/${product.id}`}
-                      > */}
                       <Card
                         border="info"
                         style={{ width: "22rem" }}
@@ -677,28 +606,17 @@ const ProductsOfSeller = () => {
                           </Card.Text>
                           <hr />
                           <Card.Text className="fs-5">
-                            {/* <Stack direction="horizontal"> */}
-                            {/* <div>
-                                  Brand:{" "}
-                                  <b className="text-dark">{product.brand}</b>
-                                </div> */}
-
                             <div className="mx-auto">
                               No of Products Sold:{" "}
                               <b className="text-dark">{`${product.soldProductCount}`}</b>
                             </div>
-                            {/* </Stack> */}
                           </Card.Text>
                           <hr />
-                          {/* <Stack direction="horizontal" className=" px-5 text-primary"> */}
 
                           <div className="text-center">
-                            {/* Edit */}
-
                             <Button
                               variant="success fw-bold shadow-lg mb-2 mx-2"
                               onClick={() => {
-                                // navigate(`/seller/product/${product.id}`);
                                 setEditId(product.id);
                                 setEditName(product.name);
                                 setEditBrand(product.brand);
@@ -717,13 +635,10 @@ const ProductsOfSeller = () => {
                               variant="info fw-bold shadow-lg mb-2 mx-2"
                               onClick={() => {
                                 navigate(`/seller/product/${product.id}`);
-                                // setAdId(ad.id);
-                                // setCancel(true);
                               }}
                             >
                               Product Details
                             </Button>
-                            {/* Delete */}
                             <Button
                               variant="danger fw-bold shadow-lg mb-2 mx-2"
                               onClick={() => {
@@ -734,28 +649,23 @@ const ProductsOfSeller = () => {
                               <i class="fa-solid fa-trash-can fa-beat-fade"></i>
                             </Button>
                           </div>
-                          {/* </Stack> */}
                         </Card.Body>
                       </Card>
-                      {/* </Link> */}
                     </div>
                   );
                 })
               ) : (
                 <div className="text-center fw-bold fs-3 text-danger">
-                  No Products to display.
+                  Please add the products. You haven't added any Product yet!
                 </div>
               )}
             </div>
           </div>
         </div>
       </Stack>
-      <div
-      //  style={{width: "55px"}}
-      >
+      <div>
         <Sidebar />
       </div>
-      {/* </Stack> */}
 
       <div>
         {/* Add new Product */}
@@ -778,7 +688,6 @@ const ProductsOfSeller = () => {
                 <Form.Label className="fs-4">Product Name:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setName(e.target.value)}
                   type="text"
                   required
@@ -801,9 +710,7 @@ const ProductsOfSeller = () => {
                         onClick={(e) => {
                           console.log(e);
                           if (e.target.checked) {
-                            // console.log(e.target.id);
                             setCategoryId(e.target.id);
-                            // console.log("category", categoryId);
                           }
                         }}
                       />
@@ -815,7 +722,6 @@ const ProductsOfSeller = () => {
                 <Form.Label className="fs-4">Product Description:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setDescription(e.target.value)}
                   type="text"
                   required
@@ -830,18 +736,13 @@ const ProductsOfSeller = () => {
                   size="md"
                   required
                   onChange={(event) => {
-                    //   setImage(e.target.files[0]);
-
                     const file = event.target.files[0];
                     if (file) {
                       const reader = new FileReader();
 
                       reader.onload = (e) => {
                         const imageDataURL = e.target.result;
-
-                        // console.log("Base 64 -> ", base64);
                         // You can use imageDataURL as a base64-encoded image string.
-                        // console.log(imageDataURL);
                         setImage(imageDataURL);
                       };
                       reader.readAsDataURL(file);
@@ -853,7 +754,6 @@ const ProductsOfSeller = () => {
                 <Form.Label className="fs-4">Product Brand:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setBrand(e.target.value)}
                   type="text"
                   required
@@ -863,7 +763,6 @@ const ProductsOfSeller = () => {
                 <Form.Label className="fs-4">Product Warranty:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setWarranty(e.target.value)}
                   type="text"
                   required
@@ -873,9 +772,8 @@ const ProductsOfSeller = () => {
                 <Form.Label className="fs-4">Product Price:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) =>
-                    e.target.value > 0
+                    e.target.value >= 0
                       ? setPrice(e.target.value)
                       : (e.target.value = "")
                   }
@@ -886,11 +784,10 @@ const ProductsOfSeller = () => {
               </Form.Group>
               <Form.Group className="mb-3" controlId="priority">
                 <Form.Label className="fs-4">Product Status:</Form.Label>
-                <Form.Check // prettier-ignore
+                <Form.Check
                   className="mx-3 fs-5"
                   type="switch"
                   id="custom-switch"
-                  // defaultChecked={priority}
                   label="Active"
                   onChange={(e) => {
                     if (e.target.checked) {
@@ -911,11 +808,7 @@ const ProductsOfSeller = () => {
               >
                 Cancel
               </Button>
-              <Button
-                variant="success shadow-lg fw-bold p-2"
-                // onClick={handleAdd}
-                type="submit"
-              >
+              <Button variant="success shadow-lg fw-bold p-2" type="submit">
                 Add new Product
               </Button>
             </Modal.Footer>
@@ -928,7 +821,6 @@ const ProductsOfSeller = () => {
             setModal(false);
             setShow(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -964,7 +856,6 @@ const ProductsOfSeller = () => {
           onHide={() => {
             setCancel(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -985,7 +876,6 @@ const ProductsOfSeller = () => {
             <Button
               variant="danger shadow-lg fw-bold px-4"
               onClick={() => {
-                // if(orderId)
                 handleDelete(productId);
                 setCancel(false);
               }}
@@ -1009,7 +899,6 @@ const ProductsOfSeller = () => {
           onHide={() => {
             setDel(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -1082,9 +971,7 @@ const ProductsOfSeller = () => {
                         onClick={(e) => {
                           console.log(e);
                           if (e.target.checked) {
-                            // console.log(e.target.id);
                             setEditCategoryId(e.target.id);
-                            // console.log("category", categoryId);
                           }
                         }}
                       />
@@ -1120,18 +1007,13 @@ const ProductsOfSeller = () => {
                   type="file"
                   size="md"
                   onChange={(event) => {
-                    //   setImage(e.target.files[0]);
-
                     const file = event.target.files[0];
                     if (file) {
                       const reader = new FileReader();
 
                       reader.onload = (e) => {
                         const imageDataURL = e.target.result;
-
-                        // console.log("Base 64 -> ", base64);
                         // You can use imageDataURL as a base64-encoded image string.
-                        // console.log(imageDataURL);
                         setEditImage(imageDataURL);
                       };
                       reader.readAsDataURL(file);
@@ -1165,7 +1047,7 @@ const ProductsOfSeller = () => {
                   className="shadow-lg"
                   value={editPrice}
                   onChange={(e) =>
-                    e.target.value > 0
+                    e.target.value >= 0
                       ? setEditPrice(e.target.value)
                       : (e.target.value = "")
                   }
@@ -1176,12 +1058,11 @@ const ProductsOfSeller = () => {
               </Form.Group>
               <Form.Group className="mb-3" controlId="priority">
                 <Form.Label className="fs-4">Product Status:</Form.Label>
-                <Form.Check // prettier-ignore
+                <Form.Check
                   checked={editStatus === "Active"}
                   className="mx-3 fs-5"
                   type="switch"
                   id="custom-switch"
-                  // defaultChecked={priority}
                   label="Active"
                   onChange={(e) => {
                     if (e.target.checked) {
@@ -1202,11 +1083,7 @@ const ProductsOfSeller = () => {
               >
                 Cancel
               </Button>
-              <Button
-                variant="success shadow-lg fw-bold p-2"
-                // onClick={handleAdd}
-                type="submit"
-              >
+              <Button variant="success shadow-lg fw-bold p-2" type="submit">
                 Update Product
               </Button>
             </Modal.Footer>
@@ -1219,7 +1096,6 @@ const ProductsOfSeller = () => {
           onHide={() => {
             setDoneEdit(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"

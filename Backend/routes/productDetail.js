@@ -9,7 +9,6 @@ const {
   getProductDetailsByProduct,
   deleteProductDetailsOfProduct,
 } = require("../controllers/productDetail");
-const { upload } = require("../controllers/image");
 
 router.post("/createProductDetail", createProductDetail);
 router.get("/getProductDetails", getAllProductDetails);

@@ -1,30 +1,28 @@
-import React, { useEffect, useState } from "react";
-// import Container from "react-bootstrap/Container";
+import React, { useContext, useEffect, useState } from "react";
 import Nav from "react-bootstrap/Nav";
 import NavBar from "react-bootstrap/NavBar";
 import { Link } from "react-router-dom";
-// import NavDropdown from "react-bootstrap/NavDropdown";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import icon from "../logo.svg";
 import "font-awesome/css/font-awesome.min.css";
-import Stack from "react-bootstrap/Stack";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-function Navbar({ reload }) {
-  const [user, setUser] = useState("");
+import cartContext from "../context/cart/cartContext";
+function Navbar({ reload, setReload }) {
+  const context = useContext(cartContext);
 
-  let navigate = useNavigate();
+  const { setOrders, setOrderDetails } = context;
+
+  const [user, setUser] = useState("");
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    // const context = useContext(cartContext);
-    // const { orders, setOrders } = context;
+    setOrders([]);
+    setOrderDetails([]);
+    setReload(true);
     navigate("/login");
-    // props.showAlert("Logged Out Successfully.", "success");
   };
+
   useEffect(() => {
     if (localStorage.getItem("token")) {
       const authToken = localStorage.getItem("token");
@@ -35,217 +33,251 @@ function Navbar({ reload }) {
   }, [reload]);
 
   return (
-    <NavBar
-      variant="dark"
-      //  fixed="top"
-      sticky="top"
-      collapseOnSelect
-      expand="lg"
-      style={{
-        // height:"80px",
-        // backgroundColor: "#9b32e0",
-        backgroundImage:
-          // "radial-gradient( circle farthest-corner at 10% 20%,  rgba(171,102,255,1) 0%, rgba(116,182,247,1) 90% )",
-          // "linear-gradient( 173.1deg,  rgba(226,66,249,0.94) 10.2%, rgba(79,147,249,1) 77.3% )",
-          "linear-gradient( 160.1deg,  rgba(151, 17, 172, 0.94) 10.2%, rgb(26, 93, 194) 77.3% )",
-        // "linear-gradient(90deg, #efd5ff 0%, #515ada 100%)",
-
-        // , color: "#430404"
-      }}
-    >
-      {/* <Container> */}
-      <NavBar.Brand
-        as={Link}
-        to={
-          !user
-            ? "/"
-            : user === "admin"
-            ? "/admin"
-            : user === "seller"
-            ? "/seller/products"
-            : ""
-        }
-      >
-        <img
-          src={icon}
-          width="60"
-          height="55"
-          className="d-inline-block align-top mx-2"
-          alt="E-commerce website logo"
-        />
-      </NavBar.Brand>
-      <NavBar.Brand
-        className="text-wrap"
-        style={{ color: "#1ab5e9", fontSize: "36px" }}
-        as={Link}
-        to={
-          !user
-            ? "/"
-            : user === "admin"
-            ? "/admin"
-            : user === "seller"
-            ? "/seller/products"
-            : ""
-        }
-      >
-        <b> E-commerce Website </b>
-      </NavBar.Brand>
-      <NavBar.Toggle className="mx-2" aria-controls="responsive-navbar-nav" />
-      {/* <Nav className=" mx-4">
-        <Nav.Link as={Link} to="/">
-          <i
-            className="mx-2 fa-solid fa-house fa-flip"
-            style={{ color: "#ab41f1" }}
-          ></i>
-          Home
-        </Nav.Link>
-      </Nav> */}
-      <NavBar.Collapse
-        id="responsive-navbar-nav"
-        className="justify-content-end"
-      >
-        {localStorage.getItem("token") && user === "customer" ? (
-          <Nav className=" mx-4">
-            <Nav.Link as={Link} to="/">
-              Home
-              <i
-                className="mx-2 fa-solid fa-house fa-flip"
-                style={{ color: "#ab41f1" }}
-              ></i>
-            </Nav.Link>
-            {/* <Stack direction="horizontal" gap={2}> */}
-            <Nav.Link as={Link} to="/profile">
-              Profile
-              <i
-                className="mx-2 fa-solid fa-id-card fa-flip"
-                style={{ color: "#ab41f1" }}
-              ></i>
-            </Nav.Link>
-            <Nav.Link as={Link} to="/cart">
-              {/* <h6> */}
-              Cart
-              <i
-                className="mx-2 fa-solid fa-cart-plus fa-bounce"
-                style={{ color: "#ab41f1" }}
-              ></i>
-              {/* </h6> */}
-            </Nav.Link>
-            <Nav.Link as={Link} to="/orders">
-              {/* <h6> */}
-              Orders
-              {/* <i class="fa-duotone fa-cubes"></i> */}
-              <i
-                className="mx-2 fa-solid fa-cubes fa-spin"
-                style={{ color: "#ab41f1" }}
-              ></i>
-              {/* </h6> */}
-            </Nav.Link>
-            <Nav.Link onClick={handleLogout}>
-              {/* <h6> */}
-              Logout
-              <i
-                className="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
-                style={{ color: "#ab41f1" }}
-              ></i>
-              {/* </h6> */}
-            </Nav.Link>
-            {/* </Stack> */}
-          </Nav>
-        ) : localStorage.getItem("token") && user === "admin" ? (
-          <Nav className=" mx-4">
-            <Nav.Link as={Link} to="/admin/profile">
-              Profile
-              <i
-                className="mx-2 fa-solid fa-id-card fa-flip"
-                style={{ color: "#ab41f1" }}
-              ></i>
-            </Nav.Link>
-
-            <Nav.Link onClick={handleLogout}>
-              {/* <h6> */}
-              Logout
-              <i
-                className="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
-                style={{ color: "#ab41f1" }}
-              ></i>
-              {/* </h6> */}
-            </Nav.Link>
-            {/* </Stack> */}
-          </Nav>
-        ) : localStorage.getItem("token") && user === "seller" ? (
-          <Nav className=" mx-4">
-            {/* <Nav.Link as={Link} to="/">
-              Home
-              <i
-                className="mx-2 fa-solid fa-house fa-flip"
-                style={{ color: "#ab41f1" }}
-              ></i>
-            </Nav.Link>
-           
-            <Nav.Link as={Link} to="/profile">
-              Profile
-              <i
-                className="mx-2 fa-solid fa-id-card fa-flip"
-                style={{ color: "#ab41f1" }}
-              ></i>
-            </Nav.Link>*/}
-
-            <Nav.Link onClick={handleLogout}>
-              Logout
-              <i
-                className="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
-                style={{ color: "#ab41f1" }}
-              ></i>
-            </Nav.Link>
-          </Nav>
-        ) : (
-          <Nav className=" mx-4">
-            <Nav.Link as={Link} to="/">
-              <i
-                className="mx-2 fa-solid fa-house fa-bounce"
-                style={{ color: "#ab41f1" }}
-              ></i>
-              Home
-            </Nav.Link>
-            <Nav.Link as={Link} to="/login">
-              <i
-                className="mx-2 fa-sharp fa-solid fa-right-to-bracket fa-beat-fade"
-                style={{ color: "#ab41f1" }}
-              ></i>
-              Login
-            </Nav.Link>
-            <Nav.Link as={Link} to="/signup">
-              <i
-                className="mx-2 fa-solid fa-user-plus fa-fade"
-                style={{ color: "#ab41f1" }}
-              ></i>
-              SignUp
-            </Nav.Link>
-            {/* <Nav.Link href="/login">
-              <i
-                className="mx-2 fa-solid fa-cart-plus fa-bounce"
-                style={{ color: "#ab41f1" }}
-              ></i>
-              Cart
-            </Nav.Link> */}
-          </Nav>
-        )}
-
-        {/* <Form className="d-flex">
-          <Form.Control
-            style={{ width: "350px", textAlign: "center" }}
-            type="search"
-            placeholder="Search"
+    <>
+      {localStorage.getItem("token") && user === "customer" ? (
+        <NavBar
+          variant="dark"
+          sticky="top"
+          collapseOnSelect
+          expand="lg"
+          style={{
+            backgroundImage:
+              "linear-gradient( 160.1deg,  rgba(151, 17, 172, 0.94) 10.2%, rgb(26, 93, 194) 77.3% )",
+          }}
+        >
+          <NavBar.Brand as={Link} to="/">
+            <img
+              src={icon}
+              width="60"
+              height="55"
+              // className="d-inline-block align-top mx-2"
+              alt="E-commerce website logo"
+            />
+          </NavBar.Brand>
+          <NavBar.Brand
+            className="text-wrap"
+            style={{ color: "#1ab5e9", fontSize: "36px" }}
+            as={Link}
+            to="/"
+          >
+            <b> E-commerce Website </b>
+          </NavBar.Brand>
+          <NavBar.Toggle
             className="mx-2"
-            aria-label="Search"
+            aria-controls="responsive-navbar-nav"
           />
-          <Button className="me-2" variant="outline-info">
-            Search
-          </Button>
-        </Form> */}
-      </NavBar.Collapse>
-      {/* </Container> */}
-    </NavBar>
+
+          <NavBar.Collapse
+            id="responsive-navbar-nav"
+            className="justify-content-end"
+          >
+            <Nav className=" mx-4">
+              <Nav.Link as={Link} to="/home">
+                Home
+                <i
+                  className="mx-2 fa-solid fa-house fa-flip"
+                  style={{ color: "#ab41f1" }}
+                ></i>
+              </Nav.Link>
+              <Nav.Link as={Link} to="/profile">
+                Profile
+                <i
+                  className="mx-2 fa-solid fa-id-card fa-flip"
+                  style={{ color: "#ab41f1" }}
+                ></i>
+              </Nav.Link>
+              <Nav.Link as={Link} to="/cart">
+                Cart
+                <i
+                  className="mx-2 fa-solid fa-cart-plus fa-bounce"
+                  style={{ color: "#ab41f1" }}
+                ></i>
+              </Nav.Link>
+              <Nav.Link as={Link} to="/orders">
+                Orders
+                <i
+                  className="mx-2 fa-solid fa-cubes fa-spin"
+                  style={{ color: "#ab41f1" }}
+                ></i>
+              </Nav.Link>
+              <Nav.Link onClick={handleLogout}>
+                Logout
+                <i
+                  className="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
+                  style={{ color: "#ab41f1" }}
+                ></i>
+              </Nav.Link>
+            </Nav>
+          </NavBar.Collapse>
+        </NavBar>
+      ) : localStorage.getItem("token") && user === "admin" ? (
+        <NavBar
+          variant="dark"
+          sticky="top"
+          collapseOnSelect
+          expand="lg"
+          style={{
+            backgroundImage:
+              "linear-gradient( 160.1deg,  rgba(151, 17, 172, 0.94) 10.2%, rgb(26, 93, 194) 77.3% )",
+          }}
+        >
+          <NavBar.Brand as={Link} to="/admin">
+            <img
+              src={icon}
+              width="60"
+              height="55"
+              // className="d-inline-block align-top mx-2"
+              alt="E-commerce website logo"
+            />
+          </NavBar.Brand>
+          <NavBar.Brand
+            className="text-wrap"
+            style={{ color: "#1ab5e9", fontSize: "36px" }}
+            as={Link}
+            to="/admin"
+          >
+            <b> E-commerce Website </b>
+          </NavBar.Brand>
+          <NavBar.Toggle
+            className="mx-2"
+            aria-controls="responsive-navbar-nav"
+          />
+
+          <NavBar.Collapse
+            id="responsive-navbar-nav"
+            className="justify-content-end"
+          >
+            <Nav className=" mx-4">
+              <Nav.Link as={Link} to="/admin/profile">
+                Profile
+                <i
+                  className="mx-2 fa-solid fa-id-card fa-flip"
+                  style={{ color: "#ab41f1" }}
+                ></i>
+              </Nav.Link>
+
+              <Nav.Link onClick={handleLogout}>
+                Logout
+                <i
+                  className="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
+                  style={{ color: "#ab41f1" }}
+                ></i>
+              </Nav.Link>
+            </Nav>
+          </NavBar.Collapse>
+        </NavBar>
+      ) : localStorage.getItem("token") && user === "seller" ? (
+        <NavBar
+          variant="dark"
+          sticky="top"
+          collapseOnSelect
+          expand="lg"
+          style={{
+            backgroundImage:
+              "linear-gradient( 160.1deg,  rgba(151, 17, 172, 0.94) 10.2%, rgb(26, 93, 194) 77.3% )",
+          }}
+        >
+          <NavBar.Brand as={Link} to="/seller/products">
+            <img
+              src={icon}
+              width="60"
+              height="55"
+              // className="d-inline-block align-top mx-2"
+              alt="E-commerce website logo"
+            />
+          </NavBar.Brand>
+          <NavBar.Brand
+            className="text-wrap"
+            style={{ color: "#1ab5e9", fontSize: "36px" }}
+            as={Link}
+            to="/seller/products"
+          >
+            <b> E-commerce Website </b>
+          </NavBar.Brand>
+          <NavBar.Toggle
+            className="mx-2"
+            aria-controls="responsive-navbar-nav"
+          />
+
+          <NavBar.Collapse
+            id="responsive-navbar-nav"
+            className="justify-content-end"
+          >
+            <Nav className=" mx-4">
+              <Nav.Link onClick={handleLogout}>
+                Logout
+                <i
+                  className="mx-2 fa-sharp fa-solid fa-right-from-bracket fa-shake"
+                  style={{ color: "#ab41f1" }}
+                ></i>
+              </Nav.Link>
+            </Nav>
+          </NavBar.Collapse>
+        </NavBar>
+      ) : (
+        <NavBar
+          variant="dark"
+          sticky="top"
+          collapseOnSelect
+          expand="lg"
+          style={{
+            backgroundImage:
+              "linear-gradient( 160.1deg,  rgba(151, 17, 172, 0.94) 10.2%, rgb(26, 93, 194) 77.3% )",
+          }}
+        >
+          <NavBar.Brand as={Link} to="/">
+            <img
+              src={icon}
+              width="60"
+              height="55"
+              // className="d-inline-block align-top mx-2"
+              alt="E-commerce website logo"
+            />
+          </NavBar.Brand>
+          <NavBar.Brand
+            className="text-wrap"
+            style={{ color: "#1ab5e9", fontSize: "36px" }}
+            as={Link}
+            to="/"
+          >
+            <b> E-commerce Website </b>
+          </NavBar.Brand>
+          <NavBar.Toggle
+            className="mx-2"
+            aria-controls="responsive-navbar-nav"
+          />
+
+          <NavBar.Collapse
+            id="responsive-navbar-nav"
+            className="justify-content-end"
+          >
+            <Nav className=" mx-4">
+              <Nav.Link as={Link} to="/home">
+                <i
+                  className="mx-2 fa-solid fa-house fa-bounce"
+                  style={{ color: "#ab41f1" }}
+                ></i>
+                Home
+              </Nav.Link>
+              <Nav.Link as={Link} to="/login">
+                <i
+                  className="mx-2 fa-sharp fa-solid fa-right-to-bracket fa-beat-fade"
+                  style={{ color: "#ab41f1" }}
+                ></i>
+                Login
+              </Nav.Link>
+              <Nav.Link as={Link} to="/signup">
+                <i
+                  className="mx-2 fa-solid fa-user-plus fa-fade"
+                  style={{ color: "#ab41f1" }}
+                ></i>
+                SignUp
+              </Nav.Link>
+            </Nav>
+          </NavBar.Collapse>
+        </NavBar>
+      )}
+    </>
   );
 }
 

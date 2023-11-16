@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-
-import { Carousel } from "react-responsive-carousel";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Stack from "react-bootstrap/Stack";
 import Button from "react-bootstrap/Button";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import Sidebar from "../admin/Sidebar";
@@ -16,17 +13,14 @@ import Image from "react-bootstrap/esm/Image";
 
 const ProductDetailsOfSeller = (props) => {
   const param = useParams();
-  // console.log([param]);
 
   const [load, setLoad] = useState(false);
 
   const [product, setProduct] = useState("");
   const [productDetails, setProductDetails] = useState(null);
-  // const [images, setImages] = useState([]);
 
   // Add Product
   const [show, setShow] = useState(false);
-  // const [categories, setCategories] = useState([]);
 
   const [stock, setStock] = useState("");
   const [size, setSize] = useState("");
@@ -77,6 +71,7 @@ const ProductDetailsOfSeller = (props) => {
   const [editShelfLife, setEditShelfLife] = useState("");
 
   const [doneEdit, setDoneEdit] = useState(false);
+
   // Delete ProductDetail:
   const [cancel, setCancel] = useState(false);
   const [del, setDel] = useState(false);
@@ -91,10 +86,8 @@ const ProductDetailsOfSeller = (props) => {
       const authToken = localStorage.getItem("token");
       const decoded = jwt_decode(authToken);
       if (decoded.user.role === "seller") {
-        // setUserId(decoded.user.id);
         getProduct();
         getProductDetails();
-        // getSeller(params.sellerId);
       }
     }
     setLoad(false);
@@ -115,7 +108,6 @@ const ProductDetailsOfSeller = (props) => {
         setProduct(result);
       })
       .catch((error) => console.log("error", error));
-    // console.log(product);
   };
 
   const getProductDetails = async () => {
@@ -130,29 +122,16 @@ const ProductDetailsOfSeller = (props) => {
     );
     if (response.status === 200) {
       const json = await response.json();
-      // console.log(json);
-
-      // const imageArr = [];
       const soldProductCount = json.map(async (productDetail) => {
-        // console.log(productDetail);
         productDetail["SoldProducts"] = await getSoldProductCount(
           productDetail.id
         );
-        // productDetail.image.forEach(async (i) => {
-        //   if (!imageArr.includes(i)) {
-        //     imageArr.push(i);
-        //   }
-        // });
+
         return productDetail;
       });
       await Promise.all(soldProductCount);
-      // setImages(imageArr);
       setProductDetails(json);
-      console.log(json);
     }
-    // if (response.status === 204) {
-    //   setImages
-    // }
   };
   const getSoldProductCount = async (productDetailId) => {
     var requestOptions = {
@@ -243,7 +222,6 @@ const ProductDetailsOfSeller = (props) => {
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
-      // productId: param.productId,
       stock: editStock,
       image: [editImage],
       size: editSize,
@@ -285,8 +263,6 @@ const ProductDetailsOfSeller = (props) => {
   };
   return (
     <>
-      {/* <Stack direction="horizontal"> */}
-
       <Stack style={{ paddingLeft: "80px" }}>
         <div className="mx-3 mb-5">
           <div className="mx-3 my-5">
@@ -302,7 +278,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Stack direction="horizontal" gap={2}>
                   <div className="p-2 fs-4 text-muted">Description:</div>
                   <h2>{product.description}</h2>
-                  {/* <div className="p-2 fs-5 text-info">{product.warranty}</div> */}
                 </Stack>
                 <hr />
                 <Stack direction="horizontal" gap={1}>
@@ -330,16 +305,12 @@ const ProductDetailsOfSeller = (props) => {
                           direction="horizontal"
                           className="my-5 text-wrap"
                           gap={2}
+                          key={index}
                         >
-                          <Button
-                            variant="info"
-                            size="sm"
-                            // className="shadow-lg"
-                            disabled
-                          >
+                          <Button variant="info" size="sm" disabled>
                             {index + 1}
                           </Button>
-                          {Object.keys(product).map((key) => {
+                          {Object.keys(product).map((key, index) => {
                             if (
                               ![
                                 "createdAt",
@@ -348,25 +319,29 @@ const ProductDetailsOfSeller = (props) => {
                                 "productId",
                               ].includes(key)
                             ) {
-                              // console.log(`/////////${key}: ${product[key]}`);
-                              if (key === "SoldProducts" || product[key]) {
-                                // console.log(`${key}: ${product[key]}`);
+                              if (
+                                key === "stock" ||
+                                key === "SoldProducts" ||
+                                product[key]
+                              ) {
                                 if (key === "image") {
                                   return (
                                     <img
                                       className="border border-dark shadow-lg mx-3"
                                       width="70px"
                                       height="60px"
-                                      // className="d-inline-block align-top mx-4"
                                       alt="Ad"
                                       src={product[key]}
                                     />
                                   );
                                 } else {
                                   return (
-                                    // <img src={product[key]}></img>
                                     <>
-                                      <Stack direction="horizontal" gap={1}>
+                                      <Stack
+                                        key={index}
+                                        direction="horizontal"
+                                        gap={1}
+                                      >
                                         <div className="p-2 fs-5">{key}: </div>
                                         <div className="p-2 fs-5 text-success">
                                           {product[key]}
@@ -377,6 +352,7 @@ const ProductDetailsOfSeller = (props) => {
                                 }
                               }
                             }
+                            return false;
                           })}
 
                           <Button
@@ -407,7 +383,7 @@ const ProductDetailsOfSeller = (props) => {
                               setEdit(true);
                             }}
                           >
-                            <i class="fa-solid fa-pen-to-square fa-beat-fade"></i>
+                            <i className="fa-solid fa-pen-to-square fa-beat-fade"></i>
                           </Button>
                           <Button
                             variant="danger fw-bold shadow-lg mb-2 mx-2"
@@ -416,7 +392,7 @@ const ProductDetailsOfSeller = (props) => {
                               setCancel(true);
                             }}
                           >
-                            <i class="fa-solid fa-trash-can fa-beat-fade"></i>
+                            <i className="fa-solid fa-trash-can fa-beat-fade"></i>
                           </Button>
                         </Stack>
                       );
@@ -426,14 +402,9 @@ const ProductDetailsOfSeller = (props) => {
                       You haven't added any ProductDetails of this product yet.
                     </div>
                   )}
-                  {/* <Stack direction="horizontal" gap={1}>
-                    <div className="p-2 fs-5">Sold : </div>
-                    <div className="p-2 fs-5 text-success">{0}</div>
-                  </Stack> */}
                 </div>
                 <div className="text-center my-5">
                   <Button
-                    // disabled={!(quantity && productDetailId)}
                     variant="outline-success shadow-lg fs-4 fw-bold p-2 px-3"
                     onClick={() => {
                       setShow(true);
@@ -444,41 +415,12 @@ const ProductDetailsOfSeller = (props) => {
                 </div>
               </Col>
             </Row>
-            {/* <Row>
-              <Col className="gx-3 col-4">
-                <Carousel className="border border-info shadow-lg mb-5">
-                  {images?.length ? (
-                    images.map((image) => {
-                      return (
-                        <div key={image}>
-                          <img
-                            className="shadow-lg"
-                            width="50%"
-                            height="70%"
-                            // className="d-inline-block align-top mx-4"
-                            alt="Product Image"
-                            src={image}
-                          />
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <div className="text-center fw-bold fs-3 text-danger mt-5">
-                      No Images to show.
-                    </div>
-                  )}
-                </Carousel>
-              </Col>
-            </Row> */}
           </Container>
         </div>
       </Stack>
-      <div
-      //  style={{width: "55px"}}
-      >
+      <div>
         <Sidebar />
       </div>
-      {/* </Stack> */}
 
       <div>
         {/* Handle Delete  */}
@@ -487,7 +429,6 @@ const ProductDetailsOfSeller = (props) => {
           onHide={() => {
             setCancel(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -507,7 +448,6 @@ const ProductDetailsOfSeller = (props) => {
             <Button
               variant="danger shadow-lg fw-bold px-4"
               onClick={() => {
-                // if(orderId)
                 handleDelete(productDetailId);
                 setCancel(false);
               }}
@@ -531,7 +471,6 @@ const ProductDetailsOfSeller = (props) => {
           onHide={() => {
             setDel(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -546,7 +485,7 @@ const ProductDetailsOfSeller = (props) => {
           </Modal.Header>
           <Modal.Body className="text-center">
             <div className="text-success fs-4">
-              <i class="fa-solid fa-circle-check fa-bounce"></i> 1 Product
+              <i className="fa-solid fa-circle-check fa-bounce"></i> 1 Product
               Option has been deleted successfully.
             </div>
             <Button
@@ -580,9 +519,8 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Stock:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) =>
-                    e.target.value > 0
+                    e.target.value >= 0
                       ? setStock(e.target.value)
                       : (e.target.value = "")
                   }
@@ -601,18 +539,13 @@ const ProductDetailsOfSeller = (props) => {
                   size="md"
                   required
                   onChange={(event) => {
-                    //   setImage(e.target.files[0]);
-
                     const file = event.target.files[0];
                     if (file) {
                       const reader = new FileReader();
 
                       reader.onload = (e) => {
                         const imageDataURL = e.target.result;
-
-                        // console.log("Base 64 -> ", base64);
                         // You can use imageDataURL as a base64-encoded image string.
-                        // console.log(imageDataURL);
                         setImage(imageDataURL);
                       };
                       reader.readAsDataURL(file);
@@ -624,7 +557,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Size:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setSize(e.target.value)}
                   type="text"
                 />
@@ -633,7 +565,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Color:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setColor(e.target.value)}
                   type="text"
                 />
@@ -643,7 +574,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Material:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setMaterial(e.target.value)}
                   type="text"
                 />
@@ -652,7 +582,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Style:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setStyle(e.target.value)}
                   type="text"
                 />
@@ -663,7 +592,6 @@ const ProductDetailsOfSeller = (props) => {
                 </Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setOperatingSystem(e.target.value)}
                   type="text"
                 />
@@ -672,7 +600,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Processor:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setProcessor(e.target.value)}
                   type="text"
                 />
@@ -681,7 +608,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Camera:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setCamera(e.target.value)}
                   type="text"
                 />
@@ -690,7 +616,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Ram:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setRam(e.target.value)}
                   type="text"
                 />
@@ -699,7 +624,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Storage:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setStorage(e.target.value)}
                   type="text"
                 />
@@ -708,7 +632,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Battery:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setBattery(e.target.value)}
                   type="text"
                 />
@@ -717,7 +640,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Bluetooth:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setBluetooth(e.target.value)}
                   type="text"
                 />
@@ -726,7 +648,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Game Type:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setGameType(e.target.value)}
                   type="text"
                 />
@@ -735,7 +656,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Age Range:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setAgeRange(e.target.value)}
                   type="text"
                 />
@@ -744,7 +664,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Capacity:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setCapacity(e.target.value)}
                   type="text"
                 />
@@ -753,7 +672,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Type:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setType(e.target.value)}
                   type="text"
                 />
@@ -762,7 +680,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Weight:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setWeight(e.target.value)}
                   type="text"
                 />
@@ -771,7 +688,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product Volume:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setVolume(e.target.value)}
                   type="text"
                 />
@@ -780,7 +696,6 @@ const ProductDetailsOfSeller = (props) => {
                 <Form.Label className="fs-4">Product ShelfLife:</Form.Label>
                 <Form.Control
                   className="shadow-lg"
-                  // value={name}
                   onChange={(e) => setShelfLife(e.target.value)}
                   type="text"
                 />
@@ -795,11 +710,7 @@ const ProductDetailsOfSeller = (props) => {
               >
                 Cancel
               </Button>
-              <Button
-                variant="success shadow-lg fw-bold p-2"
-                // onClick={handleAdd}
-                type="submit"
-              >
+              <Button variant="success shadow-lg fw-bold p-2" type="submit">
                 Add new Product
               </Button>
             </Modal.Footer>
@@ -812,7 +723,6 @@ const ProductDetailsOfSeller = (props) => {
             setModal(false);
             setShow(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -827,8 +737,8 @@ const ProductDetailsOfSeller = (props) => {
           </Modal.Header>
           <Modal.Body className="text-center">
             <div className="text-success fs-4">
-              <i class="fa-solid fa-circle-check fa-bounce"></i> 1 new Product
-              Option has been added successfully.
+              <i className="fa-solid fa-circle-check fa-bounce"></i> 1 new
+              Product Option has been added successfully.
             </div>
             <Button
               variant="outline-danger shadow-lg fs-5 fw-bold px-2 my-4"
@@ -863,7 +773,7 @@ const ProductDetailsOfSeller = (props) => {
                   className="shadow-lg"
                   value={editStock}
                   onChange={(e) =>
-                    e.target.value > 0
+                    e.target.value >= 0
                       ? setEditStock(e.target.value)
                       : (e.target.value = "")
                   }
@@ -881,7 +791,6 @@ const ProductDetailsOfSeller = (props) => {
                     className="shadow-lg mb-2 border"
                     height="160px"
                     width="320px"
-                    // alt={`${editName} Image`}
                     src={editImage}
                     rounded
                   />
@@ -890,20 +799,14 @@ const ProductDetailsOfSeller = (props) => {
                   className="shadow-lg"
                   type="file"
                   size="md"
-                  required
                   onChange={(event) => {
-                    //   setImage(e.target.files[0]);
-
                     const file = event.target.files[0];
                     if (file) {
                       const reader = new FileReader();
 
                       reader.onload = (e) => {
                         const imageDataURL = e.target.result;
-
-                        // console.log("Base 64 -> ", base64);
                         // You can use imageDataURL as a base64-encoded image string.
-                        // console.log(imageDataURL);
                         setEditImage(imageDataURL);
                       };
                       reader.readAsDataURL(file);
@@ -1086,11 +989,7 @@ const ProductDetailsOfSeller = (props) => {
               >
                 Cancel
               </Button>
-              <Button
-                variant="success shadow-lg fw-bold p-2"
-                // onClick={handleAdd}
-                type="submit"
-              >
+              <Button variant="success shadow-lg fw-bold p-2" type="submit">
                 Update Product Options
               </Button>
             </Modal.Footer>
@@ -1102,7 +1001,6 @@ const ProductDetailsOfSeller = (props) => {
           onHide={() => {
             setDoneEdit(false);
           }}
-          // size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="text-center"
@@ -1117,7 +1015,7 @@ const ProductDetailsOfSeller = (props) => {
           </Modal.Header>
           <Modal.Body className="text-center">
             <div className="text-success fs-4">
-              <i class="fa-solid fa-circle-check fa-bounce"></i> 1 Product
+              <i className="fa-solid fa-circle-check fa-bounce"></i> 1 Product
               Options has been updated successfully.
             </div>
             <Button

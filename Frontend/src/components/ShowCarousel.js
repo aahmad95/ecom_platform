@@ -1,11 +1,4 @@
-// import Image1 from "./CarouselImages/Image1.jpg";
-// import Image2 from "./CarouselImages/Image2.jpeg";
-// import Image3 from "./CarouselImages/Image3.jpeg";
-// import Image4 from "./CarouselImages/Image4.jpeg";
-// import Image5 from "./CarouselImages/Image5.jpeg";
-
 import Carousel from "react-bootstrap/Carousel";
-// import ExampleCarouselImage from "components/ExampleCarouselImage";
 import { useEffect, useState } from "react";
 function ShowCarousel() {
   const [ads, setAds] = useState([]);
@@ -25,7 +18,6 @@ function ShowCarousel() {
       setAds(data);
     };
     fetchAds();
-    // console.log("OrderItems------->", orderItems);
   }, []);
   return (
     <Carousel>
@@ -34,15 +26,9 @@ function ShowCarousel() {
           .filter((ad) => ad.priority)
           .map((ad) => {
             return (
-              <Carousel.Item interval={2000}>
+              <Carousel.Item interval={2000} key={ad.id}>
                 {/* <Image1 text="Second slide" /> */}
-                <img
-                  src={ad.image}
-                  width="100%"
-                  height="430px"
-                  // className="d-inline-block align-top mx-4"
-                  alt={ad.name}
-                />
+                <img src={ad.image} width="100%" height="430px" alt={ad.name} />
               </Carousel.Item>
             );
           })
