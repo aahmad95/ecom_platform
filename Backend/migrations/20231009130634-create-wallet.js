@@ -13,6 +13,7 @@ module.exports = {
       Amount: {
         type: Sequelize.DECIMAL,
       },
+
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
