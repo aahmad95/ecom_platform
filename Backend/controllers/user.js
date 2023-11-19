@@ -8,7 +8,7 @@ const hbs = require("nodemailer-express-handlebars");
 const path = require("path");
 
 const Mailgen = require("mailgen");
-
+// const secret = process.env.JWT_SECRET;
 const JWT_SECRET = "HelloWorld";
 
 // Get All Users:

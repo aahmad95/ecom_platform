@@ -8,7 +8,14 @@ import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+
+// import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken-browser";
 const Home = () => {
+  const data = "your data";
+  const encodedData = Buffer.from(data).toString("base64");
+  console.log(encodedData);
+
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
